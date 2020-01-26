@@ -1,9 +1,9 @@
 export class Team_member {
-    private fname : string;
-    private lname : string;
-    private email : string;
-    private id : number;
-    private active : boolean;
+    public fname : string;
+    public lname : string;
+    public email : string;
+    public id : number;
+    public active : boolean;
 
     constructor(fname : string, lname : string, email : string, id : number, active : boolean) {
         this.id = id;
