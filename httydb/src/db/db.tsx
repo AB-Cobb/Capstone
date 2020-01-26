@@ -5,7 +5,8 @@ import {Team_member} from "../models/team-member"
 export interface Database {
     open(): Promise<SQLite.SQLiteDatabase>;
     close(): Promise<void>;
-    get_teammemberByID(id) : Promise<Team_member>
+    getTeammemberByID(id) : Promise<Team_member>
+    insertTeammember(Team_member) : Promise<number>
 }
 
 class db_impl {
@@ -41,14 +42,28 @@ class db_impl {
     }
 
     //CRUD opperations
-    public get_teammemberByID(id) : Promise<Team_member>{
+    //TEAM MEMBER
+    //insert
+    public insertTeammember(member: Team_member) : Promise<number>{
+        return this.getDB().then( db => 
+            db.executeSql(
+                'INSERT INTO team_members (fname, lname, email, active) VALUES (?,?,?,?)',
+                [member.fname, member.lname, member.email, member.email])
+            ).then(([results]) => {
+                return results.insertId;
+            })
+    }
+
+    //get
+    public getTeammemberByID(id) : Promise<Team_member>{
        return this.getDB().then( db => 
             db.executeSql('SELECT * FROM team_members WHERE id = ?;',[id])
             ).then(([results]) => {
                 if (results !== undefined){
                     const data = results.rows.item(0);
-                    let { fname, lname, email, id } = data;
-                    return new Team_member(fname, lname, email, id);
+                    let { fname, lname, email, id, active } = data;
+                    active = active > 0; 
+                    return new Team_member(fname, lname, email, id, active);
                 }
                 else 
                     return Promise.reject()
