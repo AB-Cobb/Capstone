@@ -1,7 +1,19 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Button, Alert} from 'react-native';
 
 class LayoutScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitleAlign: "center",
+      headerRight: () => <Button
+              onPress={() => {
+                navigation.navigate('AddLayout');
+              }}
+              title="+"
+          />,
+    };
+  };
+
   constructor(props) {
     super(props);
   }

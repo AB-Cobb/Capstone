@@ -2,6 +2,12 @@ import React from 'react';
 import {View, Text} from 'react-native';
 
 class ReadyScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitleAlign: "center",
+    };
+  };
+
   constructor(props) {
     super(props);
   }
