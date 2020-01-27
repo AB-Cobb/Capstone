@@ -1,7 +1,13 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Button, Alert} from 'react-native';
 
 class HomeScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitleAlign: "center",
+    };
+  };
+
   constructor(props) {
     super(props);
   }

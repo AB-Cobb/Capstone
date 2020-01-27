@@ -1,7 +1,19 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Button} from 'react-native';
 
 class TeamScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitleAlign: "center",
+      headerRight: () => <Button
+          onPress={() => {
+            navigation.navigate('AddTeammate');
+          }}
+          title="+"
+      />,
+    };
+  };
+
   constructor(props) {
     super(props);
   }
