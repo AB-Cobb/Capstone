@@ -16,19 +16,19 @@ class db_impl {
     public open(): Promise <SQLite.SQLiteDatabase>{
         SQLite.DEBUG(true);
         SQLite.enablePromise(true);
-        let dbInst: SQLite.SQLiteDatabase;
+        let dbInstance: SQLite.SQLiteDatabase;
         return SQLite.openDatabase({
             name: this.db_name,
             location: "default"
-          }).then(database => {
-              dbInst = database;
-              //initialise DB if needed
-              const init = new db_init();
-              return init.updateTables(dbInst);
-          }).then (() => {
-              this.db = dbInst;
-              return dbInst;
-          })
+        }).then(database => {
+            dbInstance = database;
+            //initialise DB
+            const init = new db_init();
+            return init.updateTables(dbInstance);
+        }).then (() => {
+            this.db = dbInstance;
+            return dbInstance;
+        })
     }
     public close(): Promise<void> {
         if (this.db !== undefined || this.db !== null){
@@ -42,6 +42,7 @@ class db_impl {
     }
 
     //CRUD opperations
+    
     //TEAM MEMBER
     //insert
     public insertTeammember(member: Team_member) : Promise<number>{
