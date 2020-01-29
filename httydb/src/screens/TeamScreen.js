@@ -4,6 +4,13 @@ import {View, Text} from 'react-native';
 class TeamScreen extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      teammates: null,
+    };
+  }
+  
+  componentDidMount(){
+    
   }
 
   render() {

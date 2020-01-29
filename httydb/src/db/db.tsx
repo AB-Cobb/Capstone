@@ -9,7 +9,7 @@ export interface Database {
     insertTeammember(Team_member) : Promise<number>
 }
 
-class db_impl {
+class db_impl implements Database{
     private db_name = "dragon_boat.db";
     private db: SQLite.SQLiteDatabase | undefined;
 
@@ -58,7 +58,7 @@ class db_impl {
     //get
     public getTeammemberByID(id) : Promise<Team_member>{
        return this.getDB().then( db => 
-            db.executeSql('SELECT * FROM team_members WHERE id = ?;',[id])
+            db.executeSql('SELECT * FROM team_members WHERE team_member_id = ?;',[id])
             ).then(([results]) => {
                 if (results !== undefined){
                     const data = results.rows.item(0);
@@ -69,6 +69,35 @@ class db_impl {
                 else 
                     return Promise.reject()
             })
+    }
+    //get all teammates
+    public getAllTeammembers() : Promise<Team_member[]>{
+        return this.getDB().then( db => 
+            db.executeSql('SELECT * FROM team_members;')).then(([results]) => {
+                if (results !== undefined){
+                    let team_members : Team_member[] = [];
+                    for (let i = 0; i < results.rows.length; i++){
+                        const data = results.rows.item(i);
+                        let { fname, lname, email, id, active } = data;
+                        team_members.push(new Team_member(fname, lname, email, id, active))
+                    }
+                    return team_members;
+                }
+                else 
+                    return Promise.reject()
+            });
+    }
+    //update 
+    public updateTeammamber(team_member : Team_member) : Promise<number>{
+        return this.getDB().then ( db => 
+            db.executeSql(
+                'UPDATE team_members SET fname = ?, lname = ?, email = ?, active = ?' +
+                 '  WHERE team_member_id = ?;',
+                 [team_member.fname,team_member.lname, team_member.email,team_member.active, team_member.id]
+            )
+        ).then(([results])=>{
+            return results.insertId;
+        })
     }
 }
 export const db: Database = new db_impl();
