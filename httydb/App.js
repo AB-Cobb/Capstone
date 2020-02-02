@@ -47,19 +47,17 @@ const TabStack = createBottomTabNavigator({
 });
 
 const RootStack = createStackNavigator({
-  Tabs: TabStack,
+  Tabs: {
+      screen: TabStack,
+      navigationOptions: ({ navigation }) => ({
+          headerShown: false
+      })
+  },
   AddLayout: {screen: AddLayoutModal},
   AddTeammate: {screen: AddTeammateModal},
 },{
-
+    header: null
 });
-
-RootStack.navigationOptions = ({ navigation }) =>{
-        const headerTitleAlign = "center";
-        return (
-            headerTitleAlign
-        )
-};
 
 export default createAppContainer(
   RootStack
