@@ -1,5 +1,7 @@
 import React from 'react';
-import {View, Text, Button, Alert, StyleSheet, ScrollView} from 'react-native';
+import {View, Button, StyleSheet} from 'react-native';
+import { Divider, Text } from 'react-native-elements';
+
 
 class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -17,12 +19,15 @@ class HomeScreen extends React.Component {
     return (
       <View>
         <Text>Home Screen!</Text>
-        <View>
-          <Text>Recent Layouts</Text>
+        <Divider style={{ backgroundColor: 'blue' }} />
+        <View style={styles.RecentHeaderStyle}>
+          <Text h4>Recent Layouts</Text>
         </View>
-        <View>
-          <Text>Recent Analytics</Text>
+        <Divider style={{ backgroundColor: 'blue' }} />
+        <View style={styles.RecentHeaderStyle}>
+          <Text h4>Recent Analytics</Text>
         </View>
+        <Divider style={{ backgroundColor: 'blue' }} />
       </View>
     );
   }
@@ -34,6 +39,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+  },
+  RecentHeaderStyle: {
+    alignSelf: 'center',
   }
 });
 
