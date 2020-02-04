@@ -9,12 +9,29 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: 350, 
     height: 50, 
-    textAlign: "center", 
+    textAlign: "center",
+    textAlignVertical: "center", 
     fontSize: 24,
     color: "white",
     borderWidth: 1,
     borderColor: "grey",
-    borderRadius: 2}
+    borderRadius: 2
+  },
+  
+  ButtonStyleTwo: {
+    backgroundColor: "lightgrey",
+    flexDirection: "row-reverse",
+    width: 150,
+    height: 75,
+    margin: 15,
+    textAlign: "center",
+    textAlignVertical: "center", 
+    fontSize: 24,
+    color: "white",
+    borderWidth: 1,
+    borderColor: "grey",
+    borderRadius: 2
+  }
 })
 
  class ReadyOptions extends React.Component {
@@ -70,35 +87,12 @@ class ReadyAnalytics extends React.Component {
         <View style={{alignItems: "flex-end"}}>
           <Text style={{margin: 15, fontSize: 16}}>Time: {"00:00:00"}</Text>
           <TouchableOpacity>
-            <Text style={{
-              backgroundColor: "blue",
-              flexDirection: "row-reverse",
-              width: 150,
-              height: 75,
-              margin: 15,
-              textAlign: "center", 
-              fontSize: 24,
-              color: "white",
-              borderWidth: 2,
-              borderColor: "black",
-              borderRadius: 12}}
+            <Text style={styles.ButtonStyleTwo}
               >Pause
             </Text>
           </TouchableOpacity>
           <TouchableOpacity>
-            <Text style={{
-              backgroundColor: "red",
-              flexDirection: "row-reverse",
-              width: 150,
-              height: 75,
-              margin: 15,
-              textAlign: "center", 
-              fontSize: 24,
-              color: "white",
-              borderWidth: 2,
-              borderColor: "black",
-              borderRadius: 12
-              }}>Stop and Save
+            <Text style={styles.ButtonStyleTwo}>Stop and Save
             </Text>
           </TouchableOpacity>
         </View>
