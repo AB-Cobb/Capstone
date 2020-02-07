@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Image, Text, Picker, TouchableOpacity, ShadowPropTypesIOS, StyleSheet} from 'react-native';
+import {View, Image, } from 'react-native';
 import ReadyOptions from '../components/ReadyOptions';
 
 
@@ -21,7 +21,9 @@ class ReadyScreen extends React.Component {
 
   handleClick() {
     if (this.state.selectedLayout != 0){
-      
+      this.props.navigation.navigate('ReadyRecording', {
+        selectedLayout: this.state.layouts[this.state.selectedLayout]
+      });
     }
   }
 
