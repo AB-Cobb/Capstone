@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
-class ReadyAnalytics extends React.Component {
+class ReadyRecording extends React.Component {
     constructor(props) {
       super(props)
       this.state = {
@@ -58,4 +58,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ReadyAnalytics
+export default ReadyRecording
