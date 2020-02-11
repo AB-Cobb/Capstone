@@ -1,26 +1,59 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {ScrollView, Text, Button, StyleSheet, View, FlatList} from 'react-native';
+import Card from '../components/Card.js';
 
 class TeamScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitleAlign: "center",
+      headerRight: () => <Button
+          onPress={() => {
+            navigation.navigate('AddTeammate');
+          }}
+          title="+"
+      />,
+    };
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       teammates: null,
-    };
+    }
   }
-  
-  componentDidMount(){
-    
+
+  componentDidMount() {
+
+    this.setState({
+      teammates: ["Arsalan", "Andrew", "Guiseppe", "Nga","Zapdos","Jolteon","Pikachu","Luxray","Dedenne","Charizard"],
+    });
   }
 
   render() {
     console.log('Rendered TeamScreen!');
+    const {teammates} = this.state;
+
     return (
-      <View>
-        <Text>Team Screen!</Text>
-      </View>
+        <View>
+          <View>
+            <FlatList
+                data={teammates}
+                renderItem={({item}) => <Card><Text>{item}</Text></Card>}
+                keyExtractor={item => item.length}
+                numColumns={3}
+                columnWrapperStyle={styles.ListStyle}
+            />
+          </View>
+        </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  ListStyle: {
+    flex: 1,
+    justifyContent: 'space-between',
+  }
+});
 
 export default TeamScreen;

@@ -5,8 +5,10 @@ import {Team_member} from "../models/team-member"
 export interface Database {
     open(): Promise<SQLite.SQLiteDatabase>;
     close(): Promise<void>;
-    getTeammemberByID(id) : Promise<Team_member>
-    insertTeammember(Team_member) : Promise<number>
+    getTeammemberByID(id : number) : Promise<Team_member>
+    insertTeammember(Team_member : Team_member) : Promise<number>
+    getAllTeammembers() : Promise<Team_member[]>
+    updateTeammamber(team_member : Team_member) : Promise<number>
 }
 
 class db_impl implements Database{
@@ -43,7 +45,7 @@ class db_impl implements Database{
 
     //CRUD opperations
     
-    //TEAM MEMBER
+    // ------ TEAM MEMBER ------
     //insert
     public insertTeammember(member: Team_member) : Promise<number>{
         return this.getDB().then( db => 
@@ -70,6 +72,7 @@ class db_impl implements Database{
                     return Promise.reject()
             })
     }
+
     //get all teammates
     public getAllTeammembers() : Promise<Team_member[]>{
         return this.getDB().then( db => 
@@ -87,6 +90,7 @@ class db_impl implements Database{
                     return Promise.reject()
             });
     }
+    
     //update 
     public updateTeammamber(team_member : Team_member) : Promise<number>{
         return this.getDB().then ( db => 

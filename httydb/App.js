@@ -6,7 +6,6 @@
  * @flow
  */
 
-import React from 'react';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
@@ -16,6 +15,9 @@ import LayoutScreen from './src/screens/LayoutScreen';
 import ReadyScreen from './src/screens/ReadyScreen';
 import AnalyticsScreen from './src/screens/AnalyticsScreen';
 import TeamScreen from './src/screens/TeamScreen';
+import AddLayoutModal from './src/screens/AddLayoutModal';
+import AddTeammateModal from "./src/screens/AddTeammateModal";
+import ReadyRecordingModal from "./src/screens/ReadyRecordingModal";
 
 const HomeStack = createStackNavigator({
   Home: {screen: HomeScreen},
@@ -37,12 +39,28 @@ const TeamStack = createStackNavigator({
   Team: {screen: TeamScreen},
 });
 
-export default createAppContainer(
-  createBottomTabNavigator({
+const TabStack = createBottomTabNavigator({
     Home: HomeStack,
     Layout: LayoutStack,
     Ready: ReadyStack,
     Analytics: AnalyticsStack,
     Team: TeamStack,
-  }),
+});
+
+const RootStack = createStackNavigator({
+  Tabs: {
+      screen: TabStack,
+      navigationOptions: ({ navigation }) => ({
+          headerShown: false
+      })
+  },
+  AddLayout: {screen: AddLayoutModal},
+  AddTeammate: {screen: AddTeammateModal},
+  ReadyRecording: {screen: ReadyRecordingModal},
+},{
+    header: null
+});
+
+export default createAppContainer(
+  RootStack
 );

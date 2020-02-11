@@ -21,7 +21,7 @@ export class db_init {
                 '"active"	INTEGER NOT NULL,'+
                 'PRIMARY KEY("team_member_id")"'+
                 '");'
-        )
+        );
         // Version table
         transaction.executeSql(
             "CREATE TABLE IF NOT EXISTS Version( " +
