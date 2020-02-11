@@ -1,9 +1,9 @@
 import React from 'react';
 import {View, TextInput, ScrollView } from 'react-native';
 import { Button } from 'react-native-elements';
-import Database from '../db/db1'
+import db from '../db/db'
 
-const db = new Database();
+// const db = new Database();
 export default class AddTeammateModal extends React.Component {
     static navigationOptions = ({ navigation }) => {
         return {
@@ -22,9 +22,27 @@ export default class AddTeammateModal extends React.Component {
     
     onUpdate = (text, field) => {
         const state = this.state;
-        state[field] = text;
-        this.setState(state);
+        this.setState({state, field: text});
     }
+
+    onHandledId = (event) => {
+      this.setState({
+        id: event
+      })
+    }
+
+    onHandledName = (event) => {
+      this.setState({
+        name: event
+      })
+    }
+
+    onHandledActive = (event) => {
+      this.setState({
+        active: event
+      })
+    }
+
 
     onAdd() {
           let data = {
@@ -32,10 +50,11 @@ export default class AddTeammateModal extends React.Component {
             name: this.state.name,
             active: this.state.active
           }
-          db.add(data).then((result) => {
+          db.insertTeammember(data).then((result) => {
             console.log(result);
-            this.props.navigation.state.params.onNavigateBack;
+            // this.props.navigation.params.onNavigateBack;
             this.props.navigation.goBack();
+            // this.props.navigation.go
           }).catch((err) => {
             console.log(err);
           })
@@ -47,21 +66,21 @@ export default class AddTeammateModal extends React.Component {
               <TextInput
                   placeholder={'ID'}
                   value={this.state.id}
-                  onChangeText={(text) => this.onUpdate(text, 'id')}
+                  onChangeText={this.onHandledId}
               />
             </View>
             <View>
               <TextInput
                   placeholder={'Name'}
                   value={this.state.name}
-                  onChangeText={(text) => this.onUpdate(text, 'name')}
+                  onChangeText={this.onHandledName}
               />
             </View>
             <View>
               <TextInput
                   placeholder={'Active'}
                   value={this.state.active}
-                  onChangeText={(text) => this.onUpdate(text, 'active')}
+                  onChangeText={this.onHandledActive}
               />
             </View>
             <View>

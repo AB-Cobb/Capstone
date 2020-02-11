@@ -1,4 +1,4 @@
-export class Teammate {
+export class Team_member {
     public id : number;
     public name : string;
     public active : boolean;

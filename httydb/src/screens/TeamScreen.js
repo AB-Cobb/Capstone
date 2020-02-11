@@ -1,7 +1,7 @@
 import React from 'react';
 import {ScrollView, Text, Button, StyleSheet, View, FlatList} from 'react-native';
 import Card from '../components/Card.js';
-import Database from '../db/db1';
+import Database from '../db/db';
 
 db = new Database();
 
@@ -22,6 +22,7 @@ class TeamScreen extends React.Component {
     super(props);
     this.state = {
       teammates: null,
+      isLoading: false
     }
   }
 
