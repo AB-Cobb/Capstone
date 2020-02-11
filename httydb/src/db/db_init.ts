@@ -15,9 +15,7 @@ export class db_init {
         transaction.executeSql(
             'CREATE TABLE IF NOT EXISTS team_member(' + 
                 '"team_member_id"	INTEGER NOT NULL,' +
-                '"fname"	TEXT NOT NULL,'+
-                '"lname"	TEXT NOT NULL,'+
-                '"email"	TEXT,'+
+                '"name"	TEXT NOT NULL,'+
                 '"active"	INTEGER NOT NULL,'+
                 'PRIMARY KEY("team_member_id")"'+
                 '");'

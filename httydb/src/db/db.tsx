@@ -49,7 +49,7 @@ class db_impl implements Database{
     public insertTeammember(member: Team_member) : Promise<number>{
         return this.getDB().then( db => 
             db.executeSql(
-                'INSERT INTO team_members (id, name, active) VALUES (?,?,?)',
+                'INSERT INTO team_members (team_member_id, name, active) VALUES (?,?,?)',
                 [member.id, member.name, member.active])
             ).then(([results]) => {
                 return results.insertId;
