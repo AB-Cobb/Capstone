@@ -1,17 +1,11 @@
 import React from 'react';
-import {View, Button, StyleSheet, ScrollView, Text} from 'react-native';
+import {View, Button, StyleSheet, ScrollView, Text, TextInput} from 'react-native';
 import { Divider } from 'react-native-elements';
 
-class ViewTeammateModal extends React.Component {
+class EditTeammateModal extends React.Component {
     static navigationOptions = ({ navigation }) => {
         return {
             headerTitleAlign: "center",
-            headerRight: () => <Button
-                onPress={() => {
-                    navigation.navigate('EditTeammate');
-                }}
-                title="Edit"
-            />,
         };
     };
 
@@ -25,39 +19,39 @@ class ViewTeammateModal extends React.Component {
         return (
             <ScrollView>
                 <Text>Name</Text>
-                <Text>{this.props.firstName || "FIRST_NAME"}</Text>
+                <TextInput>{this.props.firstName || "FIRST_NAME"}</TextInput>
                 <Divider style={{ backgroundColor: 'blue' }} />
 
                 <Text>Gender</Text>
-                <Text>{this.props.gender || "GENDER"}</Text>
+                <TextInput>{this.props.gender || "GENDER"}</TextInput>
                 <Divider style={{ backgroundColor: 'blue' }} />
 
                 <Text>Paddling Side Preference</Text>
-                <Text>{this.props.paddlingSide || "PADDLING_SIDE"}</Text>
+                <TextInput>{this.props.paddlingSide || "PADDLING_SIDE"}</TextInput>
                 <Divider style={{ backgroundColor: 'blue' }} />
 
                 <Text>Height</Text>
-                <Text>{this.props.height || "HEIGHT"}</Text>
+                <TextInput>{this.props.height || "HEIGHT"}</TextInput>
                 <Divider style={{ backgroundColor: 'blue' }} />
 
                 <Text>Weight</Text>
-                <Text>{this.props.weight || "WEIGHT"}</Text>
+                <TextInput>{this.props.weight || "WEIGHT"}</TextInput>
                 <Divider style={{ backgroundColor: 'blue' }} />
 
                 <Text>Email Address</Text>
-                <Text>{this.props.email || "EMAIL"}</Text>
+                <TextInput>{this.props.email || "EMAIL"}</TextInput>
                 <Divider style={{ backgroundColor: 'blue' }} />
 
                 <Text>Weight</Text>
-                <Text>{this.props.weight || "WEIGHT"}</Text>
+                <TextInput>{this.props.weight || "WEIGHT"}</TextInput>
                 <Divider style={{ backgroundColor: 'blue' }} />
 
                 <Text>Phone</Text>
-                <Text>{this.props.phone || "PHONE"}</Text>
+                <TextInput>{this.props.phone || "PHONE"}</TextInput>
                 <Divider style={{ backgroundColor: 'blue' }} />
 
                 <Text>Emergency Contact</Text>
-                <Text>{this.props.emergencyContact || "EMERGENCY_CONTACT"}</Text>
+                <TextInput>{this.props.emergencyContact || "EMERGENCY_CONTACT"}</TextInput>
                 <Divider style={{ backgroundColor: 'blue' }} />
             </ScrollView>
         );
@@ -65,4 +59,4 @@ class ViewTeammateModal extends React.Component {
 
 }
 
-export default ViewTeammateModal;
+export default EditTeammateModal;
