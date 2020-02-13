@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, Text, Button, StyleSheet, View, FlatList} from 'react-native';
+import {ScrollView, Text, Button, StyleSheet, View, FlatList, TouchableOpacity} from 'react-native';
 import Card from '../components/Card.js';
 
 class TeamScreen extends React.Component {
@@ -38,7 +38,7 @@ class TeamScreen extends React.Component {
           <View>
             <FlatList
                 data={teammates}
-                renderItem={({item}) => <Card><Text>{item}</Text></Card>}
+                renderItem={({item}) => <TouchableOpacity onPress={() => this.props.navigation.navigate("ViewTeammate")}><Card><Text>{item}</Text></Card></TouchableOpacity>}
                 keyExtractor={item => item.length}
                 numColumns={3}
                 columnWrapperStyle={styles.ListStyle}
