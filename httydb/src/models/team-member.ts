@@ -12,5 +12,4 @@ export class Team_member {
         this.email = email;
         this.active = active;
     }
-    
 }

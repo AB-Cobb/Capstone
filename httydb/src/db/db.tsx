@@ -1,10 +1,11 @@
-import SQLite from "react-native-sqlite-storage";
+import SQLite, { SQLiteDatabase } from "react-native-sqlite-storage";
 import { db_init } from "./db_init";
 import {Team_member} from "../models/team-member"
 
 export interface Database {
     open(): Promise<SQLite.SQLiteDatabase>;
     close(): Promise<void>;
+    getDB() : Promise<SQLiteDatabase>;
     getTeammemberByID(id : number) : Promise<Team_member>
     insertTeammember(Team_member : Team_member) : Promise<number>
     getAllTeammembers() : Promise<Team_member[]>
@@ -104,4 +105,4 @@ class db_impl implements Database{
         })
     }
 }
-export const db: Database = new db_impl();
+export const db: Database = new db_impl(); 

@@ -2,16 +2,19 @@ import SQLite from "react-native-sqlite-storage";
 
 export class db_init {
     public updateTables(db: SQLite.SQLiteDatabase): Promise<void> {
+        console.log("db_init updateTables");
         let dbversion: number = 0;
         return db.transaction(this.createTables).then (() => {
             return this.getVersion(db)
         }).then(version => {
             dbversion = version
+            console.log ("db version: "+ version);
             //code for updating DB versions go here
         });
     }
 
     private createTables(transaction: SQLite.Transaction) {
+        console.log("db_init createTables");
         transaction.executeSql(
             'CREATE TABLE IF NOT EXISTS team_member(' + 
                 '"team_member_id"	INTEGER NOT NULL,' +
