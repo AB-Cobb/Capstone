@@ -2,18 +2,25 @@ import SQLite from "react-native-sqlite-storage";
 
 export class db_init {
     public updateTables(db: SQLite.SQLiteDatabase): Promise<void> {
+<<<<<<< HEAD
         console.log("db_init updateTables");
+=======
+>>>>>>> 5ea0f46b003f932ea1bd3c14c8ec344f9feda296
         let dbversion: number = 0;
         return db.transaction(this.createTables).then (() => {
             return this.getVersion(db)
         }).then(version => {
             dbversion = version
+<<<<<<< HEAD
             console.log ("db version: "+ version);
+=======
+>>>>>>> 5ea0f46b003f932ea1bd3c14c8ec344f9feda296
             //code for updating DB versions go here
         });
     }
 
     private createTables(transaction: SQLite.Transaction) {
+<<<<<<< HEAD
         console.log("db_init createTables");
         transaction.executeSql(
             'CREATE TABLE IF NOT EXISTS team_member(' + 
@@ -25,6 +32,16 @@ export class db_init {
                 'PRIMARY KEY("team_member_id")"'+
                 '");'
         );
+=======
+        transaction.executeSql(
+            'CREATE TABLE IF NOT EXISTS team_member(' + 
+                '"team_member_id"	INTEGER NOT NULL,' +
+                '"name"	TEXT NOT NULL,'+
+                '"active"	INTEGER NOT NULL,'+
+                'PRIMARY KEY("team_member_id")"'+
+                '");'
+        )
+>>>>>>> 5ea0f46b003f932ea1bd3c14c8ec344f9feda296
         // Version table
         transaction.executeSql(
             "CREATE TABLE IF NOT EXISTS Version( " +
@@ -44,5 +61,9 @@ export class db_init {
                   }
             }).catch (()=> {return 0 });// do some error handling
     }
+<<<<<<< HEAD
 }
 
+=======
+}
+>>>>>>> 5ea0f46b003f932ea1bd3c14c8ec344f9feda296

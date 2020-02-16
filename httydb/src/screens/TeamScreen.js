@@ -1,6 +1,9 @@
 import React from 'react';
 import {ScrollView, Text, Button, StyleSheet, View, FlatList} from 'react-native';
 import Card from '../components/Card.js';
+import Database from '../db/db';
+
+db = new Database();
 
 class TeamScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -19,25 +22,54 @@ class TeamScreen extends React.Component {
     super(props);
     this.state = {
       teammates: null,
+      isLoading: false
     }
   }
 
   componentDidMount() {
 
-    this.setState({
-      teammates: ["Arsalan", "Andrew", "Guiseppe", "Nga","Zapdos","Jolteon","Pikachu","Luxray","Dedenne","Charizard"],
+    // this.setState({
+    //   teammates: ["Arsalan", "Andrew", "Guiseppe", "Nga","Zapdos","Jolteon","Pikachu","Luxray","Dedenne","Charizard"],
+    // });
+
+    this._subscribe = this.props.navigation.addListener('didFocus', () => {
+      this.listTeammate();
     });
+  }
+
+  listTeammate() {
+    let teammates = [];
+    db.listTeammate().then((data)=>{
+      teammates = data;
+      this.setState({
+        teammates,
+        isLoading: false,
+      });
+    }).catch((err) => {
+      console.log(err);
+      this.setState = {
+        isLoading: false
+      }
+    })
   }
 
   render() {
     console.log('Rendered TeamScreen!');
-    const {teammates} = this.state;
+    // const {teammates} = this.state;
+
+    // if(this.state.teammates.length === 0){
+    //   return(
+    //     <View>
+    //       <Text>Teammate View</Text>
+    //     </View>
+    //   )
+    // }
 
     return (
         <View>
           <View>
             <FlatList
-                data={teammates}
+                data={this.state.teammates}
                 renderItem={({item}) => <Card><Text>{item}</Text></Card>}
                 keyExtractor={item => item.length}
                 numColumns={3}
