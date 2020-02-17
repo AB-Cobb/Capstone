@@ -1,8 +1,8 @@
 import SQLite, { SQLiteDatabase } from "react-native-sqlite-storage";
 import { db_init } from "./db_init";
-import {Team_member} from "../models/team-member"
+import {Team_member} from "../models/team_member"
 
-export interface Database {
+interface Database {
     open(): Promise<SQLite.SQLiteDatabase>;
     close(): Promise<void>;
     getDB() : Promise<SQLiteDatabase>;
@@ -51,9 +51,10 @@ class db_impl implements Database{
     public insertTeammember(member: Team_member) : Promise<number>{
         return this.getDB().then( db => 
             db.executeSql(
-                'INSERT INTO team_members (fname, lname, email, active) VALUES (?,?,?,?)',
+                'INSERT INTO team_member (fname, lname, email, active) VALUES (?,?,?,?)',
                 [member.fname, member.lname, member.email, member.email])
             ).then(([results]) => {
+                console.log("insert team_member with ID: ", results.insertId)
                 return results.insertId;
             })
     }
@@ -76,7 +77,7 @@ class db_impl implements Database{
     //get all teammates
     public getAllTeammembers() : Promise<Team_member[]>{
         return this.getDB().then( db => 
-            db.executeSql('SELECT * FROM team_members;')).then(([results]) => {
+            db.executeSql('SELECT * FROM team_member;')).then(([results]) => {
                 if (results !== undefined){
                     let team_members : Team_member[] = [];
                     for (let i = 0; i < results.rows.length; i++){
@@ -95,13 +96,15 @@ class db_impl implements Database{
     public updateTeammamber(team_member : Team_member) : Promise<number>{
         return this.getDB().then ( db => 
             db.executeSql(
-                'UPDATE team_members SET fname = ?, lname = ?, email = ?, active = ?' +
+                'UPDATE team_member SET fname = ?, lname = ?, email = ?, active = ?' +
                  '  WHERE team_member_id = ?;',
                  [team_member.fname,team_member.lname, team_member.email,team_member.active, team_member.id]
             )
         ).then(([results])=>{
+            console.log("updated team_member with ID: ", results.insertId)
             return results.insertId;
         })
     }
 }
 export const db: Database = new db_impl(); 
+

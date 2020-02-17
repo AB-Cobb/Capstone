@@ -1,7 +1,8 @@
 import React from 'react';
 import {View, TextInput, ScrollView } from 'react-native';
 import { Button } from 'react-native-elements';
-import db from '../db/db'
+import { db } from '../db/db'
+import { Team_member } from '../models/team_member';
 
 // const db = new Database();
 export default class AddTeammateModal extends React.Component {
@@ -45,18 +46,21 @@ export default class AddTeammateModal extends React.Component {
 
 
     onAdd() {
-          let data = {
+          let data = new Team_member (this.state.name, "Last Name", "name@domain.com", 1, true)
+          /*{
             id: this.state.id,
             name: this.state.name,
             active: this.state.active
-          }
-          db.insertTeammember(data).then((result) => {
-            console.log(result);
-            // this.props.navigation.params.onNavigateBack;
-            this.props.navigation.goBack();
-            // this.props.navigation.go
-          }).catch((err) => {
-            console.log(err);
+          }//*/
+          db.open().then( () => {
+            db.insertTeammember(data).then((result) => {
+              console.log(result);
+              // this.props.navigation.params.onNavigateBack;
+              this.props.navigation.goBack();
+              // this.props.navigation.go
+            }).catch((err) => {
+              console.log(err);
+            })
           })
     }
     render() {

@@ -1,9 +1,9 @@
 import React from 'react';
 import {ScrollView, Text, Button, StyleSheet, View, FlatList} from 'react-native';
 import Card from '../components/Card.js';
-import Database from '../db/db';
+import {db} from '../db/db';
 
-db = new Database();
+//Database = new db_init()
 
 class TeamScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -33,14 +33,18 @@ class TeamScreen extends React.Component {
     // });
 
     this._subscribe = this.props.navigation.addListener('didFocus', () => {
-      this.listTeammate();
+      db.open().then(()=>{
+        this.listTeammate();
+      })
     });
+    
   }
 
   listTeammate() {
     let teammates = [];
-    db.listTeammate().then((data)=>{
+    db.getAllTeammembers().then((data)=>{
       teammates = data;
+      console.log("Teamscreen: teammembers: ", teammates)
       this.setState({
         teammates,
         isLoading: false,
