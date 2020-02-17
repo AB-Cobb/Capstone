@@ -18,6 +18,8 @@ import TeamScreen from './src/screens/TeamScreen';
 import AddLayoutModal from './src/screens/AddLayoutModal';
 import AddTeammateModal from "./src/screens/AddTeammateModal";
 import ReadyRecordingModal from "./src/screens/ReadyRecordingModal";
+import ViewTeammateModal from "./src/screens/ViewTeammateModal";
+import EditTeammateModal from "./src/screens/EditTeammateModal";
 
 const HomeStack = createStackNavigator({
   Home: {screen: HomeScreen},
@@ -56,6 +58,8 @@ const RootStack = createStackNavigator({
   },
   AddLayout: {screen: AddLayoutModal},
   AddTeammate: {screen: AddTeammateModal},
+  ViewTeammate: {screen: ViewTeammateModal},
+  EditTeammate: {screen: EditTeammateModal},
   ReadyRecording: {screen: ReadyRecordingModal},
 },{
     header: null
