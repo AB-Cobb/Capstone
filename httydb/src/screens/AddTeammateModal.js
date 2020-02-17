@@ -52,7 +52,7 @@ export default class AddTeammateModal extends React.Component {
             name: this.state.name,
             active: this.state.active
           }//*/
-          db.open().then( () => {
+          //db.open().then( () => {
             db.insertTeammember(data).then((result) => {
               console.log(result);
               // this.props.navigation.params.onNavigateBack;
@@ -61,7 +61,7 @@ export default class AddTeammateModal extends React.Component {
             }).catch((err) => {
               console.log(err);
             })
-          })
+          //})
     }
     render() {
         return (

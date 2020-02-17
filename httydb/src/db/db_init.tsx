@@ -15,7 +15,6 @@ export class db_init {
 
     private createTables(transaction: SQLite.Transaction) {
         console.log("db_init createTables");
-        try{
             transaction.executeSql(
                 'CREATE TABLE IF NOT EXISTS team_member( ' + 
                     '"team_member_id"	INTEGER NOT NULL, ' +
@@ -33,10 +32,6 @@ export class db_init {
                 "version INTEGER" +
                 ");"
             );
-        } catch (err){
-            console.log("Error creating db", err)
-            Promise.reject()
-        }
     }
     private getVersion(db: SQLite.SQLiteDatabase): Promise<number> {
         return db.executeSql("SELECT version FROM Version ORDER BY version DESC LIMIT 1;")

@@ -33,9 +33,9 @@ class TeamScreen extends React.Component {
     // });
 
     this._subscribe = this.props.navigation.addListener('didFocus', () => {
-      db.open().then(()=>{
+      //db.open().then(()=>{
         this.listTeammate();
-      })
+      //})
     });
     
   }
@@ -72,13 +72,7 @@ class TeamScreen extends React.Component {
     return (
         <View>
           <View>
-            <FlatList
-                data={this.state.teammates}
-                renderItem={({item}) => <Card><Text>{item}</Text></Card>}
-                keyExtractor={item => item.length}
-                numColumns={3}
-                columnWrapperStyle={styles.ListStyle}
-            />
+
           </View>
         </View>
     );

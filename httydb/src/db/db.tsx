@@ -34,14 +34,18 @@ class db_impl implements Database{
         })
     }
     public close(): Promise<void> {
-        if (this.db !== undefined || this.db !== null){
+        if (this.db !== undefined){
             return this.db.close().then(() => this.db = undefined)
         }
     }
     public getDB () : Promise<SQLite.SQLiteDatabase> {
-        if (this.db !== undefined || this.db !== null)
+        if (this.db !== undefined)
+        {
             return Promise.resolve(this.db)
+        }
+        console.log("getDB(): opening DB")
         return this.open()
+
     }
 
     //CRUD opperations
@@ -82,8 +86,8 @@ class db_impl implements Database{
                     let team_members : Team_member[] = [];
                     for (let i = 0; i < results.rows.length; i++){
                         const data = results.rows.item(i);
-                        let { fname, lname, email, id, active } = data;
-                        team_members.push(new Team_member(fname, lname, email, id, active))
+                        let { fname, lname, email, team_member_id, active } = data;
+                        team_members.push(new Team_member(fname, lname, email, team_member_id, active))
                     }
                     return team_members;
                 }
