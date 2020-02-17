@@ -33,9 +33,7 @@ class TeamScreen extends React.Component {
     // });
 
     this._subscribe = this.props.navigation.addListener('didFocus', () => {
-      //db.open().then(()=>{
         this.listTeammate();
-      //})
     });
     
   }
