@@ -45,7 +45,6 @@ class db_impl implements Database{
         }
         console.log("getDB(): opening DB")
         return this.open()
-
     }
 
     //CRUD opperations

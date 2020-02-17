@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, Text, Button, StyleSheet, View, FlatList} from 'react-native';
+import {ScrollView, Text, Button, StyleSheet, View, FlatList, TouchableOpacity} from 'react-native';
 import Card from '../components/Card.js';
 import {db} from '../db/db';
 
@@ -72,7 +72,6 @@ class TeamScreen extends React.Component {
     return (
         <View>
           <View>
-
           </View>
         </View>
     );
