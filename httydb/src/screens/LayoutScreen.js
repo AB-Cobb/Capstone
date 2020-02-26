@@ -1,19 +1,58 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Button, Alert, StyleSheet, ScrollView, FlatList} from 'react-native';
+import Card from "../components/Card";
 
 class LayoutScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitleAlign: "center",
+      headerRight: () => <Button
+              onPress={() => {
+                navigation.navigate('AddLayout');
+              }}
+              title="+"
+          />,
+    };
+  };
+
   constructor(props) {
     super(props);
+    this.state = {
+        layouts: null
+    }
   }
+
+    componentDidMount() {
+        this.setState({
+            layouts: ["Mens Team", "Womens Team", "A Team", "B Team","Mixed Team","C Team","Practice Team A","Practice Team B","Test Team","Team Team 2"],
+        });
+    }
 
   render() {
     console.log('Rendered LayoutScreen!');
+    const {layouts} = this.state;
+
     return (
-      <View>
-        <Text>Layout Screen!</Text>
-      </View>
+        <View>
+            <View>
+                <FlatList
+                    data={layouts}
+                    renderItem={({item}) => <Card><Text>{item}</Text></Card>}
+                    keyExtractor={item => item.length}
+                    numColumns={3}
+                    columnWrapperStyle={styles.ListStyle}
+                />
+            </View>
+        </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+    ListStyle: {
+        flex: 1,
+        justifyContent: 'space-between',
+    }
+});
 
 export default LayoutScreen;
