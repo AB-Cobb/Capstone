@@ -108,6 +108,8 @@ class db_impl implements Database{
             return results.insertId;
         })
     }
+    // -------- Paddlers --------
+    
 }
 export const db: Database = new db_impl(); 
 
