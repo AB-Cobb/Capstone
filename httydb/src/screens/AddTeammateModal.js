@@ -149,7 +149,7 @@ export default class AddTeammateModal extends React.Component {
         <View>
           <TextInput
             placeholder={'Height'}
-            value={this.state.email}
+            value={this.state.height}
             onChangeText={this.onHandleHeight}
           />
         </View>
@@ -163,14 +163,14 @@ export default class AddTeammateModal extends React.Component {
         <View>
           <TextInput
             placeholder={'Active'}
-            value={this.state.email}
+            value={this.state.active}
             onChangeText={this.onHandleActive}
           />
         </View>
         <View>
           <TextInput
             placeholder={'Emergency Contact'}
-            value={this.state.email}
+            value={this.state.emergency_cont}
             onChangeText={this.onHandleEmergencyCont}
           />
         </View>
