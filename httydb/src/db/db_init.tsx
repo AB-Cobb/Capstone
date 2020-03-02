@@ -1,38 +1,42 @@
 import SQLite from 'react-native-sqlite-storage';
 
 export class db_init {
-  public updateTables(db: SQLite.SQLiteDatabase): Promise<void> {
-    console.log('db_init updateTables');
-    let dbversion: number = 0;
-    return db
-      .transaction(this.createTables)
-      .then(() => {
-        return this.getVersion(db);
-      })
-      .then(version => {
-        dbversion = version;
-        console.log('db version: ' + version);
-        //code for updating DB versions go here
-      });
-  }
+    public updateTables(db: SQLite.SQLiteDatabase): Promise<void> {
+        console.log("db_init updateTables");
+        let dbversion: number = 0;
+        return db.transaction(this.createTables).then (() => {
+            return this.getVersion(db)
+        }).then(version => {
+            dbversion = version
+            console.log ("db version: "+ version);
+            if (dbversion == 0){
+              db.executeSql('DROP TABLE team_member').then(()=>{
+                db.transaction(this.createTables).then(() => {
+                  db.executeSql("INSERT INTO version (version) VALUES (1)")
+                })
+              })
+            }
+        });
+    }
 
-  private createTables(transaction: SQLite.Transaction) {
-    console.log('db_init createTables');
-    // team members
-    transaction.executeSql(
-      'CREATE TABLE IF NOT EXISTS team_member( ' +
-        '"team_member_id"	INTEGER PRIMARY KEY, ' +
-        '"name"	TEXT NOT NULL, ' +
-        '"email"	TEXT NOT NULL, ' +
-        '"phone"	TEXT NOT NULL, ' +
-        '"emergency_cont"   TEXT NOT NULL,' +
-        '"gender"   TEXT NOT NULL,' +
-        '"weight"   NUMBER NOT NULL,' +
-        '"height"   NUMBER NOT NULL,' +
-        '"side_preference" TEXT,' +
-        '"active"   NUMBER' +
-        ');',
-    ); /*
+
+    private createTables(transaction: SQLite.Transaction) {
+        console.log("db_init createTables");
+        // team members
+            transaction.executeSql(
+                'CREATE TABLE IF NOT EXISTS team_member( ' + 
+                    '"team_member_id"	INTEGER PRIMARY KEY, ' +
+                    '"name" 	TEXT NOT NULL, '+
+                    '"email"	TEXT NOT NULL, '+
+                    '"phone"	TEXT NOT NULL, '+
+                    '"emergency_cont"   TEXT, '+
+                    '"gender"   TEXT NOT NULL, '+
+                    '"weight"   NUMBER NOT NULL, '+
+                    '"height"   NUMBER NOT NULL, '+
+                    '"side_preference" TEXT, '+
+                    '"active"   NUMBER '+
+                    ');'
+            );/*
             //paddler
             transaction.executeSql(
                 'CREATE TABLE IF NOT EXISTS paddler( '+
