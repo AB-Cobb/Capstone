@@ -9,8 +9,11 @@ export class db_init {
         }).then(version => {
             dbversion = version
             console.log ("db version: "+ version);
-            //code for updating DB versions go here
+            
         });
+    }
+    private droptables (transaction: SQLite.Transaction) {
+        
     }
 
     private createTables(transaction: SQLite.Transaction) {
@@ -19,7 +22,7 @@ export class db_init {
             transaction.executeSql(
                 'CREATE TABLE IF NOT EXISTS team_member( ' + 
                     '"team_member_id"	INTEGER NOT NULL AUTOINCREMENT, ' +
-                    '"name"	TEXT NOT NULL, '+
+                    '"name" 	TEXT NOT NULL, '+
                     '"email"	TEXT NOT NULL, '+
                     '"phone"	TEXT NOT NULL, '+
                     '"emergency_cont"   TEXT NOT NULL'+
