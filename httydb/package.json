@@ -14,7 +14,8 @@
     "@react-navigation/native": "^5.0.0-alpha.24",
     "expo": "^36.0.0",
     "firebase-admin": "^8.9.2",
-    "react": "16.9.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.13.0",
     "react-native": "0.61.5",
     "react-native-elements": "^1.2.7",
     "react-native-gesture-handler": "^1.5.3",
@@ -24,7 +25,10 @@
     "react-native-sqlite-storage": "^4.1.0",
     "react-native-vector-icons": "^6.6.0",
     "react-navigation-stack": "latest",
-    "react-navigation-tabs": "latest"
+    "react-navigation-tabs": "latest",
+    "react-router-native": "^5.1.2",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.88.2"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",

@@ -1,4 +1,5 @@
 export class Team_member {
+
     public name : string;
     public gender : string;
     public wieght : number;
