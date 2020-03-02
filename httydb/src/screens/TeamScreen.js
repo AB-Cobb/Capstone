@@ -79,7 +79,7 @@ class TeamScreen extends React.Component {
                 <Card>
                   <Text>{item.name}</Text>
                   <Text>{item.gender}</Text>
-                  <Text>{item.padd}</Text>
+                  <Text>{item.side_preference}</Text>
                 </Card>
               </TouchableOpacity>
             )}
