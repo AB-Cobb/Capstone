@@ -1,5 +1,11 @@
 import React from 'react';
-import {View, TextInput, ScrollView} from 'react-native';
+import {
+  View,
+  TextInput,
+  ScrollView,
+  Picker,
+  TouchableOpacity,
+} from 'react-native';
 import {Button} from 'react-native-elements';
 import {db} from '../db/db';
 import {Team_member} from '../models/team_member';
@@ -22,7 +28,7 @@ export default class AddTeammateModal extends React.Component {
       weight: '',
       height: '',
       side_preference: '',
-      active: 'true',
+      active: '',
       emergency_cont: '',
     };
   }
@@ -133,11 +139,15 @@ export default class AddTeammateModal extends React.Component {
           />
         </View>
         <View>
-          <TextInput
-            placeholder={'Gender'}
-            value={this.state.gender}
-            onChangeText={this.onHandleGender}
-          />
+          <Picker
+            selectedValue={this.state.gender}
+            onValueChange={(itemValue, itemIndex) =>
+              this.setState({gender: itemValue})
+            }
+            mode="dropdown">
+            <Picker.Item label="Male" value="Male" />
+            <Picker.Item label="Female" value="Female" />
+          </Picker>
         </View>
         <View>
           <TextInput
@@ -154,18 +164,28 @@ export default class AddTeammateModal extends React.Component {
           />
         </View>
         <View>
-          <TextInput
-            placeholder={'Paddling side Preference'}
-            value={this.state.side_preference}
-            onChangeText={this.onHandleSidePreference}
-          />
+          <Picker
+            selectedValue={this.state.side_preference}
+            onValueChange={(itemValue, itemIndex) =>
+              this.setState({side_preference: itemValue})
+            }
+            mode="dropdown">
+            <Picker.Item label="Left" value="left" />
+            <Picker.Item label="Right" value="right" />
+            <Picker.Item label="Any" value="any" />
+          </Picker>
         </View>
+
         <View>
-          <TextInput
-            placeholder={'Active'}
-            value={this.state.active}
-            onChangeText={this.onHandleActive}
-          />
+          <Picker
+            selectedValue={this.state.active}
+            onValueChange={(itemValue, itemIndex) =>
+              this.setState({active: itemValue})
+            }
+            mode="dropdown">
+            <Picker.Item label="Yes" value="true" />
+            <Picker.Item label="No" value="false" />
+          </Picker>
         </View>
         <View>
           <TextInput
@@ -181,3 +201,21 @@ export default class AddTeammateModal extends React.Component {
     );
   }
 }
+
+// <TextInput
+//             placeholder={'Gender'}
+//             value={this.state.gender}
+//             onChangeText={this.onHandleGender}
+//           />
+
+//           <TextInput
+//             placeholder={'Paddling side Preference'}
+//             value={this.state.side_preference}
+//             onChangeText={this.onHandleSidePreference}
+//           />
+
+//           <TextInput
+//           placeholder={'Active'}
+//           value={this.state.active}
+//           onChangeText={this.onHandleActive}
+//         />
