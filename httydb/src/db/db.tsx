@@ -216,8 +216,8 @@ class db_impl implements Database{
                 }
                 else 
                     return Promise.reject()
-            });// */
-    }
+            });
+    }// */
 
 }
 export const db: Database = new db_impl(); 
