@@ -1,120 +1,193 @@
-import SQLite, { SQLiteDatabase } from "react-native-sqlite-storage";
+import SQLite, {SQLiteDatabase} from 'react-native-sqlite-storage';
 
-import { db_init } from "./db_init";
-import {Team_member} from "../models/team_member";
-import { Boat_Layout } from "../models/boat_layout";
-import { Map_Point} from "../models/map_point";
-import { Paddler } from "../models/paddler";
-import { race } from "../models/race";
+import {db_init} from './db_init';
+import {Team_member} from '../models/team_member';
+import {Boat_Layout} from '../models/boat_layout';
+import {Map_Point} from '../models/map_point';
+import {Paddler} from '../models/paddler';
+import {race} from '../models/race';
 
 interface Database {
-    open(): Promise<SQLite.SQLiteDatabase>;
-    close(): Promise<void>;
-    getDB() : Promise<SQLiteDatabase>;
-    getTeammemberByID(id : number) : Promise<Team_member>
-    insertTeammember(Team_member : Team_member) : Promise<number>
-    getAllTeammembers() : Promise<Team_member[]>
-    updateTeammamber(team_member : Team_member) : Promise<number>
+  open(): Promise<SQLite.SQLiteDatabase>;
+  close(): Promise<void>;
+  getDB(): Promise<SQLiteDatabase>;
+  getTeammemberByID(id: number): Promise<Team_member>;
+  insertTeammember(Team_member: Team_member): Promise<number>;
+  getAllTeammembers(): Promise<Team_member[]>;
+  updateTeammamber(team_member: Team_member): Promise<number>;
 }
 
-class db_impl implements Database{
-    private db_name = "dragon_boat.db";
-    private db: SQLite.SQLiteDatabase | undefined;
+class db_impl implements Database {
+  private db_name = 'dragon_boat.db';
+  private db: SQLite.SQLiteDatabase | undefined;
 
-    public open(): Promise <SQLite.SQLiteDatabase>{
-        SQLite.DEBUG(true);
-        SQLite.enablePromise(true);
-        let dbInstance: SQLite.SQLiteDatabase;
-        return SQLite.openDatabase({
-            name: this.db_name,
-            location: "default"
-        }).then(database => {
-            dbInstance = database;
-            //initialise DB
-            const init = new db_init();
-            return init.updateTables(dbInstance);
-        }).then (() => {
-            this.db = dbInstance;
-            return dbInstance;
-        })
+  public open(): Promise<SQLite.SQLiteDatabase> {
+    SQLite.DEBUG(true);
+    SQLite.enablePromise(true);
+    let dbInstance: SQLite.SQLiteDatabase;
+    return SQLite.openDatabase({
+      name: this.db_name,
+      location: 'default',
+    })
+      .then(database => {
+        dbInstance = database;
+        //initialise DB
+        const init = new db_init();
+        return init.updateTables(dbInstance);
+      })
+      .then(() => {
+        this.db = dbInstance;
+        return dbInstance;
+      });
+  }
+  public close(): Promise<void> {
+    if (this.db !== undefined) {
+      return this.db.close().then(() => (this.db = undefined));
     }
-    public close(): Promise<void> {
-        if (this.db !== undefined){
-            return this.db.close().then(() => this.db = undefined)
-        }
+  }
+  public getDB(): Promise<SQLite.SQLiteDatabase> {
+    if (this.db !== undefined) {
+      return Promise.resolve(this.db);
     }
-    public getDB () : Promise<SQLite.SQLiteDatabase> {
-        if (this.db !== undefined)
-        {
-            return Promise.resolve(this.db)
-        }
-        console.log("getDB(): opening DB")
-        return this.open()
-    }
+    console.log('getDB(): opening DB');
+    return this.open();
+  }
 
-    //CRUD opperations
-    
-    // ------ TEAM MEMBER ------
-    //insert
-    public insertTeammember(team_member: Team_member) : Promise<number>{
-        return this.getDB().then( db => 
-            db.executeSql(
-                'INSERT INTO team_member (name, email, phone, gender, wieght, hieght, side_preference, active, emergency_cont) VALUES (?,?,?,?)',
-                [team_member.name, team_member.email, team_member.phone, team_member.gender, team_member.wieght, team_member.hieght, team_member.side_preference, team_member.active, team_member.emergency_cont])
-            ).then(([results]) => {
-                console.log("insert team_member with ID: ", results.insertId)
-                return results.insertId;
-            })
-    }
+  //CRUD opperations
 
-    //get
-    public getTeammemberByID(id) : Promise<Team_member>{
-       return this.getDB().then( db => 
-            db.executeSql('SELECT * FROM team_members WHERE team_member_id = ?;',[id])
-            ).then(([results]) => {
-                if (results !== undefined){
-                    const data = results.rows.item(0);
-                    let { name, email, phone , gender, weight , height, side_preference, active, emergency_cont, id } = data;
-                    active = active > 0; 
-                    return new Team_member(name, email, phone , gender, weight , height, side_preference, active, emergency_cont, id);
-                }
-                else 
-                    return Promise.reject()
-            })
-    }
-    //get all teammates
-    public getAllTeammembers() : Promise<Team_member[]>{
-        return this.getDB().then( db => 
-            db.executeSql('SELECT * FROM team_member;')).then(([results]) => {
-                if (results !== undefined){
-                    let team_members : Team_member[] = [];
-                    for (let i = 0; i < results.rows.length; i++){
-                        const data = results.rows.item(i);
-                        let { name, email, phone , gender, weight , height, side_preference, active, emergency_cont, id } = data;
-                        team_members.push(new Team_member(name, email, phone , gender, weight , height, side_preference, active, emergency_cont, id))
-                    }
-                    return team_members;
-                }
-                else 
-                    return Promise.reject()
-            });
-    }
-    
-    //update 
-    public updateTeammamber(team_member : Team_member) : Promise<number>{
-        return this.getDB().then ( db => 
-            db.executeSql(
-                'UPDATE team_member SET name = ?, email = ?, phone = ?, gender = ?, wieght = ?, hieght = ? , side_preference = ?, active = ?, emergency_cont =?' +
-                 '  WHERE team_member_id = ?;',
-                 [team_member.name, team_member.email, team_member.phone, team_member.gender, team_member.wieght, team_member.hieght, team_member.side_preference, team_member.active, team_member.emergency_cont]
-            )
-        ).then(([results])=>{
-            console.log("updated team_member with ID: ", results.insertId)
-            return results.insertId;
-        })
-    }
-    // -------- Paddlers --------
-    /*
+  // ------ TEAM MEMBER ------
+  //insert
+  public insertTeammember(team_member: Team_member): Promise<number> {
+    return this.getDB()
+      .then(db =>
+        db.executeSql(
+          'INSERT INTO team_member (name, email, phone, gender, weight, height, side_preference, active, emergency_cont) VALUES (?,?,?,?,?,?,?,?,?)',
+          [
+            team_member.name,
+            team_member.email,
+            team_member.phone,
+            team_member.gender,
+            team_member.weight,
+            team_member.height,
+            team_member.side_preference,
+            team_member.active,
+            team_member.emergency_cont,
+          ],
+        ),
+      )
+      .then(([results]) => {
+        console.log('insert team_member with ID: ', results.insertId);
+        return results.insertId;
+      });
+  }
+
+  //get
+  public getTeammemberByID(id): Promise<Team_member> {
+    return this.getDB()
+      .then(db =>
+        db.executeSql('SELECT * FROM team_members WHERE team_member_id = ?;', [
+          id,
+        ]),
+      )
+      .then(([results]) => {
+        if (results !== undefined) {
+          const data = results.rows.item(0);
+          let {
+            name,
+            email,
+            phone,
+            gender,
+            weight,
+            height,
+            side_preference,
+            active,
+            emergency_cont,
+            id,
+          } = data;
+          active = active > 0;
+          return new Team_member(
+            name,
+            email,
+            phone,
+            gender,
+            weight,
+            height,
+            side_preference,
+            active,
+            emergency_cont,
+            id,
+          );
+        } else return Promise.reject();
+      });
+  }
+  //get all teammates
+  public getAllTeammembers(): Promise<Team_member[]> {
+    return this.getDB()
+      .then(db => db.executeSql('SELECT * FROM team_member;'))
+      .then(([results]) => {
+        if (results !== undefined) {
+          let team_members: Team_member[] = [];
+          for (let i = 0; i < results.rows.length; i++) {
+            const data = results.rows.item(i);
+            let {
+              name,
+              email,
+              phone,
+              gender,
+              weight,
+              height,
+              side_preference,
+              active,
+              emergency_cont,
+              id,
+            } = data;
+            team_members.push(
+              new Team_member(
+                name,
+                email,
+                phone,
+                gender,
+                weight,
+                height,
+                side_preference,
+                active,
+                emergency_cont,
+                id,
+              ),
+            );
+          }
+          return team_members;
+        } else return Promise.reject();
+      });
+  }
+
+  //update
+  public updateTeammamber(team_member: Team_member): Promise<number> {
+    return this.getDB()
+      .then(db =>
+        db.executeSql(
+          'UPDATE team_member SET name = ?, email = ?, phone = ?, gender = ?, wieght = ?, hieght = ? , side_preference = ?, active = ?, emergency_cont =?' +
+            '  WHERE team_member_id = ?;',
+          [
+            team_member.name,
+            team_member.email,
+            team_member.phone,
+            team_member.gender,
+            team_member.weight,
+            team_member.height,
+            team_member.side_preference,
+            team_member.active,
+            team_member.emergency_cont,
+          ],
+        ),
+      )
+      .then(([results]) => {
+        console.log('updated team_member with ID: ', results.insertId);
+        return results.insertId;
+      });
+  }
+  // -------- Paddlers --------
+  /*
     //insert
     public insertPaddler(member: Paddler) : Promise<number>{
         return this.getDB().then( db => 
@@ -216,9 +289,7 @@ class db_impl implements Database{
                 }
                 else 
                     return Promise.reject()
-            });
-    }// */
-
+            });// */
 }
-export const db: Database = new db_impl(); 
 
+export const db: Database = new db_impl();
