@@ -19,13 +19,18 @@ export class db_init {
             transaction.executeSql(
                 'CREATE TABLE IF NOT EXISTS team_member( ' + 
                     '"team_member_id"	INTEGER NOT NULL AUTOINCREMENT, ' +
-                    '"fname"	TEXT NOT NULL, '+
-                    '"lname"	TEXT NOT NULL, '+
-                    '"email"	TEXT, '+
-                    '"active"	INTEGER NOT NULL, '+
+                    '"name"	TEXT NOT NULL, '+
+                    '"email"	TEXT NOT NULL, '+
+                    '"phone"	TEXT NOT NULL, '+
+                    '"emergency_cont"   TEXT NOT NULL'+
+                    '"gender"   TEXT NOT NULL'+
+                    '"wieght"   NUMBER NOT NULL'+
+                    '"hieght"   NUMBER NOT NULL'+
+                    '"side_preference" TEXT'+
+                    '"active"   NUMBER'+
                     'PRIMARY KEY("team_member_id")'+
                     ');'
-            );
+            );/*
             //paddler
             transaction.executeSql(
                 'CREATE TABLE IF NOT EXISTS paddler( '+
@@ -77,7 +82,7 @@ export class db_init {
                     '"timestamp"    UNSIGNED BIG INT'+
                     'PRIMARY KEY("point_id")'+
                 ');'
-            );            
+            );       // */     
 
             // Version table
             transaction.executeSql(
