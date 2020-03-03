@@ -36,16 +36,6 @@ export class db_init {
                     '"side_preference" TEXT, '+
                     '"active"   NUMBER '+
                     ');'
-            );/*
-            //paddler
-            transaction.executeSql(
-                'CREATE TABLE IF NOT EXISTS paddler( '+
-                    'FOREIGN KEY(team_member_id) REFERENCES team_member(team_member_id), '+
-                    '"perfered_side" TEXT, ' +
-                    '"gender" TEXT, ' + 
-                    '"wieght" NUMBER  NOT NULL' +
-                    'PRIMARY KEY("team_member_id")'+
-                ');'
             );
             //Boat Layout
             transaction.executeSql(

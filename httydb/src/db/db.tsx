@@ -6,6 +6,7 @@ import {Boat_Layout} from '../models/boat_layout';
 import {Map_Point} from '../models/map_point';
 import {Paddler} from '../models/paddler';
 import {race} from '../models/race';
+import {PaddleronBoat} from '../models/paddler_on_boat';
 
 interface Database {
   open(): Promise<SQLite.SQLiteDatabase>;
@@ -186,66 +187,59 @@ class db_impl implements Database {
         return results.insertId;
       });
   }
-  // -------- Paddlers --------
-  /*
+    // ------- Paddler On Boat ---
+    //get
+    public getPaddlersOnBoat(id): Promise<PaddleronBoat[]> {
+      return this.getDB()
+        .then(db =>
+          db.executeSql('SELECT * FROM paddler_on_boat WHERE layout_id = ?;', [
+            id,
+          ]),
+        )
+        .then(([results]) => {
+          if (results !== undefined) {
+            let paddlers: PaddleronBoat[] = [];
+            for (let i = 0; i < results.rows.length; i++) {
+              const data = results.rows.item(i);
+              let {
+                layout_id,
+                team_member_id,
+                row,
+                side
+              } = data;
+              paddlers.push(
+                new PaddleronBoat(
+                  layout_id,
+                  team_member_id,
+                  row,
+                  side
+                ),
+              );
+            }
+            return paddlers;
+          } else return Promise.reject();
+        });
+    }
     //insert
-    public insertPaddler(member: Paddler) : Promise<number>{
-        return this.getDB().then( db => 
-            db.executeSql(
-                'INSERT INTO paddler (team_mamber_id, perfered_side, gender, wieght) VALUES (?,?,?,?)',
-                [member.id, member.perfered_side, member.gender, member.wieght])
-            ).then(([results]) => {
-                console.log("insert paddler with ID: ", results.insertId)
-                return results.insertId;
-            })
+    public insertPaddlerOnBoat(paddler: PaddleronBoat): Promise<void> {
+      return this.getDB()
+        .then(db =>
+          db.executeSql(
+            'INSERT INTO paddler_on_boat (layout_id, team_member_id, row, side) VALUES (?,?,?,?)',
+            [
+              paddler.layout_id,
+              paddler.team_member_id,
+              paddler.row,
+              paddler.side
+            ],
+          ),
+        )
+        .then(() => {
+          console.log('insert paddler on boat ');
+          return;
+        });
     }
 
-    //get
-    public getPaddlerByID(id) : Promise<Paddler>{
-       return this.getDB().then( db => 
-            db.executeSql('SELECT * FROM paddler WHERE team_member_id = ?;',[id])
-            ).then(([results]) => {
-                if (results !== undefined){
-                    const data = results.rows.item(0);
-                    let { team_member_id, perfered_side, gender, wieght, active } = data;
-                    active = active > 0; 
-                    return new Paddler (team_member_id, perfered_side, gender, wieght, active);
-                }
-                else 
-                    return Promise.reject()
-            })
-    }
-    //get all paddlers
-    public getAllPaddlers() : Promise<Paddler[]>{
-        return this.getDB().then( db => 
-            db.executeSql('SELECT * FROM team_member;')).then(([results]) => {
-                if (results !== undefined){
-                    let paddlers : Paddler[] = [];
-                    for (let i = 0; i < results.rows.length; i++){
-                        const data = results.rows.item(i);
-                        let { team_member_id, perfered_side, gender, wieght, active } = data;
-                        paddlers.push(new Paddler( team_member_id,perfered_side,gender,wieght,active))
-                    }
-                    return paddlers;
-                }
-                else 
-                    return Promise.reject()
-            });
-    }
-    
-    //update 
-    public updatePaddler(paddler : Paddler) : Promise<number>{
-        return this.getDB().then ( db => 
-            db.executeSql(
-                'UPDATE paddler SET perfered_side = ?, gender = ?, wieght = ?, active = ?' +
-                 '  WHERE team_member_id = ?;',
-                 [paddler.perfered_side, paddler.gender, paddler.wieght, paddler.active]
-            )
-        ).then(([results])=>{
-            console.log("updated team_member with ID: ", results.insertId)
-            return results.insertId;
-        })
-    } // 
     // ------- Boat Layout -------
     //insert 
     public insertBoatLayout(layout: Boat_Layout) : Promise<number>{
@@ -254,9 +248,16 @@ class db_impl implements Database {
                 'INSERT INTO boat_layout (num_paddlers, active, name, date) VALUES (?,?,?,?)',
                 [layout.num_paddlers, layout.active, layout.name, layout.date])
             ).then(([results]) => {
-                console.log("insert paddler with ID: ", results.insertId)
+                console.log("insert boatlayout with ID: ", results.insertId)
                 return results.insertId;
-            })
+            }).then ((id) =>{
+              let paddlers = layout.paddlers;
+              for (let i = 0; i < 2; i++){
+               // this.insertPaddlerOnBoat()
+               console.log ("add paddler to boat")
+              }
+              return id;
+            });
     }
 
     //get
@@ -267,29 +268,47 @@ class db_impl implements Database {
                 if (results !== undefined){
                     const data = results.rows.item(0);
                     let { num_paddlers, name, date, active, id} = data;
-                    active = active > 0; 
-                    return new Boat_Layout (num_paddlers, name,date,active,id, []);
+                    active = active > 0;
+                    let layout = new Boat_Layout (num_paddlers, name,date,active,id) 
+                    this.getPaddlersOnBoat(layout.id).then((paddlersonboat) => {
+                      paddlersonboat.forEach(paddleronboat => {
+                        this.getTeammemberByID(paddleronboat.team_member_id).then((paddler) =>{
+                        layout.paddlers[paddleronboat.side][paddleronboat.row] = paddler 
+                        });
+                      })
+                    })
+                    return layout;
                 }
                 else 
                     return Promise.reject()
             })
     }
-    //get all layouts
-    public getAllBoatLayouts() : Promise<Paddler[]>{
+    //get most recent layouts
+    public getRecentBoatLayouts(num = 3) : Promise<Boat_Layout[]>{
         return this.getDB().then( db => 
-            db.executeSql('SELECT * FROM Boat_Layout;')).then(([results]) => {
+            db.executeSql('SELECT * FROM Boat_Layout ORDER BY date LIMIT ?;', [num])).then(([results]) => {
                 if (results !== undefined){
-                    let paddlers : Boat_Layout[] = [];
+                    let layouts : Boat_Layout[] = [];
                     for (let i = 0; i < results.rows.length; i++){
                         const data = results.rows.item(i);
                         let { num_paddlers, name, date, active, id} = data;
-                        paddlers.push(new Boat_Layout( team_member_id,perfered_side,gender,wieght,active))
+                        active = active > 0; 
+                        let layout = new Boat_Layout( num_paddlers, name, date, active, id)
+                        this.getPaddlersOnBoat(layout.id).then((paddlersonboat) => {
+                          paddlersonboat.forEach(paddleronboat => {
+                            this.getTeammemberByID(paddleronboat.team_member_id).then((paddler) =>{
+                            layout.paddlers[paddleronboat.side][paddleronboat.row] = paddler 
+                            });
+                          })
+                        })
+                        layouts.push(layout)
                     }
-                    return paddlers;
+                    return layouts;
                 }
                 else 
                     return Promise.reject()
             });// */
+          }
 }
 
 export const db: Database = new db_impl();
