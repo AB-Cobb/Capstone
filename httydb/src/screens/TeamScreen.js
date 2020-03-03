@@ -75,11 +75,11 @@ class TeamScreen extends React.Component {
             data={teamMembers}
             renderItem={({item}) => (
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('ViewTeammate')}>
+                onPress={() => this.props.navigation.navigate('ViewTeammate', {teammate: item})}>
                 <Card>
                   <Text>{item.name}</Text>
                   <Text>{item.gender}</Text>
-                  <Text>{item.padd}</Text>
+                  <Text>Paddling Side: {item.side_preference}</Text>
                 </Card>
               </TouchableOpacity>
             )}
