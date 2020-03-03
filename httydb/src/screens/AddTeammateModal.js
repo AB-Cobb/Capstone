@@ -136,6 +136,7 @@ export default class AddTeammateModal extends React.Component {
             placeholder={'Phone number'}
             value={this.state.phone}
             onChangeText={this.onHandlePhone}
+            keyboardType={'numeric'}
           />
         </View>
         <View>
@@ -154,6 +155,7 @@ export default class AddTeammateModal extends React.Component {
             placeholder={'Weight'}
             value={this.state.weight}
             onChangeText={this.onHandleWeight}
+            keyboardType={'numeric'}
           />
         </View>
         <View>
@@ -161,6 +163,7 @@ export default class AddTeammateModal extends React.Component {
             placeholder={'Height'}
             value={this.state.height}
             onChangeText={this.onHandleHeight}
+            keyboardType={'numeric'}
           />
         </View>
         <View>
@@ -192,6 +195,7 @@ export default class AddTeammateModal extends React.Component {
             placeholder={'Emergency Contact'}
             value={this.state.emergency_cont}
             onChangeText={this.onHandleEmergencyCont}
+            keyboardType={'numeric'}
           />
         </View>
         <View>
