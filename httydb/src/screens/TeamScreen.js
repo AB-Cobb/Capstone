@@ -78,8 +78,8 @@ class TeamScreen extends React.Component {
                 onPress={() => this.props.navigation.navigate('ViewTeammate')}>
                 <Card>
                   <Text>{item.name}</Text>
-                  <Text>{item.gender}</Text>
-                  <Text>{item.padd}</Text>
+                  <Text>{item.phone}</Text>
+                  <Text>{item.side_preference}</Text>
                 </Card>
               </TouchableOpacity>
             )}
