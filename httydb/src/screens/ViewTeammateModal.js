@@ -9,7 +9,7 @@ class ViewTeammateModal extends React.Component {
       headerRight: () => (
         <Button
           onPress={() => {
-            navigation.navigate('EditTeammate');
+            navigation.navigate('EditTeammate', {teammate: navigation.getParam("teammate")});
           }}
           title="Edit"
         />
@@ -19,45 +19,46 @@ class ViewTeammateModal extends React.Component {
 
   constructor(props) {
     super(props);
+    const teammate = this.props.navigation.getParam("teammate");
+    this.state = {
+        teammate
+    }
   }
 
   render() {
+      const {teammate} = this.state;
     return (
       <ScrollView>
         <Text>Name</Text>
-        <Text>{this.props.fname || 'FIRST_NAME'}</Text>
+        <Text>{teammate.name || 'FIRST_NAME'}</Text>
         <Divider style={{backgroundColor: 'blue'}} />
 
         <Text>Gender</Text>
-        <Text>{this.props.gender || 'GENDER'}</Text>
+        <Text>{teammate.gender || 'GENDER'}</Text>
         <Divider style={{backgroundColor: 'blue'}} />
 
         <Text>Paddling Side Preference</Text>
-        <Text>{this.props.paddlingSide || 'PADDLING_SIDE'}</Text>
+        <Text>{teammate.side_preference || 'PADDLING_SIDE'}</Text>
         <Divider style={{backgroundColor: 'blue'}} />
 
         <Text>Height</Text>
-        <Text>{this.props.height || 'HEIGHT'}</Text>
+        <Text>{teammate.height || 'HEIGHT'}</Text>
         <Divider style={{backgroundColor: 'blue'}} />
 
         <Text>Weight</Text>
-        <Text>{this.props.weight || 'WEIGHT'}</Text>
+        <Text>{teammate.weight || 'WEIGHT'}</Text>
         <Divider style={{backgroundColor: 'blue'}} />
 
         <Text>Email Address</Text>
-        <Text>{this.props.email || 'EMAIL'}</Text>
-        <Divider style={{backgroundColor: 'blue'}} />
-
-        <Text>Weight</Text>
-        <Text>{this.props.weight || 'WEIGHT'}</Text>
+        <Text>{teammate.email || 'EMAIL'}</Text>
         <Divider style={{backgroundColor: 'blue'}} />
 
         <Text>Phone</Text>
-        <Text>{this.props.phone || 'PHONE'}</Text>
+        <Text>{teammate.phone || 'PHONE'}</Text>
         <Divider style={{backgroundColor: 'blue'}} />
 
         <Text>Emergency Contact</Text>
-        <Text>{this.props.emergencyContact || 'EMERGENCY_CONTACT'}</Text>
+        <Text>{teammate.emergency_cont || 'EMERGENCY_CONTACT'}</Text>
         <Divider style={{backgroundColor: 'blue'}} />
       </ScrollView>
     );
