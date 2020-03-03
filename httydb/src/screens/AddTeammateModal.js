@@ -92,28 +92,37 @@ export default class AddTeammateModal extends React.Component {
   };
 
   onAdd() {
-    let data = new Team_member(
-      this.state.name,
-      this.state.email,
-      this.state.phone,
-      this.state.gender,
-      this.state.weight,
-      this.state.height,
-      this.state.side_preference,
-      this.state.active,
-      this.state.emergency_cont,
-    );
+    if (!this.isEmail(this.state.email)) {
+      console.log('email is not correct');
+      alert('Email is not correct');
+    } else {
+      let data = new Team_member(
+        this.state.name,
+        this.state.email,
+        this.state.phone,
+        this.state.gender,
+        this.state.weight,
+        this.state.height,
+        this.state.side_preference,
+        this.state.active,
+        this.state.emergency_cont,
+      );
 
-    db.insertTeammember(data)
-      .then(result => {
-        console.log(result);
-        this.props.navigation.goBack();
-      })
-      .catch(err => {
-        console.log(err);
-      });
-    //})
+      db.insertTeammember(data)
+        .then(result => {
+          console.log(result);
+          this.props.navigation.goBack();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }
+
+  isEmail = email => {
+    let reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return reg.test(email);
+  };
   render() {
     return (
       <ScrollView>
@@ -136,7 +145,7 @@ export default class AddTeammateModal extends React.Component {
             placeholder={'Phone number'}
             value={this.state.phone}
             onChangeText={this.onHandlePhone}
-            keyboardType={'numeric'}
+            keyboardType="phone-pad"
           />
         </View>
         <View>
@@ -155,7 +164,7 @@ export default class AddTeammateModal extends React.Component {
             placeholder={'Weight'}
             value={this.state.weight}
             onChangeText={this.onHandleWeight}
-            keyboardType={'numeric'}
+            keyboardType="phone-pad"
           />
         </View>
         <View>
@@ -163,7 +172,7 @@ export default class AddTeammateModal extends React.Component {
             placeholder={'Height'}
             value={this.state.height}
             onChangeText={this.onHandleHeight}
-            keyboardType={'numeric'}
+            keyboardType="phone-pad"
           />
         </View>
         <View>
@@ -173,9 +182,9 @@ export default class AddTeammateModal extends React.Component {
               this.setState({side_preference: itemValue})
             }
             mode="dropdown">
-            <Picker.Item label="Left" value="left" />
-            <Picker.Item label="Right" value="right" />
-            <Picker.Item label="Any" value="any" />
+            <Picker.Item label="Left" value="Left" />
+            <Picker.Item label="Right" value="Right" />
+            <Picker.Item label="Any" value="Any" />
           </Picker>
         </View>
 
@@ -195,7 +204,7 @@ export default class AddTeammateModal extends React.Component {
             placeholder={'Emergency Contact'}
             value={this.state.emergency_cont}
             onChangeText={this.onHandleEmergencyCont}
-            keyboardType={'numeric'}
+            keyboardType="phone-pad"
           />
         </View>
         <View>
