@@ -79,7 +79,8 @@ class TeamScreen extends React.Component {
                 <Card>
                   <Text>{item.name}</Text>
                   <Text>{item.gender}</Text>
-                  <Text>Paddling Side: {item.side_preference}</Text>
+                  <Text>{item.phone}</Text>
+                  <Text>{item.side_preference}</Text>
                 </Card>
               </TouchableOpacity>
             )}

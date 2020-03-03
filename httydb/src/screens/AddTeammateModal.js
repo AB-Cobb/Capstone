@@ -1,5 +1,11 @@
 import React from 'react';
-import {View, TextInput, ScrollView} from 'react-native';
+import {
+  View,
+  TextInput,
+  ScrollView,
+  Picker,
+  TouchableOpacity,
+} from 'react-native';
 import {Button} from 'react-native-elements';
 import {db} from '../db/db';
 import {Team_member} from '../models/team_member';
@@ -22,7 +28,7 @@ export default class AddTeammateModal extends React.Component {
       weight: '',
       height: '',
       side_preference: '',
-      active: 'true',
+      active: '',
       emergency_cont: '',
     };
   }
@@ -86,28 +92,37 @@ export default class AddTeammateModal extends React.Component {
   };
 
   onAdd() {
-    let data = new Team_member(
-      this.state.name,
-      this.state.email,
-      this.state.phone,
-      this.state.gender,
-      this.state.weight,
-      this.state.height,
-      this.state.side_preference,
-      this.state.active,
-      this.state.emergency_cont,
-    );
+    if (!this.isEmail(this.state.email)) {
+      console.log('email is not correct');
+      alert('Email is not correct');
+    } else {
+      let data = new Team_member(
+        this.state.name,
+        this.state.email,
+        this.state.phone,
+        this.state.gender,
+        this.state.weight,
+        this.state.height,
+        this.state.side_preference,
+        this.state.active,
+        this.state.emergency_cont,
+      );
 
-    db.insertTeammember(data)
-      .then(result => {
-        console.log(result);
-        this.props.navigation.goBack();
-      })
-      .catch(err => {
-        console.log(err);
-      });
-    //})
+      db.insertTeammember(data)
+        .then(result => {
+          console.log(result);
+          this.props.navigation.goBack();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }
+
+  isEmail = email => {
+    let reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return reg.test(email);
+  };
   render() {
     return (
       <ScrollView>
@@ -130,20 +145,26 @@ export default class AddTeammateModal extends React.Component {
             placeholder={'Phone number'}
             value={this.state.phone}
             onChangeText={this.onHandlePhone}
+            keyboardType="phone-pad"
           />
         </View>
         <View>
-          <TextInput
-            placeholder={'Gender'}
-            value={this.state.gender}
-            onChangeText={this.onHandleGender}
-          />
+          <Picker
+            selectedValue={this.state.gender}
+            onValueChange={(itemValue, itemIndex) =>
+              this.setState({gender: itemValue})
+            }
+            mode="dropdown">
+            <Picker.Item label="Male" value="Male" />
+            <Picker.Item label="Female" value="Female" />
+          </Picker>
         </View>
         <View>
           <TextInput
             placeholder={'Weight'}
             value={this.state.weight}
             onChangeText={this.onHandleWeight}
+            keyboardType="phone-pad"
           />
         </View>
         <View>
@@ -151,27 +172,39 @@ export default class AddTeammateModal extends React.Component {
             placeholder={'Height'}
             value={this.state.height}
             onChangeText={this.onHandleHeight}
+            keyboardType="phone-pad"
           />
         </View>
         <View>
-          <TextInput
-            placeholder={'Paddling side Preference'}
-            value={this.state.side_preference}
-            onChangeText={this.onHandleSidePreference}
-          />
+          <Picker
+            selectedValue={this.state.side_preference}
+            onValueChange={(itemValue, itemIndex) =>
+              this.setState({side_preference: itemValue})
+            }
+            mode="dropdown">
+            <Picker.Item label="Left" value="Left" />
+            <Picker.Item label="Right" value="Right" />
+            <Picker.Item label="Any" value="Any" />
+          </Picker>
         </View>
+
         <View>
-          <TextInput
-            placeholder={'Active'}
-            value={this.state.active}
-            onChangeText={this.onHandleActive}
-          />
+          <Picker
+            selectedValue={this.state.active}
+            onValueChange={(itemValue, itemIndex) =>
+              this.setState({active: itemValue})
+            }
+            mode="dropdown">
+            <Picker.Item label="Yes" value="true" />
+            <Picker.Item label="No" value="false" />
+          </Picker>
         </View>
         <View>
           <TextInput
             placeholder={'Emergency Contact'}
             value={this.state.emergency_cont}
             onChangeText={this.onHandleEmergencyCont}
+            keyboardType="phone-pad"
           />
         </View>
         <View>
@@ -181,3 +214,21 @@ export default class AddTeammateModal extends React.Component {
     );
   }
 }
+
+// <TextInput
+//             placeholder={'Gender'}
+//             value={this.state.gender}
+//             onChangeText={this.onHandleGender}
+//           />
+
+//           <TextInput
+//             placeholder={'Paddling side Preference'}
+//             value={this.state.side_preference}
+//             onChangeText={this.onHandleSidePreference}
+//           />
+
+//           <TextInput
+//           placeholder={'Active'}
+//           value={this.state.active}
+//           onChangeText={this.onHandleActive}
+//         />
