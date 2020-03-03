@@ -1,6 +1,8 @@
 import React from 'react';
 import {View, Button, StyleSheet, ScrollView, Text, TextInput} from 'react-native';
 import { Divider } from 'react-native-elements';
+import {db} from '../db/db';
+import {Team_member} from '../models/team_member';
 
 class EditTeammateModal extends React.Component {
     static navigationOptions = ({ navigation }) => {
@@ -8,9 +10,7 @@ class EditTeammateModal extends React.Component {
             headerTitleAlign: "center",
             headerRight: () => (
                 <Button
-                    onPress={() => {
-
-                    }}
+                    onPress={() => this.saveHandler()}
                     title="Save"
                 />
             )
@@ -37,13 +37,26 @@ class EditTeammateModal extends React.Component {
             newPhone: "",
             oldEmergency: teammate.emergency_cont,
             newEmergency: "",
-            oldActive: teammate.active,
-            newActive: null
+            oldActive: teammate.active.toString(),
+            newActive: true
         }
     }
 
-    saveHandler = () =>{
+    static saveHandler = () =>{
+        let data = new Team_member(
+            this.state.newName,
+            this.state.newEmail,
+            this.state.newPhone,
+            this.state.newGender,
+            this.state.newWeight,
+            this.state.newHeight,
+            this.state.newSide,
+            this.state.newActive,
+            this.state.newEmergency,
+        );
 
+        db.updateTeammamber(data)
+            .then()
     };
 
     render(){
