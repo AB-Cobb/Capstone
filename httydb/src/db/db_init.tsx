@@ -40,24 +40,25 @@ export class db_init {
             //Boat Layout
             transaction.executeSql(
                 'CREATE TABLE IF NOT EXISTS boat_layout( '+
-                    'layout_id INTEGER NOT NULL AUTOINCREMENT, '+
+                    'layout_id INTEGER PRIMARY KEY, '+
                     'num_paddlers   INTEGER, '+
                     'active INTEGER NOT NULL, '+
                     'name TEXT, '+
-                    'date UNSIGNED BIG INT, '+
+                    'date DATE '+
                 ');'  
 
-            )
+            )/*
             //paddler on boat
             transaction.executeSql(
-                'CREATE TABLE IF NOT EXISTS boat_layout( '+
-                    'FOREIGN KEY(layout_id) REFERENCES boay_layout(layout_id)'+
-                    'FOREIGN KEY(team_member_id) REFERENCES paddler(team_member_id), '+
+                'CREATE TABLE IF NOT EXISTS paddler_on_boat( '+
+                    'FOREIGN KEY(layout_id) REFERENCES boay_layout(layout_id), '+
+                    'FOREIGN KEY(team_member_id) REFERENCES team_member(team_member_id), '+
                     'row INTEGER NOT NULL, '+
-                    'side INTEGER NOT NULL, '+
+                    'side INTEGER NOT NULL '+
                 ');'  
-            );
+            );//*/
             //race
+            /*
             transaction.executeSql(
                 'CREATE TABLE IF NOT EXISTS race( '+
                     '"race_id" INTEGER NOT NULL AUTOINCREMENT, ' + 
@@ -65,18 +66,16 @@ export class db_init {
                     'date       UNSIGNED BIG INT, '+
                     'duration   FLOAT, '+
                     'distance   FLAOT' +
-                    'PRIMARY KEY("race_id")'+
                 ');'
             );
             //map point
             transaction.executeSql(
                 'CREATE TABLE IF NOT EXISTS map_point( '+
-                    '"point_id"     INTEGER NOT NULL AUTOINCREMENT' +
+                    '"point_id"     INTEGER PRIMARY KEY' +
                     'FOREIGN KEY(race_id) REFERENCES race(race_id)'+
                     '"long"         FLOAT, ' +
                     '"lat"          FLOAT' +
                     '"timestamp"    UNSIGNED BIG INT'+
-                    'PRIMARY KEY("point_id")'+
                 ');'
             );       // */
 
