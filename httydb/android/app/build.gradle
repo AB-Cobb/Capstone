@@ -179,9 +179,19 @@ android {
 }
 
 dependencies {
+    implementation project(':@react-native-community_geolocation')
     implementation project(':react-native-sqlite-storage')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
+
+    //added to attempt to fix error when loading application
+    implementation(project(':react-native-maps')){
+        exclude group: 'com.google.android.gms', module: 'play-services-base'
+        exclude group: 'com.google.android.gms', module: 'play-services-maps'
+    }
+    implementation 'com.google.android.gms:play-services-base:+'
+    implementation 'com.google.android.gms:play-services-maps:+'
+    //
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";

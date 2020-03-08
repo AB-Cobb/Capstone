@@ -36,6 +36,8 @@ target 'httydb' do
 
   pod 'react-native-sqlite-storage', :path => '../node_modules/react-native-sqlite-storage'
 
+  pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
+
   target 'httydbTests' do
     inherit! :search_paths
     # Pods for testing
