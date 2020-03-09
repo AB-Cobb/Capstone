@@ -47,10 +47,11 @@ export class db_init {
                     'date DATE '+
                 ');'  
 
-            )/*
+            )
             //paddler on boat
             transaction.executeSql(
                 'CREATE TABLE IF NOT EXISTS paddler_on_boat( '+
+                    '"paddler_on_boat_id"	INTEGER PRIMARY KEY, ' +
                     'FOREIGN KEY(layout_id) REFERENCES boay_layout(layout_id), '+
                     'FOREIGN KEY(team_member_id) REFERENCES team_member(team_member_id), '+
                     'row INTEGER NOT NULL, '+
@@ -58,7 +59,6 @@ export class db_init {
                 ');'  
             );//*/
             //race
-            /*
             transaction.executeSql(
                 'CREATE TABLE IF NOT EXISTS race( '+
                     '"race_id" INTEGER NOT NULL AUTOINCREMENT, ' + 
