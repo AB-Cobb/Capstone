@@ -22,8 +22,8 @@ class ReadyRecording extends React.Component {
           <View style={{alignItems: "flex-end"}}>
             <Text style={styles.TextSpacing}>Time: {"00:00:00"}</Text>
             <TouchableOpacity>
-              <Text style={styles.ButtonStyleTwo}
-                >Pause
+              <Text style={styles.ButtonStyleTwo}>
+                Pause
               </Text>
             </TouchableOpacity>
             <TouchableOpacity>
