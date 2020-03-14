@@ -1,7 +1,7 @@
 import { Boat_Layout } from "./boat_layout"
 import { Map_Point } from "./map_point"
 
-export class race {
+export class Race {
     id : number;
     layout : Boat_Layout;
     map_points : Map_Point[];
