@@ -18,7 +18,7 @@ class ReadyRecordingModal extends React.Component {
         super(props)
         this.state = {
             selectedLayout: props.selectedLayout,
-            onPause: false,
+            isPaused: false,
             locationData: {
                 latitude: 0,
                 longitude: 0,
@@ -49,8 +49,7 @@ class ReadyRecordingModal extends React.Component {
       }
 
     accessLocation() {
-        let paused = this.state.onPause
-        console.log(paused)
+        let paused = this.state.isPaused
         if (!paused) {
             this.watchID = Geolocation.watchPosition((position) => {
                 console.log(position)
@@ -75,8 +74,20 @@ class ReadyRecordingModal extends React.Component {
         }
     }
 
+    setPause() {
+      let pause = this.state.isPaused
+      this.setState({
+        isPaused: !pause
+      })
+    }
+
+    getPaused() {
+      return this.state.isPaused
+    }
+
     render() {
         console.log("Rendered ReadyRecordingModal!")
+        console.log(`RecordingRecordingModal Paused: ${this.getPaused()}`)
 
         let initialPos = {
             latitude: 37.421,
@@ -90,7 +101,7 @@ class ReadyRecordingModal extends React.Component {
                 <MapView ref={map => this._mapRecord = map} provider={PROVIDER_GOOGLE} style={{width: 410, height:300}} showsUserLocation={true} followsUserLocation={true} initialRegion={initialPos}>
                     <MapView.Marker coordinate={this.state.marker} title="Current Location" />
                 </MapView>
-                <ReadyRecording currentLayout={this.state.selectedLayout} />
+                <ReadyRecording currentLayout={this.state.selectedLayout} setPause={() => this.setPause()} isPaused={() => this.getPaused()}/>
             </View>
         )
     }

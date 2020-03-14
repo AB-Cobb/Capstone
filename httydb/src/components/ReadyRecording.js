@@ -1,15 +1,17 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import Timer from './Timer';
 
 class ReadyRecording extends React.Component {
     constructor(props) {
       super(props)
       this.state = {
-        currentLayout: props.currentLayout
+        currentLayout: props.selectedLayout
       }
     }
-  
+
     render() {
+      console.log(`RecordRecording isPaused: ${this.props.isPaused()}`)
       return (
         <View style={{flexDirection: "row", justifyContent: "space-between"}}>
           <View style={{alignItems: "flex-start"}}>
@@ -20,9 +22,9 @@ class ReadyRecording extends React.Component {
           </View>
   
           <View style={{alignItems: "flex-end"}}>
-            <Text style={styles.TextSpacing}>Time: {"00:00:00"}</Text>
+            <Timer isPaused={() => this.props.isPaused()} elapsedTime={0}></Timer>
             <TouchableOpacity>
-              <Text style={styles.ButtonStyleTwo}>
+              <Text style={styles.ButtonStyleTwo} onPress={() => this.props.setPause()}>
                 Pause
               </Text>
             </TouchableOpacity>
