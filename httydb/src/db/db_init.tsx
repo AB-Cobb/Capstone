@@ -62,7 +62,7 @@ export class db_init {
             transaction.executeSql(
                 'CREATE TABLE IF NOT EXISTS race( '+
                     '"race_id" INTEGER NOT NULL AUTOINCREMENT, ' + 
-                    'FOREIGN KEY(layout_id) REFERENCES boay_layout(layout_id)'+
+                    'FOREIGN KEY(layout_id) REFERENCES boay_layout(layout_id), '+
                     'date       UNSIGNED BIG INT, '+
                     'duration   FLOAT, '+
                     'distance   FLAOT' +
@@ -71,10 +71,10 @@ export class db_init {
             //map point
             transaction.executeSql(
                 'CREATE TABLE IF NOT EXISTS map_point( '+
-                    '"point_id"     INTEGER PRIMARY KEY' +
-                    'FOREIGN KEY(race_id) REFERENCES race(race_id)'+
+                    '"point_id"     INTEGER PRIMARY KEY, ' +
+                    'FOREIGN KEY(race_id) REFERENCES race(race_id), '+
                     '"long"         FLOAT, ' +
-                    '"lat"          FLOAT' +
+                    '"lat"          FLOAT, ' +
                     '"timestamp"    UNSIGNED BIG INT'+
                 ');'
             );       // */
@@ -100,6 +100,7 @@ export class db_init {
       })
       .catch(() => {
         return 0;
-      }); // do some error handling
+        // do some error handling
+      }); 
   }
 }

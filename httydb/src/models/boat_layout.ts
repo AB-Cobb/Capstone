@@ -1,4 +1,3 @@
-import { Paddler } from "./paddler"
 import { Team_member } from "./team_member";
 
 export class Boat_Layout {
