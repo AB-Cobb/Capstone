@@ -6,7 +6,6 @@ import { PROVIDER_GOOGLE } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import { request, PERMISSIONS } from 'react-native-permissions';
 
-let watchID
 class ReadyScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -39,6 +38,8 @@ class ReadyScreen extends React.Component {
 
   handleClick() {
     if (this.state.selectedLayout != 0){
+      console.log("Clearing Watch ID")
+      Geolocation.clearWatch(this.watchID)
       this.props.navigation.navigate('ReadyRecording', {
         selectedLayout: this.state.layouts[this.state.selectedLayout]
       });

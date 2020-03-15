@@ -35,8 +35,6 @@ class Timer extends React.Component {
     pausedStatus(){
         let paused = this.props.isPaused()
         let active = this.state.isActive
-        console.log(`Is Timer Paused: ${paused}`)
-        console.log(`Is Active: ${active}`)
         if (!paused && !active){
             this.setState({
                 isActive: true

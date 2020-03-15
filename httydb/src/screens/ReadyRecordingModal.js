@@ -2,11 +2,10 @@ import React from 'react';
 import {View} from 'react-native';
 import ReadyRecording from '../components/ReadyRecording';
 import MapView from 'react-native-maps';
-import { PROVIDER_GOOGLE } from 'react-native-maps';
+import { PROVIDER_GOOGLE, Polyline } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import { request, PERMISSIONS } from 'react-native-permissions';
 
-let watchID
 class ReadyRecordingModal extends React.Component {
     static navigationOptions = ({ navigation }) => {
         return {
@@ -19,14 +18,14 @@ class ReadyRecordingModal extends React.Component {
         this.state = {
             selectedLayout: props.selectedLayout,
             isPaused: false,
-            locationData: {
-                latitude: 0,
-                longitude: 0,
-                speed: null,
-                accuracy: null,
-                timestamp: null
+            routeData: {
+              routeName: "New Route",
+              time: 0,
+              distance: 0,
+              points: []
             },
-            marker: {
+            markers: [],
+            recentMarker: {
               latitude: 0,
               longitude: 0
             }
@@ -37,41 +36,61 @@ class ReadyRecordingModal extends React.Component {
         this.requestLocationPermission()
     }
 
+    componentWillUnmount(){
+      console.log("Clearing Watch ID")
+      Geolocation.clearWatch(this.watchID)
+      console.log(this.state.routeData)
+    }
+
     async requestLocationPermission() {
         if (Platform.OS == 'android'){
           let response = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
     
           if (response === 'granted'){
             console.log("Permission Granted")
-            this.accessLocation()
+            await this.accessLocation()
           }
         }
       }
 
-    accessLocation() {
-        let paused = this.state.isPaused
-        if (!paused) {
-            this.watchID = Geolocation.watchPosition((position) => {
-                console.log(position)
-              
-                this.setState({
-                  locationData: {
-                      latitude: position.coords.latitude,
-                      longitude: position.coords.longitude,
-                      speed: position.coords.speed,
-                      accuracy: position.coords.accuracy,
-                      timestamp: position.timestamp
-                  },
-                  marker: {
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude
-                  }
-                })
-              }, (error) => {
-                console.log("An error occured: " + error.message)
+      //Map currently on False for High Accuracy Mode, as it does not work during debugging
+
+    async accessLocation() {
+        this.watchID = Geolocation.watchPosition((position) => {
+          let paused = this.state.isPaused
+          console.log(`Retrieved New Point: ${JSON.stringify(position)}`)
+          let newPoint = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            speed: position.coords.speed,
+            accuracy: position.coords.accuracy,
+            timestamp: position.timestamp
+          }
+
+          let newMarker = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          }
+
+          if (!paused) {
+            console.log("Storing New Point...")
+            let pointArray = this.state.routeData.points
+            let lineArray = this.state.markers
+            pointArray.push(newPoint)
+            lineArray.push(newMarker)
+        
+            this.setState({
+              routeData: {
+                points: pointArray
               },
-              {enableHighAccuracy: false, timeout:20000, maximumAge:1000})
-        }
+              markers: lineArray,
+              recentMarker: newMarker
+            })
+          }
+        }, (error) => {
+          console.log("An error occured: " + error.message)
+        },
+        {enableHighAccuracy: false, timeout:20000, maximumAge:1000})
     }
 
     setPause() {
@@ -87,7 +106,7 @@ class ReadyRecordingModal extends React.Component {
 
     render() {
         console.log("Rendered ReadyRecordingModal!")
-        console.log(`RecordingRecordingModal Paused: ${this.getPaused()}`)
+        console.log(`Application Paused: ${this.getPaused()}`)
 
         let initialPos = {
             latitude: 37.421,
@@ -95,13 +114,13 @@ class ReadyRecordingModal extends React.Component {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421
           }
-
         return (
             <View>
                 <MapView ref={map => this._mapRecord = map} provider={PROVIDER_GOOGLE} style={{width: 410, height:300}} showsUserLocation={true} followsUserLocation={true} initialRegion={initialPos}>
-                    <MapView.Marker coordinate={this.state.marker} title="Current Location" />
+                    <MapView.Marker coordinate={this.state.recentMarker} title="Current Location" />
+                    <Polyline coordinates={this.state.markers} />
                 </MapView>
-                <ReadyRecording currentLayout={this.state.selectedLayout} setPause={() => this.setPause()} isPaused={() => this.getPaused()}/>
+                <ReadyRecording currentLayout={this.state.selectedLayout} setPause={() => this.setPause()} isPaused={() => this.getPaused()} currVelocity={this.state.routeData.points.speed}/>
             </View>
         )
     }
