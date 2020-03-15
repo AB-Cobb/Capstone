@@ -51,40 +51,44 @@ export class db_init {
             //paddler on boat
             transaction.executeSql(
                 'CREATE TABLE IF NOT EXISTS paddler_on_boat( '+
-                    '"paddler_on_boat_id"	INTEGER PRIMARY KEY, ' +
-                    'FOREIGN KEY(layout_id) REFERENCES boay_layout(layout_id), '+
-                    'FOREIGN KEY(team_member_id) REFERENCES team_member(team_member_id), '+
-                    'row INTEGER NOT NULL, '+
-                    'side INTEGER NOT NULL '+
-                ');'  
+                  '"paddler_on_boat_id"	INTEGER PRIMARY KEY, '+
+                  'layout_id INTEGER NOT NULL, '+
+                  'team_member_id INTEGER NOT NULL, ' + 
+                  'position INTEGER NOT NULL, ' + 
+                  'side INTEGER NOT NULL, ' +
+                  'FOREIGN KEY(layout_id) REFERENCES boat_layout(layout_id), '+
+                  'FOREIGN KEY(team_member_id) REFERENCES team_member(team_member_id) '+
+              ');'  
             );//*/
             //race
             transaction.executeSql(
-                'CREATE TABLE IF NOT EXISTS race( '+
-                    '"race_id" INTEGER NOT NULL AUTOINCREMENT, ' + 
-                    'FOREIGN KEY(layout_id) REFERENCES boay_layout(layout_id), '+
-                    'date       UNSIGNED BIG INT, '+
-                    'duration   FLOAT, '+
-                    'distance   FLAOT' +
-                ');'
+                'CREATE TABLE IF NOT EXISTS race( '+ 
+                  '"race_id" INTEGER PRIMARY KEY, ' +
+                  'layout_id INTEGER, '+
+                  'race_date       DATE, ' +
+                  'duration   FLOAT, ' +
+                  'distance   FLOAT, ' +
+                  'FOREIGN KEY(layout_id) REFERENCES boat_layout(layout_id) ' +
+              ');'
             );
             //map point
             transaction.executeSql(
                 'CREATE TABLE IF NOT EXISTS map_point( '+
-                    '"point_id"     INTEGER PRIMARY KEY, ' +
-                    'FOREIGN KEY(race_id) REFERENCES race(race_id), '+
-                    '"long"         FLOAT, ' +
-                    '"lat"          FLOAT, ' +
-                    '"timestamp"    UNSIGNED BIG INT'+
-                ');'
+                  '"point_id"     INTEGER PRIMARY KEY, '+
+                  '"race_id"	   INTEGER ' +
+                  '"long"         FLOAT, ' +
+                  '"lat"          FLOAT, '+
+                  '"timestamp"    datetime, '+
+                  'FOREIGN KEY(race_id) REFERENCES race(race_id) ' +
+              ');'
             );       // */
 
-    // Version table
-    transaction.executeSql(
-      'CREATE TABLE IF NOT EXISTS Version( ' +
-        'version_id INTEGER PRIMARY KEY NOT NULL, ' +
-        'version INTEGER' +
-        ');',
+            // Version table
+            transaction.executeSql(
+              'CREATE TABLE IF NOT EXISTS Version( ' +
+                'version_id INTEGER PRIMARY KEY NOT NULL, ' +
+                'version INTEGER' +
+                ');',
     );
   }
   private getVersion(db: SQLite.SQLiteDatabase): Promise<number> {

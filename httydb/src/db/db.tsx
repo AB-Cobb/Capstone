@@ -68,7 +68,7 @@ class db_impl implements Database {
     return this.getDB()
       .then(db =>
         db.executeSql(
-          'INSERT INTO team_member (name, email, phone, gender, weight, height, side_preference, active, emergency_cont) VALUES (?,?,?,?,?,?,?,?,?)',
+          'INSERT INTO team_member (name, email, phone, gender, weight, height, side_preference, active, emergency_cont) VALUES (?,?,?,?,?,?,?,?,?);',
           [
             team_member.name,
             team_member.email,
@@ -146,7 +146,7 @@ class db_impl implements Database {
               side_preference,
               active,
               emergency_cont,
-              id,
+              team_member_id,
             } = data;
             team_members.push(
               new Team_member(
@@ -159,7 +159,7 @@ class db_impl implements Database {
                 side_preference,
                 active,
                 emergency_cont,
-                id,
+                team_member_id
               ),
             );
           }
@@ -213,44 +213,58 @@ class db_impl implements Database {
   }
     // ------- Paddler On Boat ---
     //get
-    public getPaddlersOnBoat(id): Promise<PaddleronBoat[][]> {
+    public getPaddlersOnBoat(id): Promise<Team_member[][]> {
       return this.getDB()
         .then(db =>
-          db.executeSql('SELECT * FROM team_member WHERE team_mebmer.id IN '+
-                        'SELECT paddler_on_boat WHERE layout_id = ?;', [
+          db.executeSql('SELECT * FROM team_member as tm '+
+            'JOIN paddler_on_boat as pob ON tm.team_member_id = pob.team_member_id '+
+            'WHERE layout_id = ?;', [
             id,
           ]),
         )
         .then(([results]) => {
           if (results !== undefined) {
-            let paddlers: PaddleronBoat[] = [];
+            let paddlers: Team_member[][];
             for (let i = 0; i < results.rows.length; i++) {
               const data = results.rows.item(i);
               let {
-                layout_id,
                 team_member_id,
-                row,
-                side
+                position,
+                side,
+                name,
+                email,
+                phone,
+                gender,
+                weight,
+                height,
+                side_preference,
+                active,
+                emergency_cont,
               } = data;
-              paddlers.push(
-                new PaddleronBoat(
-                  layout_id,
+              paddlers[side][position] = 
+                new Team_member(
+                  name,
+                  email,
+                  phone,
+                  gender,
+                  weight,
+                  height,
+                  side_preference,
+                  active,
+                  emergency_cont,
                   team_member_id,
-                  row,
-                  side
-                ),
-              );
+                );
             }
             return paddlers;
           } else return Promise.reject();
         });
-    }
+    }//*/
     //insert
     public insertPaddlerOnBoat(paddler: PaddleronBoat): Promise<void> {
       return this.getDB()
         .then(db =>
           db.executeSql(
-            'INSERT INTO paddler_on_boat (layout_id, team_member_id, row, side) VALUES (?,?,?,?)',
+            'INSERT INTO paddler_on_boat (layout_id, team_member_id, position, side) VALUES (?,?,?,?)',
             [
               paddler.layout_id,
               paddler.team_member_id,
@@ -326,32 +340,54 @@ class db_impl implements Database {
                 return layout
               })
             })
-    }
+    }//*/
+    //get all
+    public getallBoatLayouts() : Promise<Boat_Layout[]>{
+      return this.getDB().then( db => 
+          db.executeSql('SELECT * FROM Boat_Layout ORDER BY date ;')).then(([results]) => {
+              if (results !== undefined){
+                  let layouts : [ Promise<Boat_Layout>];
+                  for (let i = 0; i < results.rows.length; i++){
+                    layouts.push(this.getBoatLayouts_helper(results.row.item(i)))
+                  }
+                  Promise.all(layouts).then (()=>{
+                    return layouts;
+                    }
+                  )
+              }
+              else 
+                  return Promise.reject()
+          });// */
+        }
     //get most recent layouts
     public getRecentBoatLayouts(num = 3) : Promise<Boat_Layout[]>{
         return this.getDB().then( db => 
             db.executeSql('SELECT * FROM Boat_Layout ORDER BY date LIMIT ?;', [num])).then(([results]) => {
                 if (results !== undefined){
-                    let layouts : Boat_Layout[] = [];
+                    let layouts : [ Promise<Boat_Layout>];
                     for (let i = 0; i < results.rows.length; i++){
-                        const data = results.rows.item(i);
-                        let { num_paddlers, name, date, active, id} = data;
-                        active = active > 0; 
-                        let layout = new Boat_Layout( num_paddlers, name, date, active, id)
-                        this.getPaddlersOnBoat(layout.id).then((paddlersonboat) => {
-                          paddlersonboat.forEach(paddleronboat => {
-                            this.getTeammemberByID(paddleronboat.team_member_id).then((paddler) =>{
-                            layout.paddlers[paddleronboat.side][paddleronboat.row] = paddler 
-                            });
-                          })
-                        })
-                        layouts.push(layout)
+                      layouts.push(this.getBoatLayouts_helper(results.row.item(i)))
                     }
-                    return layouts;
+                    Promise.all(layouts).then (()=>{
+                      return layouts;
+                      }
+                    )
                 }
                 else 
                     return Promise.reject()
             });// */
+          }
+    private getBoatLayouts_helper(data : { num_paddlers, name, date, active, id}) : Promise<Boat_Layout>{
+        let layout : Boat_Layout = new Boat_Layout(
+          data.num_paddlers,
+          data.name,
+          data.date,
+          data.active,
+          data.id)
+          return this.getPaddlersOnBoat(data.id).then(paddlers => {
+            layout.paddlers = paddlers;
+            return layout;
+          });
     }
     //map point
     //instert
@@ -359,7 +395,7 @@ class db_impl implements Database {
       return this.getDB()
         .then(db => 
           db.executeSql(
-            'INSERT INTO map_point (race_id, long, lat, timestamp) values (?,?,?,)',
+            'INSERT INTO map_point (race_id, long, lat, timestamp) values (?,?,?);',
             [
               race.id,
               map_point.long,
@@ -446,9 +482,47 @@ class db_impl implements Database {
           })
         })
     }
+    //get all
+    public getAllRaces() : Promise<Race[]>{
+      return this.getDB().then( db =>
+        db.executeSql('SELECT * FROM race ORDER BY race_date')).then(([results]) => {
+          if (results !== undefined){
+            let races : [Promise<Race>]
+            for (let i = 0; i < results.row.length; i++){
+              races.push(this.getRaces_helper(results.row.item(i)))
+            }
+            Promise.all(races).then(()=>{
+              return races
+            })
+          } else return Promise.reject()
+        });
+    } 
+    private getRaces_helper (data) : Promise<Race>{
+      let race : Race = new Race(data.date, data.distance,data.duration, data.id)
+      return this.getMapPointsByRace(data.id).then((map_points) => {
+        race.map_points = map_points
+        return this.getBoatLayoutByID(data.layout_id).then((layout) => {
+          race.layout = layout
+          return race;
+        })
+      })
+    }
     //get most recent
-
-    //get buy layout
+    public getRecentRaces(num = 3) : Promise<Race[]>{
+      return this.getDB().then( db =>
+        db.executeSql('SELECT * FROM race ORDER BY race_date LIMIT ?', [num])).then(([results]) => {
+          if (results !== undefined){
+            let races : [Promise<Race>]
+            for (let i = 0; i < results.row.length; i++){
+              races.push(this.getRaces_helper(results.row.item(i)))
+            }
+            Promise.all(races).then(()=>{
+              return races
+            })
+          } else return Promise.reject()
+        });
+    } 
+    //get by layout
     public getRace (id) : Promise<Race>{
       return this.getDB().then( db =>
         db.executeSql('SELECT * FROM race WHERE r.race_id = ?')
