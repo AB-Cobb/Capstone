@@ -29,10 +29,23 @@ class TeamScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+<<<<<<< HEAD
+      teammates: null,
+<<<<<<< HEAD
+    };
+  }
+  
+  componentDidMount(){
+    
+=======
+    }
+  }
+=======
       teamMembers: [],
       isLoading: false,
     };
   }
+>>>>>>> 42b65d7ce074b219d782c7759e073d5fd0cac526
 
   componentDidMount() {
     // this.setState({
@@ -42,6 +55,9 @@ class TeamScreen extends React.Component {
     this._subscribe = this.props.navigation.addListener('didFocus', () => {
       this.listTeammembers();
     });
+<<<<<<< HEAD
+>>>>>>> 8b4bd0e542daed44ec2ac467a99b9f2df195bd45
+=======
   }
 
   listTeammembers() {
@@ -61,6 +77,7 @@ class TeamScreen extends React.Component {
           isLoading: false,
         });
       });
+>>>>>>> 42b65d7ce074b219d782c7759e073d5fd0cac526
   }
 
   render() {
