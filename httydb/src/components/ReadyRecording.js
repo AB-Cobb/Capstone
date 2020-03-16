@@ -15,8 +15,8 @@ class ReadyRecording extends React.Component {
         <View style={{flexDirection: "row", justifyContent: "space-between"}}>
           <View style={{alignItems: "flex-start"}}>
             <Text style={styles.TextSpacing}>Current Layout: {this.state.currentLayout}</Text>
-            <Text style={styles.TextSpacing}>Distance: {"0.00 KM"}</Text>
-            <Text style={styles.TextSpacing}>Current Velocity: {this.props.currVelocity}</Text>
+            <Text style={styles.TextSpacing}>Distance: {this.props.distance} km</Text>
+            <Text style={styles.TextSpacing}>Current Velocity: {this.props.currVelocity} m/s</Text>
             <Text style={styles.TextSpacing}>Average Velocity: {"0.00 m/s"}</Text>
           </View>
   

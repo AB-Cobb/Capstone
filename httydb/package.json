@@ -15,6 +15,7 @@
     "@react-navigation/native": "^5.0.0-alpha.24",
     "expo": "^36.0.0",
     "firebase-admin": "^8.9.2",
+    "geolib": "^3.2.1",
     "react": "^16.9.0",
     "react-dom": "^16.13.0",
     "react-native": "0.61.5",

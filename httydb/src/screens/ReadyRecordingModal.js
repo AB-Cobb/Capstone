@@ -5,6 +5,7 @@ import MapView from 'react-native-maps';
 import { PROVIDER_GOOGLE, Polyline } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import { request, PERMISSIONS } from 'react-native-permissions';
+import { getDistance } from 'geolib';
 
 class ReadyRecordingModal extends React.Component {
     static navigationOptions = ({ navigation }) => {
@@ -19,7 +20,7 @@ class ReadyRecordingModal extends React.Component {
             selectedLayout: props.selectedLayout,
             isPaused: false,
             routeData: {
-              routeName: "New Route",
+              routeName: Date.now(),
               time: 0,
               distance: 0,
               points: []
@@ -72,6 +73,9 @@ class ReadyRecordingModal extends React.Component {
             longitude: position.coords.longitude
           }
 
+          let newDistance = this.calculateDistance(position.coords.latitude, position.coords.longitude)
+          console.log(`New Distance ${newDistance}`)
+
           if (!paused) {
             console.log("Storing New Point...")
             let pointArray = this.state.routeData.points
@@ -81,7 +85,8 @@ class ReadyRecordingModal extends React.Component {
         
             this.setState({
               routeData: {
-                points: pointArray
+                points: pointArray,
+                distance: newDistance
               },
               markers: polyArray,
               recentMarker: newMarker
@@ -104,6 +109,23 @@ class ReadyRecordingModal extends React.Component {
       return this.state.isPaused
     }
 
+    calculateDistance(newLat, newLong) {
+      let length = this.state.routeData.points.length
+      if (length > 0){
+        let prevLat = this.state.routeData.points[length -1].latitude
+        console.log(`PrevLat ${prevLat}`)
+        let prevLong = this.state.routeData.points[length -1].longitude
+
+        let oldDistance = this.state.routeData.distance
+        console.log(`Original Distance: ${oldDistance}`)
+        let newDistance = oldDistance + getDistance({latitude: prevLat, longitude: prevLong}, {latitude: newLat, longitude: newLong})
+        console.log(`NewDistance value: ${newDistance}`)
+
+        return newDistance
+      }
+      return 0
+    }
+
     render() {
         console.log("Rendered ReadyRecordingModal!")
         console.log(`Application Paused: ${this.getPaused()}`)
@@ -120,7 +142,7 @@ class ReadyRecordingModal extends React.Component {
                     <MapView.Marker coordinate={this.state.recentMarker} title="Current Location" />
                     <Polyline coordinates={this.state.markers} />
                 </MapView>
-                <ReadyRecording currentLayout={this.state.selectedLayout} setPause={() => this.setPause()} isPaused={() => this.getPaused()} currVelocity={this.state.routeData.points.speed}/>
+                <ReadyRecording currentLayout={this.state.selectedLayout} setPause={() => this.setPause()} isPaused={() => this.getPaused()} currVelocity={this.state.routeData.points.speed} distance={this.state.routeData.distance}/>
             </View>
         )
     }
