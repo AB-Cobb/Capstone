@@ -23,15 +23,8 @@
     "react-native-reanimated": "^1.4.0",
     "react-native-safe-area-context": "^0.6.2",
     "react-native-screens": "^2.0.0-alpha.22",
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
     "react-native-vector-icons": "^6.6.0",
->>>>>>> 8b4bd0e542daed44ec2ac467a99b9f2df195bd45
-=======
->>>>>>> 42b65d7ce074b219d782c7759e073d5fd0cac526
     "react-native-sqlite-storage": "^4.1.0",
-    "react-native-vector-icons": "^6.6.0",
     "react-navigation-stack": "latest",
     "react-navigation-tabs": "latest",
     "react-router-native": "^5.1.2",

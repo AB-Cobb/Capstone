@@ -348,7 +348,7 @@ class db_impl implements Database {
               if (results !== undefined){
                   let layouts : [ Promise<Boat_Layout>];
                   for (let i = 0; i < results.rows.length; i++){
-                    layouts.push(this.getBoatLayouts_helper(results.row.item(i)))
+                    layouts.push(this.getBoatLayouts_helper(results.rows.item(i)))
                   }
                   Promise.all(layouts).then (()=>{
                     return layouts;
@@ -366,7 +366,7 @@ class db_impl implements Database {
                 if (results !== undefined){
                     let layouts : [ Promise<Boat_Layout>];
                     for (let i = 0; i < results.rows.length; i++){
-                      layouts.push(this.getBoatLayouts_helper(results.row.item(i)))
+                      layouts.push(this.getBoatLayouts_helper(results.rows.item(i)))
                     }
                     Promise.all(layouts).then (()=>{
                       return layouts;
@@ -488,8 +488,8 @@ class db_impl implements Database {
         db.executeSql('SELECT * FROM race ORDER BY race_date')).then(([results]) => {
           if (results !== undefined){
             let races : [Promise<Race>]
-            for (let i = 0; i < results.row.length; i++){
-              races.push(this.getRaces_helper(results.row.item(i)))
+            for (let i = 0; i < results.rows.length; i++){
+              races.push(this.getRaces_helper(results.rows.item(i)))
             }
             Promise.all(races).then(()=>{
               return races
@@ -513,8 +513,8 @@ class db_impl implements Database {
         db.executeSql('SELECT * FROM race ORDER BY race_date LIMIT ?', [num])).then(([results]) => {
           if (results !== undefined){
             let races : [Promise<Race>]
-            for (let i = 0; i < results.row.length; i++){
-              races.push(this.getRaces_helper(results.row.item(i)))
+            for (let i = 0; i < results.rows.length; i++){
+              races.push(this.getRaces_helper(results.rows.item(i)))
             }
             Promise.all(races).then(()=>{
               return races
