@@ -75,15 +75,15 @@ class ReadyRecordingModal extends React.Component {
           if (!paused) {
             console.log("Storing New Point...")
             let pointArray = this.state.routeData.points
-            let lineArray = this.state.markers
+            let polyArray = this.state.markers.slice()
             pointArray.push(newPoint)
-            lineArray.push(newMarker)
+            polyArray.push(newMarker)
         
             this.setState({
               routeData: {
                 points: pointArray
               },
-              markers: lineArray,
+              markers: polyArray,
               recentMarker: newMarker
             })
           }
