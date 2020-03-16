@@ -10,6 +10,14 @@ class ReadyRecording extends React.Component {
       }
     }
 
+    getElapsedTime(){
+       return this.refs.timerRef.getElapsedTime()
+    }
+
+    saveData(){
+      this.props.saveData()
+    }
+
     render() {
       return (
         <View style={{flexDirection: "row", justifyContent: "space-between"}}>
@@ -21,14 +29,14 @@ class ReadyRecording extends React.Component {
           </View>
   
           <View style={{alignItems: "flex-end"}}>
-            <Timer isPaused={() => this.props.isPaused()} elapsedTime={0}></Timer>
+            <Timer ref="timerRef" isPaused={() => this.props.isPaused()} elapsedTime={0} sendTime={(time) => this.sendTime(time)}></Timer>
             <TouchableOpacity>
               <Text style={styles.ButtonStyleTwo} onPress={() => this.props.setPause()}>
                 Pause
               </Text>
             </TouchableOpacity>
             <TouchableOpacity>
-              <Text style={styles.ButtonStyleTwo}>Stop and Save
+              <Text style={styles.ButtonStyleTwo} onPress={() => this.props.saveData()}>Stop and Save
               </Text>
             </TouchableOpacity>
           </View>

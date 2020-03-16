@@ -20,10 +20,11 @@ class ReadyRecordingModal extends React.Component {
             selectedLayout: props.selectedLayout,
             isPaused: false,
             routeData: {
-              routeName: Date.now(),
+              routeName: "",
               time: 0,
               distance: 0,
-              points: []
+              points: [],
+              length: 0
             },
             markers: [],
             recentMarker: {
@@ -40,7 +41,6 @@ class ReadyRecordingModal extends React.Component {
     componentWillUnmount(){
       console.log("Clearing Watch ID")
       Geolocation.clearWatch(this.watchID)
-      console.log(this.state.routeData)
     }
 
     async requestLocationPermission() {
@@ -74,7 +74,8 @@ class ReadyRecordingModal extends React.Component {
           }
 
           let newDistance = this.calculateDistance(position.coords.latitude, position.coords.longitude)
-          console.log(`New Distance ${newDistance}`)
+
+          let newLength = this.state.routeData.length + 1
 
           if (!paused) {
             console.log("Storing New Point...")
@@ -86,7 +87,10 @@ class ReadyRecordingModal extends React.Component {
             this.setState({
               routeData: {
                 points: pointArray,
-                distance: newDistance
+                distance: newDistance,
+                length: newLength,
+                time: 0,
+                routeName: ""
               },
               markers: polyArray,
               recentMarker: newMarker
@@ -109,17 +113,41 @@ class ReadyRecordingModal extends React.Component {
       return this.state.isPaused
     }
 
+    getElapsedTime() {
+      return this.refs.readyRecording.getElapsedTime()
+    }
+
+    saveData() {
+      let newRouteObject = {
+        routeName: Date.now(),
+        time: this.getElapsedTime(),
+        distance: this.state.routeData.distance,
+        points: this.state.routeData.points.slice()
+      }
+      this.setState({
+        routeData: newRouteObject
+      }, () => {
+        //===== Perform Data Saving Here =====
+        //
+        console.log(this.state.routeData)
+        //
+        //====================================
+      })
+     this.props.navigation.navigate('Ready');
+    }
+
+    getCurrVelocity(){
+      return this.state.routeData.points[this.state.routeData.length -1].speed
+    }
+
     calculateDistance(newLat, newLong) {
-      let length = this.state.routeData.points.length
+      let length = this.state.routeData.length
       if (length > 0){
         let prevLat = this.state.routeData.points[length -1].latitude
-        console.log(`PrevLat ${prevLat}`)
         let prevLong = this.state.routeData.points[length -1].longitude
 
         let oldDistance = this.state.routeData.distance
-        console.log(`Original Distance: ${oldDistance}`)
-        let newDistance = oldDistance + getDistance({latitude: prevLat, longitude: prevLong}, {latitude: newLat, longitude: newLong})
-        console.log(`NewDistance value: ${newDistance}`)
+        let newDistance = oldDistance + Number((getDistance({latitude: prevLat, longitude: prevLong}, {latitude: newLat, longitude: newLong}) / 1000).toFixed(3))
 
         return newDistance
       }
@@ -142,7 +170,7 @@ class ReadyRecordingModal extends React.Component {
                     <MapView.Marker coordinate={this.state.recentMarker} title="Current Location" />
                     <Polyline coordinates={this.state.markers} />
                 </MapView>
-                <ReadyRecording currentLayout={this.state.selectedLayout} setPause={() => this.setPause()} isPaused={() => this.getPaused()} currVelocity={this.state.routeData.points.speed} distance={this.state.routeData.distance}/>
+                <ReadyRecording ref="readyRecording" currentLayout={this.state.selectedLayout} setPause={() => this.setPause()} isPaused={() => this.getPaused()} currVelocity={this.state.routeData.length == 0 ? 0 : () => this.getCurrVelocity()} distance={this.state.routeData.distance} sendTime={(time) => this.getTime(time)} saveData={() => this.saveData()}/>
             </View>
         )
     }

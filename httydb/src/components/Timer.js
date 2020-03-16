@@ -10,6 +10,10 @@ class Timer extends React.Component {
         }
     }
 
+    getElapsedTime(){
+        return this.state.elapsedTime
+    }
+
     convertToSeconds() {
         return (('0' + this.state.elapsedTime % 60).slice(-2))
     }
