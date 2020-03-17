@@ -12,13 +12,8 @@ import {Team_member} from '../models/team_member';
 import {Dropdown} from 'react-native-material-dropdown';
 // import Icon from 'react-native-vector-icons/FontAwesome';
 // import {Input} from 'react-native-elements';
-import {
-  TextField,
-  FilledTextField,
-  OutlinedTextField,
-} from 'react-native-material-textfield';
+import {OutlinedTextField} from 'react-native-material-textfield';
 
-// const db = new Database();
 export default class AddTeammateModal extends React.Component {
   static navigationOptions = ({navigation}) => {
     return {
@@ -167,8 +162,7 @@ export default class AddTeammateModal extends React.Component {
               value: 'Others',
             },
           ]}
-          selectedValue={this.state.gender}
-          onValueChange={(item, index) => this.setState({gender: item})}
+          onChangeText={this.onHandleGender}
         />
         <OutlinedTextField
           label="Weight (lb)"
@@ -195,10 +189,7 @@ export default class AddTeammateModal extends React.Component {
               value: 'Any',
             },
           ]}
-          selectedValue={this.state.side_preference}
-          onValueChange={(item, index) =>
-            this.setState({side_preference: item})
-          }
+          onChangeText={this.onHandleSidePreference}
         />
         <Dropdown
           label="Status"
@@ -210,8 +201,7 @@ export default class AddTeammateModal extends React.Component {
               value: 'Inactive',
             },
           ]}
-          selectedValue={this.state.active}
-          onValueChange={(item, index) => this.setState({active: item})}
+          onChangeText={this.onHandleActive}
         />
         <OutlinedTextField
           label="Emergency Contact"

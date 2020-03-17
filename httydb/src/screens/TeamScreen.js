@@ -9,6 +9,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Card from '../components/Card.js';
+import {
+  CardTitle,
+  CardContent,
+  CardAction,
+  CardButton,
+  CardImage,
+} from 'react-native-cards';
 import {db} from '../db/db';
 
 class TeamScreen extends React.Component {
@@ -77,9 +84,10 @@ class TeamScreen extends React.Component {
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('ViewTeammate')}>
                 <Card>
-                  <Text>{item.name}</Text>
-                  <Text>{item.phone}</Text>
-                  <Text>{item.side_preference}</Text>
+                  <CardTitle title={item.name} />
+                  <CardContent text={item.gender} />
+                  <CardContent text={item.side_preference} />
+                  <CardContent text={item.active} />
                 </Card>
               </TouchableOpacity>
             )}
