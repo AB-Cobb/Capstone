@@ -17,22 +17,21 @@
     "react": "^16.9.0",
     "react-dom": "^16.13.0",
     "react-native": "0.61.5",
+    "react-native-cards": "^1.1.4",
     "react-native-elements": "^1.2.7",
     "react-native-gesture-handler": "^1.5.3",
+    "react-native-material-dropdown": "^0.11.1",
+    "react-native-material-textfield": "^0.16.1",
+    "react-native-paper": "^3.6.0",
     "react-native-raw-bottom-sheet": "^2.0.6",
     "react-native-reanimated": "^1.4.0",
     "react-native-safe-area-context": "^0.6.2",
     "react-native-screens": "^2.0.0-alpha.22",
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
     "react-native-vector-icons": "^6.6.0",
->>>>>>> 8b4bd0e542daed44ec2ac467a99b9f2df195bd45
-=======
->>>>>>> 42b65d7ce074b219d782c7759e073d5fd0cac526
     "react-native-sqlite-storage": "^4.1.0",
+    "react-native-table-component": "^1.2.1",
     "react-native-vector-icons": "^6.6.0",
-    "react-navigation-stack": "latest",
+    "react-navigation-stack": "^2.3.1",
     "react-navigation-tabs": "latest",
     "react-router-native": "^5.1.2",
     "semantic-ui-css": "^2.4.1",

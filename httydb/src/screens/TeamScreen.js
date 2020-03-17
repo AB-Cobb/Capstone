@@ -9,6 +9,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Card from '../components/Card.js';
+import {
+  CardTitle,
+  CardContent,
+  CardAction,
+  CardButton,
+  CardImage,
+} from 'react-native-cards';
 import {db} from '../db/db';
 
 class TeamScreen extends React.Component {
@@ -29,35 +36,21 @@ class TeamScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-<<<<<<< HEAD
+
       teammates: null,
-<<<<<<< HEAD
+
     };
   }
   
-  componentDidMount(){
-    
-=======
-    }
-  }
-=======
+   componentDidMount() {
+    this._subscribe = this.props.navigation.addListener('didFocus', () => {
+      this.listTeammembers();
+    });
       teamMembers: [],
       isLoading: false,
     };
   }
->>>>>>> 42b65d7ce074b219d782c7759e073d5fd0cac526
 
-  componentDidMount() {
-    // this.setState({
-    //   teammates: ["Arsalan", "Andrew", "Guiseppe", "Nga","Zapdos","Jolteon","Pikachu","Luxray","Dedenne","Charizard"],
-    // });
-
-    this._subscribe = this.props.navigation.addListener('didFocus', () => {
-      this.listTeammembers();
-    });
-<<<<<<< HEAD
->>>>>>> 8b4bd0e542daed44ec2ac467a99b9f2df195bd45
-=======
   }
 
   listTeammembers() {
@@ -77,7 +70,6 @@ class TeamScreen extends React.Component {
           isLoading: false,
         });
       });
->>>>>>> 42b65d7ce074b219d782c7759e073d5fd0cac526
   }
 
   render() {
@@ -92,12 +84,17 @@ class TeamScreen extends React.Component {
             data={teamMembers}
             renderItem={({item}) => (
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('ViewTeammate', {teammate: item})}>
+                onPress={() =>
+                  this.props.navigation.navigate('ViewTeammate', {
+                    item,
+                  })
+                }>
                 <Card>
-                  <Text>{item.name}</Text>
-                  <Text>{item.gender}</Text>
-                  <Text>{item.phone}</Text>
-                  <Text>{item.side_preference}</Text>
+                  <CardTitle title={item.name} />
+                  <CardContent text={item.gender} />
+                  <CardContent text={item.side_preference} />
+                  <CardContent text={item.active} />
+
                 </Card>
               </TouchableOpacity>
             )}

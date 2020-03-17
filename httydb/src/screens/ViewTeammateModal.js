@@ -1,8 +1,16 @@
 import React from 'react';
-import {View, Button, StyleSheet, ScrollView, Text} from 'react-native';
+import {
+  FlatList,
+  View,
+  Button,
+  StyleSheet,
+  ScrollView,
+  Text,
+} from 'react-native';
 import {Divider} from 'react-native-elements';
 
 class ViewTeammateModal extends React.Component {
+
   static navigationOptions = ({navigation}) => {
     return {
       headerTitleAlign: 'center',
@@ -25,41 +33,95 @@ class ViewTeammateModal extends React.Component {
     }
   }
 
+  // navigationOptions = ({navigation}) => {
+  //   const editItem = this.props.navigation.state.params.item;
+
+  //   return {
+  //     headerTitleAlign: 'center',
+  //     headerRight: () => (
+  //       <Button
+  //         onPress={() => {
+  //           this.props.navigation.navigate('EditTeammate', {editItem});
+  //         }}
+  //         title="Edit"
+  //       />
+  //     ),
+  //   };
+  // };
+
   render() {
-      const {teammate} = this.state;
+
+    const styles = StyleSheet.create({
+      container: {
+        flex: 1,
+        paddingTop: 10,
+        paddingLeft: 15,
+      },
+      item: {
+        padding: 5,
+        fontSize: 14,
+        height: 30,
+        color: '#5C607C',
+      },
+      text: {margin: 2, fontSize: 20, color: '#243A43'},
+    });
+    const teammember = this.props.navigation.state.params.item;
     return (
       <ScrollView>
-        <Text>Name</Text>
-        <Text>{teammate.name || 'FIRST_NAME'}</Text>
-        <Divider style={{backgroundColor: 'blue'}} />
-
-        <Text>Gender</Text>
-        <Text>{teammate.gender || 'GENDER'}</Text>
-        <Divider style={{backgroundColor: 'blue'}} />
-
-        <Text>Paddling Side Preference</Text>
-        <Text>{teammate.side_preference || 'PADDLING_SIDE'}</Text>
-        <Divider style={{backgroundColor: 'blue'}} />
-
-        <Text>Height</Text>
-        <Text>{teammate.height || 'HEIGHT'}</Text>
-        <Divider style={{backgroundColor: 'blue'}} />
-
-        <Text>Weight</Text>
-        <Text>{teammate.weight || 'WEIGHT'}</Text>
-        <Divider style={{backgroundColor: 'blue'}} />
-
-        <Text>Email Address</Text>
-        <Text>{teammate.email || 'EMAIL'}</Text>
-        <Divider style={{backgroundColor: 'blue'}} />
-
-        <Text>Phone</Text>
-        <Text>{teammate.phone || 'PHONE'}</Text>
-        <Divider style={{backgroundColor: 'blue'}} />
-
-        <Text>Emergency Contact</Text>
-        <Text>{teammate.emergency_cont || 'EMERGENCY_CONTACT'}</Text>
-        <Divider style={{backgroundColor: 'blue'}} />
+        <Button
+          onPress={() => {
+            this.props.navigation.navigate('EditTeammate', {teammember});
+          }}
+          title="Edit"
+        />
+        <View style={styles.container}>
+          <FlatList
+            data={[
+              {
+                key: 'Name',
+                value: teammember.name,
+              },
+              {
+                key: 'Email',
+                value: teammember.email,
+              },
+              {
+                key: 'Phone Number',
+                value: teammember.phone,
+              },
+              {
+                key: 'Gender',
+                value: teammember.gender,
+              },
+              {
+                key: 'Weight',
+                value: teammember.weight,
+              },
+              {
+                key: 'Height',
+                value: teammember.height,
+              },
+              {
+                key: 'Padding Side Preference',
+                value: teammember.side_preference,
+              },
+              {
+                key: 'Status',
+                value: teammember.active,
+              },
+              {
+                key: 'Emergency Contact',
+                value: teammember.emergency_cont,
+              },
+            ]}
+            renderItem={({item}) => (
+              <View style={styles.container}>
+                <Text style={styles.item}> {item.key} </Text>
+                <Text style={styles.text}> {item.value} </Text>
+              </View>
+            )}
+          />
+        </View>
       </ScrollView>
     );
   }
