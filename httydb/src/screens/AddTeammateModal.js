@@ -9,6 +9,14 @@ import {
 import {Button} from 'react-native-elements';
 import {db} from '../db/db';
 import {Team_member} from '../models/team_member';
+import {Dropdown} from 'react-native-material-dropdown';
+// import Icon from 'react-native-vector-icons/FontAwesome';
+// import {Input} from 'react-native-elements';
+import {
+  TextField,
+  FilledTextField,
+  OutlinedTextField,
+} from 'react-native-material-textfield';
 
 // const db = new Database();
 export default class AddTeammateModal extends React.Component {
@@ -119,6 +127,10 @@ export default class AddTeammateModal extends React.Component {
     }
   }
 
+  formatText = text => {
+    return text.replace(/[^+\d]/g, '');
+  };
+
   isEmail = email => {
     let reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return reg.test(email);
@@ -126,87 +138,87 @@ export default class AddTeammateModal extends React.Component {
   render() {
     return (
       <ScrollView>
-        <View>
-          <TextInput
-            placeholder={'Name'}
-            value={this.state.fname}
-            onChangeText={this.onHandleName}
-          />
-        </View>
-        <View>
-          <TextInput
-            placeholder={'Email'}
-            value={this.state.email}
-            onChangeText={this.onHandleEmail}
-          />
-        </View>
-        <View>
-          <TextInput
-            placeholder={'Phone number'}
-            value={this.state.phone}
-            onChangeText={this.onHandlePhone}
-            keyboardType="phone-pad"
-          />
-        </View>
-        <View>
-          <Picker
-            selectedValue={this.state.gender}
-            onValueChange={(itemValue, itemIndex) =>
-              this.setState({gender: itemValue})
-            }
-            mode="dropdown">
-            <Picker.Item label="Male" value="Male" />
-            <Picker.Item label="Female" value="Female" />
-          </Picker>
-        </View>
-        <View>
-          <TextInput
-            placeholder={'Weight'}
-            value={this.state.weight}
-            onChangeText={this.onHandleWeight}
-            keyboardType="phone-pad"
-          />
-        </View>
-        <View>
-          <TextInput
-            placeholder={'Height'}
-            value={this.state.height}
-            onChangeText={this.onHandleHeight}
-            keyboardType="phone-pad"
-          />
-        </View>
-        <View>
-          <Picker
-            selectedValue={this.state.side_preference}
-            onValueChange={(itemValue, itemIndex) =>
-              this.setState({side_preference: itemValue})
-            }
-            mode="dropdown">
-            <Picker.Item label="Left" value="Left" />
-            <Picker.Item label="Right" value="Right" />
-            <Picker.Item label="Any" value="Any" />
-          </Picker>
-        </View>
-
-        <View>
-          <Picker
-            selectedValue={this.state.active}
-            onValueChange={(itemValue, itemIndex) =>
-              this.setState({active: itemValue})
-            }
-            mode="dropdown">
-            <Picker.Item label="Yes" value="true" />
-            <Picker.Item label="No" value="false" />
-          </Picker>
-        </View>
-        <View>
-          <TextInput
-            placeholder={'Emergency Contact'}
-            value={this.state.emergency_cont}
-            onChangeText={this.onHandleEmergencyCont}
-            keyboardType="phone-pad"
-          />
-        </View>
+        <OutlinedTextField
+          label="Name"
+          keyboardType="default"
+          onChangeText={this.onHandleName}
+        />
+        <OutlinedTextField
+          label="Email"
+          keyboardType="email-address"
+          onChangeText={this.onHandleEmail}
+        />
+        <OutlinedTextField
+          label="Phone number"
+          keyboardType="phone-pad"
+          formatText={this.formatText}
+          onChangeText={this.onHandlePhone}
+        />
+        <Dropdown
+          label="Gender"
+          data={[
+            {
+              value: 'Female',
+            },
+            {
+              value: 'Male',
+            },
+            {
+              value: 'Others',
+            },
+          ]}
+          selectedValue={this.state.gender}
+          onValueChange={(item, index) => this.setState({gender: item})}
+        />
+        <OutlinedTextField
+          label="Weight (lb)"
+          keyboardType="numeric"
+          formatText={this.formatText}
+          onChangeText={this.onHandleWeight}
+        />
+        <OutlinedTextField
+          label="Height (cm)"
+          keyboardType="numeric"
+          formatText={this.formatText}
+          onChangeText={this.onHandleHeight}
+        />
+        <Dropdown
+          label="Padding Side Preference"
+          data={[
+            {
+              value: 'Left',
+            },
+            {
+              value: 'Right',
+            },
+            {
+              value: 'Any',
+            },
+          ]}
+          selectedValue={this.state.side_preference}
+          onValueChange={(item, index) =>
+            this.setState({side_preference: item})
+          }
+        />
+        <Dropdown
+          label="Status"
+          data={[
+            {
+              value: 'Active',
+            },
+            {
+              value: 'Inactive',
+            },
+          ]}
+          selectedValue={this.state.active}
+          onValueChange={(item, index) => this.setState({active: item})}
+        />
+        <OutlinedTextField
+          label="Emergency Contact"
+          keyboardType="phone-pad"
+          formatText={this.formatText}
+          onChangeText={this.onHandleEmergencyCont}
+        />
         <View>
           <Button title="Add" onPress={() => this.onAdd()} />
         </View>
@@ -214,21 +226,3 @@ export default class AddTeammateModal extends React.Component {
     );
   }
 }
-
-// <TextInput
-//             placeholder={'Gender'}
-//             value={this.state.gender}
-//             onChangeText={this.onHandleGender}
-//           />
-
-//           <TextInput
-//             placeholder={'Paddling side Preference'}
-//             value={this.state.side_preference}
-//             onChangeText={this.onHandleSidePreference}
-//           />
-
-//           <TextInput
-//           placeholder={'Active'}
-//           value={this.state.active}
-//           onChangeText={this.onHandleActive}
-//         />
