@@ -42,10 +42,6 @@ class TeamScreen extends React.Component {
   }
 
   componentDidMount() {
-    // this.setState({
-    //   teammates: ["Arsalan", "Andrew", "Guiseppe", "Nga","Zapdos","Jolteon","Pikachu","Luxray","Dedenne","Charizard"],
-    // });
-
     this._subscribe = this.props.navigation.addListener('didFocus', () => {
       this.listTeammembers();
     });
@@ -82,7 +78,11 @@ class TeamScreen extends React.Component {
             data={teamMembers}
             renderItem={({item}) => (
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('ViewTeammate')}>
+                onPress={() =>
+                  this.props.navigation.navigate('ViewTeammate', {
+                    item,
+                  })
+                }>
                 <Card>
                   <CardTitle title={item.name} />
                   <CardContent text={item.gender} />

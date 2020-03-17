@@ -1,6 +1,14 @@
 import React from 'react';
-import {View, Button, StyleSheet, ScrollView, Text} from 'react-native';
+import {
+  FlatList,
+  View,
+  Button,
+  StyleSheet,
+  ScrollView,
+  Text,
+} from 'react-native';
 import {Divider} from 'react-native-elements';
+import {Table, Row, Rows} from 'react-native-table-component';
 
 class ViewTeammateModal extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -19,49 +27,81 @@ class ViewTeammateModal extends React.Component {
 
   constructor(props) {
     super(props);
+    // const item = this.props.navigation.getParam('item');
+    // this.state = {
+    //   teammember: item,
+    // };
   }
 
   render() {
+    const styles = StyleSheet.create({
+      container: {
+        flex: 1,
+        paddingTop: 10,
+        paddingLeft: 15,
+      },
+      item: {
+        padding: 5,
+        fontSize: 14,
+        height: 30,
+        color: '#5C607C',
+      },
+      text: {margin: 2, fontSize: 20, color: '#243A43'},
+    });
     return (
       <ScrollView>
-        <Text>Name</Text>
-        <Text>{this.props.fname || 'FIRST_NAME'}</Text>
-        <Divider style={{backgroundColor: 'blue'}} />
-
-        <Text>Gender</Text>
-        <Text>{this.props.gender || 'GENDER'}</Text>
-        <Divider style={{backgroundColor: 'blue'}} />
-
-        <Text>Paddling Side Preference</Text>
-        <Text>{this.props.paddlingSide || 'PADDLING_SIDE'}</Text>
-        <Divider style={{backgroundColor: 'blue'}} />
-
-        <Text>Height</Text>
-        <Text>{this.props.height || 'HEIGHT'}</Text>
-        <Divider style={{backgroundColor: 'blue'}} />
-
-        <Text>Weight</Text>
-        <Text>{this.props.weight || 'WEIGHT'}</Text>
-        <Divider style={{backgroundColor: 'blue'}} />
-
-        <Text>Email Address</Text>
-        <Text>{this.props.email || 'EMAIL'}</Text>
-        <Divider style={{backgroundColor: 'blue'}} />
-
-        <Text>Weight</Text>
-        <Text>{this.props.weight || 'WEIGHT'}</Text>
-        <Divider style={{backgroundColor: 'blue'}} />
-
-        <Text>Phone</Text>
-        <Text>{this.props.phone || 'PHONE'}</Text>
-        <Divider style={{backgroundColor: 'blue'}} />
-
-        <Text>Emergency Contact</Text>
-        <Text>{this.props.emergencyContact || 'EMERGENCY_CONTACT'}</Text>
-        <Divider style={{backgroundColor: 'blue'}} />
+        <View style={styles.container}>
+          <FlatList
+            data={[
+              {
+                key: 'Name',
+                value: this.props.navigation.state.params.item.name,
+              },
+              {
+                key: 'Email',
+                value: this.props.navigation.state.params.item.email,
+              },
+              {
+                key: 'Phone Number',
+                value: this.props.navigation.state.params.item.phone,
+              },
+              {
+                key: 'Gender',
+                value: this.props.navigation.state.params.item.gender,
+              },
+              {
+                key: 'Weight',
+                value: this.props.navigation.state.params.item.weight,
+              },
+              {
+                key: 'Height',
+                value: this.props.navigation.state.params.item.height,
+              },
+              {
+                key: 'Padding Side Preference',
+                value: this.props.navigation.state.params.item.side_preference,
+              },
+              {
+                key: 'Status',
+                value: this.props.navigation.state.params.item.active,
+              },
+              {
+                key: 'Emergency Contact',
+                value: this.props.navigation.state.params.item.emergency_cont,
+              },
+            ]}
+            renderItem={({item}) => (
+              <View style={styles.container}>
+                <Text style={styles.item}> {item.key} </Text>
+                <Text style={styles.text}> {item.value} </Text>
+              </View>
+            )}
+          />
+        </View>
       </ScrollView>
     );
   }
 }
 
 export default ViewTeammateModal;
+// <Text style={styles.item}>{item.key}</Text>
