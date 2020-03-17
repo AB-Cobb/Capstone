@@ -46,11 +46,10 @@ class TeamScreen extends React.Component {
     this._subscribe = this.props.navigation.addListener('didFocus', () => {
       this.listTeammembers();
     });
+    this.setState({
       teamMembers: [],
       isLoading: false,
-    };
-  }
-
+    });
   }
 
   listTeammembers() {
