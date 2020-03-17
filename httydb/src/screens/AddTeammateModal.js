@@ -136,12 +136,12 @@ export default class AddTeammateModal extends React.Component {
         <OutlinedTextField
           label="Name"
           keyboardType="default"
-          onChangeText={this.onHandleName}
+          onChangeText={name => this.setState({name})}
         />
         <OutlinedTextField
           label="Email"
           keyboardType="email-address"
-          onChangeText={this.onHandleEmail}
+          onChangeText={email => this.setState({email})}
         />
         <OutlinedTextField
           label="Phone number"

@@ -8,30 +8,27 @@ import {
   Text,
 } from 'react-native';
 import {Divider} from 'react-native-elements';
-import {Table, Row, Rows} from 'react-native-table-component';
 
 class ViewTeammateModal extends React.Component {
-  static navigationOptions = ({navigation}) => {
-    return {
-      headerTitleAlign: 'center',
-      headerRight: () => (
-        <Button
-          onPress={() => {
-            navigation.navigate('EditTeammate');
-          }}
-          title="Edit"
-        />
-      ),
-    };
-  };
-
   constructor(props) {
     super(props);
-    // const item = this.props.navigation.getParam('item');
-    // this.state = {
-    //   teammember: item,
-    // };
   }
+
+  // navigationOptions = ({navigation}) => {
+  //   const editItem = this.props.navigation.state.params.item;
+
+  //   return {
+  //     headerTitleAlign: 'center',
+  //     headerRight: () => (
+  //       <Button
+  //         onPress={() => {
+  //           this.props.navigation.navigate('EditTeammate', {editItem});
+  //         }}
+  //         title="Edit"
+  //       />
+  //     ),
+  //   };
+  // };
 
   render() {
     const styles = StyleSheet.create({
@@ -48,46 +45,53 @@ class ViewTeammateModal extends React.Component {
       },
       text: {margin: 2, fontSize: 20, color: '#243A43'},
     });
+    const teammember = this.props.navigation.state.params.item;
     return (
       <ScrollView>
+        <Button
+          onPress={() => {
+            this.props.navigation.navigate('EditTeammate', {teammember});
+          }}
+          title="Edit"
+        />
         <View style={styles.container}>
           <FlatList
             data={[
               {
                 key: 'Name',
-                value: this.props.navigation.state.params.item.name,
+                value: teammember.name,
               },
               {
                 key: 'Email',
-                value: this.props.navigation.state.params.item.email,
+                value: teammember.email,
               },
               {
                 key: 'Phone Number',
-                value: this.props.navigation.state.params.item.phone,
+                value: teammember.phone,
               },
               {
                 key: 'Gender',
-                value: this.props.navigation.state.params.item.gender,
+                value: teammember.gender,
               },
               {
                 key: 'Weight',
-                value: this.props.navigation.state.params.item.weight,
+                value: teammember.weight,
               },
               {
                 key: 'Height',
-                value: this.props.navigation.state.params.item.height,
+                value: teammember.height,
               },
               {
                 key: 'Padding Side Preference',
-                value: this.props.navigation.state.params.item.side_preference,
+                value: teammember.side_preference,
               },
               {
                 key: 'Status',
-                value: this.props.navigation.state.params.item.active,
+                value: teammember.active,
               },
               {
                 key: 'Emergency Contact',
-                value: this.props.navigation.state.params.item.emergency_cont,
+                value: teammember.emergency_cont,
               },
             ]}
             renderItem={({item}) => (
@@ -104,4 +108,3 @@ class ViewTeammateModal extends React.Component {
 }
 
 export default ViewTeammateModal;
-// <Text style={styles.item}>{item.key}</Text>
