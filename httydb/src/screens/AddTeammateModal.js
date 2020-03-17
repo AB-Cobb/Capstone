@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, ScrollView} from 'react-native';
+import {View, ScrollView, StyleSheet} from 'react-native';
 import {Button} from 'react-native-elements';
 import {db} from '../db/db';
 import {Team_member} from '../models/team_member';
@@ -67,86 +67,84 @@ export default class AddTeammateModal extends React.Component {
     return reg.test(email);
   };
   render() {
+    const styles = StyleSheet.create({
+      container: {
+        paddingTop: 20,
+      },
+      field: {
+        marginTop: 10,
+        marginLeft: 20,
+        marginRight: 20,
+      },
+      saveButton: {
+        backgroundColor: '#A14A76',
+        padding: 10,
+        margin: 15,
+        height: 40,
+      },
+      buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 70,
+        margin: 15,
+        paddingTop: 23,
+      },
+    });
     return (
       <ScrollView>
-        <OutlinedTextField
-          label="Name"
-          keyboardType="default"
-          onChangeText={name => this.setState({name})}
-        />
-        <OutlinedTextField
-          label="Email"
-          keyboardType="email-address"
-          onChangeText={email => this.setState({email})}
-        />
-        <OutlinedTextField
-          label="Phone number"
-          keyboardType="phone-pad"
-          formatText={this.formatText}
-          onChangeText={phone => this.setState({phone})}
-        />
-        <Dropdown
-          label="Gender"
-          data={[
-            {
-              value: 'Female',
-            },
-            {
-              value: 'Male',
-            },
-            {
-              value: 'Others',
-            },
-          ]}
-          onChangeText={gender => this.setState({gender})}
-        />
-        <OutlinedTextField
-          label="Weight (lb)"
-          keyboardType="numeric"
-          formatText={this.formatText}
-          onChangeText={weight => this.setState({weight})}
-        />
-        <OutlinedTextField
-          label="Height (cm)"
-          keyboardType="numeric"
-          formatText={this.formatText}
-          onChangeText={height => this.setState({height})}
-        />
-        <Dropdown
-          label="Padding Side Preference"
-          data={[
-            {
-              value: 'Left',
-            },
-            {
-              value: 'Right',
-            },
-            {
-              value: 'Any',
-            },
-          ]}
-          onChangeText={side_preference => this.setState({side_preference})}
-        />
-        <Dropdown
-          label="Status"
-          data={[
-            {
-              value: 'Active',
-            },
-            {
-              value: 'Inactive',
-            },
-          ]}
-          onChangeText={active => this.setState({active})}
-        />
-        <OutlinedTextField
-          label="Emergency Contact"
-          keyboardType="phone-pad"
-          formatText={this.formatText}
-          onChangeText={emergency_cont => this.setState({emergency_cont})}
-        />
-        <View>
-          <Button title="Add" onPress={() => this.onAdd()} />
+        <View style={styles.container}>
+          <OutlinedTextField
+            label="Name"
+            keyboardType="default"
+            onChangeText={name => this.setState({name})}
+          />
+          <OutlinedTextField
+            label="Email"
+            keyboardType="email-address"
+            onChangeText={email => this.setState({email})}
+          />
+          <OutlinedTextField
+            label="Phone number"
+            keyboardType="phone-pad"
+            formatText={this.formatText}
+            onChangeText={phone => this.setState({phone})}
+          />
+          <Dropdown
+            label="Gender"
+            data={[{value: 'Male'}, {value: 'Female'}, {value: 'Others'}]}
+            onChangeText={gender => this.setState({gender})}
+          />
+          <OutlinedTextField
+            label="Weight (lb)"
+            keyboardType="numeric"
+            formatText={this.formatText}
+            onChangeText={weight => this.setState({weight})}
+          />
+          <OutlinedTextField
+            label="Height (cm)"
+            keyboardType="numeric"
+            formatText={this.formatText}
+            onChangeText={height => this.setState({height})}
+          />
+          <Dropdown
+            label="Padding Side Preference"
+            data={[{value: 'Left'}, {value: 'Right'}, {value: 'Any Sides'}]}
+            onChangeText={side_preference => this.setState({side_preference})}
+          />
+          <Dropdown
+            label="Status"
+            data={[{value: 'Active'}, {value: 'Inactive'}]}
+            onChangeText={active => this.setState({active})}
+          />
+          <OutlinedTextField
+            label="Emergency Contact"
+            keyboardType="phone-pad"
+            formatText={this.formatText}
+            onChangeText={emergency_cont => this.setState({emergency_cont})}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button title="Add Team Member" onPress={() => this.onAdd()} />
         </View>
       </ScrollView>
     );

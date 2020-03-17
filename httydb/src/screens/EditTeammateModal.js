@@ -1,7 +1,14 @@
 import React from 'react';
-import {View, Button, StyleSheet, ScrollView, Text} from 'react-native';
+import {
+  View,
+  Button,
+  StyleSheet,
+  ScrollView,
+  Picker,
+  PickerIOS,
+} from 'react-native';
 import {TextInput} from 'react-native-paper';
-import {Divider} from 'react-native-elements';
+import {Dropdown} from 'react-native-material-dropdown';
 class EditTeammateModal extends React.Component {
   static navigationOptions = ({navigation}) => {
     return {
@@ -25,108 +32,42 @@ class EditTeammateModal extends React.Component {
     };
   }
 
-  onHandleName = event => {
-    this.setState({
-      name: event,
-    });
-  };
-  onHandleEmail = event => {
-    this.setState({
-      email: event,
-    });
-  };
-
-  onHandlePhone = event => {
-    this.setState({
-      phone: event,
-    });
-  };
-
-  onHandleGender = event => {
-    this.setState({
-      gender: event,
-    });
-  };
-
-  onHandleWeight = event => {
-    this.setState({
-      weight: event,
-    });
-  };
-
-  onHandleHeight = event => {
-    this.setState({
-      height: event,
-    });
-  };
-
-  onHandleSidePreference = event => {
-    this.setState({
-      side_preference: event,
-    });
-  };
-
-  onHandleActive = event => {
-    this.setState({
-      active: event,
-    });
-  };
-
-  onHandleEmergencyCont = event => {
-    this.setState({
-      emergency_cont: event,
-    });
-  };
-
   onUpdateButton() {
-    if (!this.isEmail(this.state.email)) {
-    } else {
-      let data = new Team_member(
-        this.state.name,
-        this.state.email,
-        this.state.phone,
-        this.state.gender,
-        this.state.weight,
-        this.state.height,
-        this.state.side_preference,
-        this.state.active,
-        this.state.emergency_cont,
-      );
+    let data = new Team_member(
+      this.state.name,
+      this.state.email,
+      this.state.phone,
+      this.state.gender,
+      this.state.weight,
+      this.state.height,
+      this.state.side_preference,
+      this.state.active,
+      this.state.emergency_cont,
+    );
 
-      db.updateTeammamber(data)
-        .then(result => {
-          console.log(result);
-          this.props.navigation.goBack();
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
+    db.updateTeammamber(data)
+      .then(result => {
+        console.log(result);
+        this.props.navigation.goBack();
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   onDeleteButton() {
     console.log('Button clicked');
   }
 
-  formatText = text => {
-    return text.replace(/[^+\d]/g, '');
-  };
-
-  isEmail = email => {
-    let reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return reg.test(email);
-  };
-
   render() {
     const styles = StyleSheet.create({
       container: {
-        paddingTop: 23,
+        paddingTop: 10,
       },
-      input: {
-        margin: 15,
-        height: 40,
-        borderColor: '#A14A76',
-        borderWidth: 1,
+      field: {
+        marginTop: 10,
+        marginLeft: 20,
+        marginRight: 20,
       },
       saveButton: {
         backgroundColor: '#A14A76',
@@ -134,56 +75,98 @@ class EditTeammateModal extends React.Component {
         margin: 15,
         height: 40,
       },
-      submitButtonText: {
-        color: 'white',
+      buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 70,
+        margin: 15,
+        paddingTop: 23,
       },
     });
 
-    const item = this.props.navigation.state.params.teammember;
-    console.log('passed item ', item);
     return (
       <ScrollView>
         <View style={styles.container}>
           <TextInput
+            style={styles.field}
             label="Name"
             mode="outlined"
-            value={item.name}
+            value={this.state.name}
             onChangeText={name => this.setState({name})}
           />
-
-          <Text>Gender</Text>
-          <TextInput>{this.props.gender || 'GENDER'}</TextInput>
-          <Divider style={{backgroundColor: 'blue'}} />
-
-          <Text>Paddling Side Preference</Text>
-          <TextInput>{this.props.paddlingSide || 'PADDLING_SIDE'}</TextInput>
-          <Divider style={{backgroundColor: 'blue'}} />
-
-          <Text>Height</Text>
-          <TextInput>{this.props.height || 'HEIGHT'}</TextInput>
-          <Divider style={{backgroundColor: 'blue'}} />
-
-          <Text>Weight</Text>
-          <TextInput>{this.props.weight || 'WEIGHT'}</TextInput>
-          <Divider style={{backgroundColor: 'blue'}} />
-
-          <Text>Email Address</Text>
-          <TextInput>{this.props.email || 'EMAIL'}</TextInput>
-          <Divider style={{backgroundColor: 'blue'}} />
-
-          <Text>Weight</Text>
-          <TextInput>{this.props.weight || 'WEIGHT'}</TextInput>
-          <Divider style={{backgroundColor: 'blue'}} />
-
-          <Text>Phone</Text>
-          <TextInput>{this.props.phone || 'PHONE'}</TextInput>
-          <Divider style={{backgroundColor: 'blue'}} />
-
-          <Text>Emergency Contact</Text>
-          <TextInput>
-            {this.props.emergencyContact || 'EMERGENCY_CONTACT'}
-          </TextInput>
-          <Divider style={{backgroundColor: 'blue'}} />
+          <TextInput
+            style={styles.field}
+            label="Email"
+            mode="outlined"
+            value={this.state.email}
+            onChangeText={email => this.setState({email})}
+          />
+          <TextInput
+            style={styles.field}
+            label="Phone Number"
+            mode="outlined"
+            value={this.state.phone}
+            onChangeText={phone => this.setState({phone})}
+          />
+          <View style={styles.field}>
+            <Dropdown
+              label="Gender"
+              value={this.state.gender}
+              data={[{value: 'Male'}, {value: 'Female'}, {value: 'Others'}]}
+              onChangeText={gender => this.setState({gender})}
+            />
+          </View>
+          <TextInput
+            style={styles.field}
+            label="Weight"
+            mode="outlined"
+            value={this.state.weight}
+            onChangeText={weight => this.setState({weight})}
+          />
+          <TextInput
+            style={styles.field}
+            label="Height"
+            mode="outlined"
+            value={this.state.height}
+            onChangeText={height => this.setState({height})}
+          />
+          <View style={styles.field}>
+            <Dropdown
+              style={styles.field}
+              label="Padding Side Preference"
+              value={this.state.side_preference}
+              data={[{value: 'Left'}, {value: 'Right'}, {value: 'Any Sides'}]}
+              onChangeText={side_preference => this.setState({side_preference})}
+            />
+          </View>
+          <View style={styles.field}>
+            <Dropdown
+              style={styles.field}
+              label="Status"
+              value={this.state.active}
+              data={[{value: 'Active'}, {value: 'Inactive'}]}
+              onChangeText={active => this.setState({active})}
+            />
+          </View>
+          <TextInput
+            style={styles.field}
+            label="Emergency Contact"
+            mode="outlined"
+            value={this.state.emergency_cont}
+            onChangeText={emergency_cont => this.setState({emergency_cont})}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Save"
+            style={styles.saveButton}
+            onPress={() => this.onAdd()}
+          />
+          <Button
+            title="Delete"
+            style={styles.saveButton}
+            onPress={() => this.onAdd()}
+          />
         </View>
       </ScrollView>
     );
