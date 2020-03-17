@@ -10,8 +10,27 @@ import {
 import {Divider} from 'react-native-elements';
 
 class ViewTeammateModal extends React.Component {
+
+  static navigationOptions = ({navigation}) => {
+    return {
+      headerTitleAlign: 'center',
+      headerRight: () => (
+        <Button
+          onPress={() => {
+            navigation.navigate('EditTeammate', {teammate: navigation.getParam("teammate")});
+          }}
+          title="Edit"
+        />
+      ),
+    };
+  };
+
   constructor(props) {
     super(props);
+    const teammate = this.props.navigation.getParam("teammate");
+    this.state = {
+        teammate
+    }
   }
 
   // navigationOptions = ({navigation}) => {
@@ -31,6 +50,7 @@ class ViewTeammateModal extends React.Component {
   // };
 
   render() {
+
     const styles = StyleSheet.create({
       container: {
         flex: 1,

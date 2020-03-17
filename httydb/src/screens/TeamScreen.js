@@ -36,15 +36,21 @@ class TeamScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+
+      teammates: null,
+
+    };
+  }
+  
+   componentDidMount() {
+    this._subscribe = this.props.navigation.addListener('didFocus', () => {
+      this.listTeammembers();
+    });
       teamMembers: [],
       isLoading: false,
     };
   }
 
-  componentDidMount() {
-    this._subscribe = this.props.navigation.addListener('didFocus', () => {
-      this.listTeammembers();
-    });
   }
 
   listTeammembers() {
@@ -88,6 +94,7 @@ class TeamScreen extends React.Component {
                   <CardContent text={item.gender} />
                   <CardContent text={item.side_preference} />
                   <CardContent text={item.active} />
+
                 </Card>
               </TouchableOpacity>
             )}

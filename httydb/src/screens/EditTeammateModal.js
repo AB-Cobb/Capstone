@@ -9,12 +9,25 @@ import {
 } from 'react-native';
 import {TextInput} from 'react-native-paper';
 import {Dropdown} from 'react-native-material-dropdown';
+import { Divider } from 'react-native-elements';
+import {db} from '../db/db';
+import {Team_member} from '../models/team_member';
+
+
 class EditTeammateModal extends React.Component {
-  static navigationOptions = ({navigation}) => {
-    return {
-      headerTitleAlign: 'center',
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerTitleAlign: "center",
+            headerRight: () => (
+                <Button
+                    onPress={() => this.saveHandler()}
+                    title="Save"
+                />
+            )
+        };
     };
   };
+
 
   constructor(props) {
     super(props);
