@@ -132,7 +132,6 @@ class EditTeammateModal extends React.Component {
           />
           <View style={styles.field}>
             <Dropdown
-              style={styles.field}
               label="Padding Side Preference"
               value={this.state.side_preference}
               data={[{value: 'Left'}, {value: 'Right'}, {value: 'Any Sides'}]}
@@ -141,7 +140,6 @@ class EditTeammateModal extends React.Component {
           </View>
           <View style={styles.field}>
             <Dropdown
-              style={styles.field}
               label="Status"
               value={this.state.active}
               data={[{value: 'Active'}, {value: 'Inactive'}]}
