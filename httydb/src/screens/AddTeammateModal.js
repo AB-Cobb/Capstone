@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  View,
-  TextInput,
-  ScrollView,
-  Picker,
-  TouchableOpacity,
-} from 'react-native';
+import {View, ScrollView} from 'react-native';
 import {Button} from 'react-native-elements';
 import {db} from '../db/db';
 import {Team_member} from '../models/team_member';
@@ -35,64 +29,6 @@ export default class AddTeammateModal extends React.Component {
       emergency_cont: '',
     };
   }
-
-  onUpdate = (text, field) => {
-    const state = this.state;
-    this.setState({state, field: text});
-  };
-
-  onHandleName = event => {
-    this.setState({
-      name: event,
-    });
-  };
-  onHandleEmail = event => {
-    this.setState({
-      email: event,
-    });
-  };
-
-  onHandlePhone = event => {
-    this.setState({
-      phone: event,
-    });
-  };
-
-  onHandleGender = event => {
-    this.setState({
-      gender: event,
-    });
-  };
-
-  onHandleWeight = event => {
-    this.setState({
-      weight: event,
-    });
-  };
-
-  onHandleHeight = event => {
-    this.setState({
-      height: event,
-    });
-  };
-
-  onHandleSidePreference = event => {
-    this.setState({
-      side_preference: event,
-    });
-  };
-
-  onHandleActive = event => {
-    this.setState({
-      active: event,
-    });
-  };
-
-  onHandleEmergencyCont = event => {
-    this.setState({
-      emergency_cont: event,
-    });
-  };
 
   onAdd() {
     if (!this.isEmail(this.state.email)) {
@@ -147,7 +83,7 @@ export default class AddTeammateModal extends React.Component {
           label="Phone number"
           keyboardType="phone-pad"
           formatText={this.formatText}
-          onChangeText={this.onHandlePhone}
+          onChangeText={phone => this.setState({phone})}
         />
         <Dropdown
           label="Gender"
@@ -162,19 +98,19 @@ export default class AddTeammateModal extends React.Component {
               value: 'Others',
             },
           ]}
-          onChangeText={this.onHandleGender}
+          onChangeText={gender => this.setState({gender})}
         />
         <OutlinedTextField
           label="Weight (lb)"
           keyboardType="numeric"
           formatText={this.formatText}
-          onChangeText={this.onHandleWeight}
+          onChangeText={weight => this.setState({weight})}
         />
         <OutlinedTextField
           label="Height (cm)"
           keyboardType="numeric"
           formatText={this.formatText}
-          onChangeText={this.onHandleHeight}
+          onChangeText={height => this.setState({height})}
         />
         <Dropdown
           label="Padding Side Preference"
@@ -189,7 +125,7 @@ export default class AddTeammateModal extends React.Component {
               value: 'Any',
             },
           ]}
-          onChangeText={this.onHandleSidePreference}
+          onChangeText={side_preference => this.setState({side_preference})}
         />
         <Dropdown
           label="Status"
@@ -201,13 +137,13 @@ export default class AddTeammateModal extends React.Component {
               value: 'Inactive',
             },
           ]}
-          onChangeText={this.onHandleActive}
+          onChangeText={active => this.setState({active})}
         />
         <OutlinedTextField
           label="Emergency Contact"
           keyboardType="phone-pad"
           formatText={this.formatText}
-          onChangeText={this.onHandleEmergencyCont}
+          onChangeText={emergency_cont => this.setState({emergency_cont})}
         />
         <View>
           <Button title="Add" onPress={() => this.onAdd()} />
