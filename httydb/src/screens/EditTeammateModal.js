@@ -26,7 +26,7 @@ class EditTeammateModal extends React.Component {
             )
         };
     };
-  };
+  
 
 
   constructor(props) {

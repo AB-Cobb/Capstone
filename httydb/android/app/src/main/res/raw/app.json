@@ -1,0 +1,14 @@
+{
+  "name": "httydb",
+  "displayName": "httydb",
+  "expo": {
+    "name": "httydb",
+    "slug": "httydb",
+    "version": "0.0.1",
+    "sdkVersion": "36.0.0",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  }
+}
