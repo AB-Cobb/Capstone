@@ -65,7 +65,8 @@ export class db_init {
                 'CREATE TABLE IF NOT EXISTS race( '+ 
                   '"race_id" INTEGER PRIMARY KEY, ' +
                   'layout_id INTEGER, '+
-                  'race_date       DATE, ' +
+                  'name       TEXT' +
+                  'race_date  DATE, ' +
                   'duration   FLOAT, ' +
                   'distance   FLOAT, ' +
                   'FOREIGN KEY(layout_id) REFERENCES boat_layout(layout_id) ' +

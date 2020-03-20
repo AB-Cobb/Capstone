@@ -442,9 +442,10 @@ class db_impl implements Database {
     public insertRace (race : Race) : Promise<number> {
       return this.getDB().then( db =>
         db.executeSql(
-          'INSERT INTO race (layout_id, date, duration, distance) VALUES (?,?,?,?)',[
+          'INSERT INTO race (layout_id, date, name, duration, distance) VALUES (?,?,?,?,?)',[
             race.layout.id,
             race.date,
+            race.name,
             race.duration,
             race.duration
           ]
@@ -468,12 +469,13 @@ class db_impl implements Database {
             let {
               layout_id,
               date,
+              name,
               duration,
               distance,
               race_id
             } = data;
             return new Race(
-              date, distance, duration, race_id)
+              date, name, distance, duration, race_id)
           } else return Promise.reject();
         }).then ( race =>{
           return this.getMapPointsByRace(race.id).then( map_points =>{
@@ -531,13 +533,14 @@ class db_impl implements Database {
             const data = results.rows.item(0);
             let {
               layout_id,
+              name,
               date,
               duration,
               distance,
               race_id
             } = data;
             return new Race(
-              date, distance, duration, race_id)
+              date, name, distance, duration, race_id)
           } else return Promise.reject();
         }).then ( race =>{
           return this.getMapPointsByRace(race.id).then( map_points =>{

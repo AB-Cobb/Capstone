@@ -1,16 +1,13 @@
 import React from 'react';
-import {
-  View,
-  TextInput,
-  ScrollView,
-  Picker,
-  TouchableOpacity,
-} from 'react-native';
+import {View, ScrollView, StyleSheet} from 'react-native';
 import {Button} from 'react-native-elements';
 import {db} from '../db/db';
 import {Team_member} from '../models/team_member';
+import {Dropdown} from 'react-native-material-dropdown';
+// import Icon from 'react-native-vector-icons/FontAwesome';
+// import {Input} from 'react-native-elements';
+import {OutlinedTextField} from 'react-native-material-textfield';
 
-// const db = new Database();
 export default class AddTeammateModal extends React.Component {
   static navigationOptions = ({navigation}) => {
     return {
@@ -32,64 +29,6 @@ export default class AddTeammateModal extends React.Component {
       emergency_cont: '',
     };
   }
-
-  onUpdate = (text, field) => {
-    const state = this.state;
-    this.setState({state, field: text});
-  };
-
-  onHandleName = event => {
-    this.setState({
-      name: event,
-    });
-  };
-  onHandleEmail = event => {
-    this.setState({
-      email: event,
-    });
-  };
-
-  onHandlePhone = event => {
-    this.setState({
-      phone: event,
-    });
-  };
-
-  onHandleGender = event => {
-    this.setState({
-      gender: event,
-    });
-  };
-
-  onHandleWeight = event => {
-    this.setState({
-      weight: event,
-    });
-  };
-
-  onHandleHeight = event => {
-    this.setState({
-      height: event,
-    });
-  };
-
-  onHandleSidePreference = event => {
-    this.setState({
-      side_preference: event,
-    });
-  };
-
-  onHandleActive = event => {
-    this.setState({
-      active: event,
-    });
-  };
-
-  onHandleEmergencyCont = event => {
-    this.setState({
-      emergency_cont: event,
-    });
-  };
 
   onAdd() {
     if (!this.isEmail(this.state.email)) {
@@ -119,116 +58,95 @@ export default class AddTeammateModal extends React.Component {
     }
   }
 
+  formatText = text => {
+    return text.replace(/[^+\d]/g, '');
+  };
+
   isEmail = email => {
     let reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return reg.test(email);
   };
   render() {
+    const styles = StyleSheet.create({
+      container: {
+        paddingTop: 20,
+      },
+      field: {
+        marginTop: 10,
+        marginLeft: 20,
+        marginRight: 20,
+      },
+      saveButton: {
+        backgroundColor: '#A14A76',
+        padding: 10,
+        margin: 15,
+        height: 40,
+      },
+      buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 70,
+        margin: 15,
+        paddingTop: 23,
+      },
+    });
     return (
       <ScrollView>
-        <View>
-          <TextInput
-            placeholder={'Name'}
-            value={this.state.fname}
-            onChangeText={this.onHandleName}
+        <View style={styles.container}>
+          <OutlinedTextField
+            label="Name"
+            keyboardType="default"
+            onChangeText={name => this.setState({name})}
           />
-        </View>
-        <View>
-          <TextInput
-            placeholder={'Email'}
-            value={this.state.email}
-            onChangeText={this.onHandleEmail}
+          <OutlinedTextField
+            label="Email"
+            keyboardType="email-address"
+            onChangeText={email => this.setState({email})}
           />
-        </View>
-        <View>
-          <TextInput
-            placeholder={'Phone number'}
-            value={this.state.phone}
-            onChangeText={this.onHandlePhone}
+          <OutlinedTextField
+            label="Phone number"
             keyboardType="phone-pad"
+            formatText={this.formatText}
+            onChangeText={phone => this.setState({phone})}
           />
-        </View>
-        <View>
-          <Picker
-            selectedValue={this.state.gender}
-            onValueChange={(itemValue, itemIndex) =>
-              this.setState({gender: itemValue})
-            }
-            mode="dropdown">
-            <Picker.Item label="Male" value="Male" />
-            <Picker.Item label="Female" value="Female" />
-          </Picker>
-        </View>
-        <View>
-          <TextInput
-            placeholder={'Weight'}
-            value={this.state.weight}
-            onChangeText={this.onHandleWeight}
+          <Dropdown
+            label="Gender"
+            data={[{value: 'Male'}, {value: 'Female'}, {value: 'Others'}]}
+            onChangeText={gender => this.setState({gender})}
+          />
+          <OutlinedTextField
+            label="Weight (lb)"
+            keyboardType="numeric"
+            formatText={this.formatText}
+            onChangeText={weight => this.setState({weight})}
+          />
+          <OutlinedTextField
+            label="Height (cm)"
+            keyboardType="numeric"
+            formatText={this.formatText}
+            onChangeText={height => this.setState({height})}
+          />
+          <Dropdown
+            label="Padding Side Preference"
+            data={[{value: 'Left'}, {value: 'Right'}, {value: 'Any Sides'}]}
+            onChangeText={side_preference => this.setState({side_preference})}
+          />
+          <Dropdown
+            label="Status"
+            data={[{value: 'Active'}, {value: 'Inactive'}]}
+            onChangeText={active => this.setState({active})}
+          />
+          <OutlinedTextField
+            label="Emergency Contact"
             keyboardType="phone-pad"
+            formatText={this.formatText}
+            onChangeText={emergency_cont => this.setState({emergency_cont})}
           />
         </View>
-        <View>
-          <TextInput
-            placeholder={'Height'}
-            value={this.state.height}
-            onChangeText={this.onHandleHeight}
-            keyboardType="phone-pad"
-          />
-        </View>
-        <View>
-          <Picker
-            selectedValue={this.state.side_preference}
-            onValueChange={(itemValue, itemIndex) =>
-              this.setState({side_preference: itemValue})
-            }
-            mode="dropdown">
-            <Picker.Item label="Left" value="Left" />
-            <Picker.Item label="Right" value="Right" />
-            <Picker.Item label="Any" value="Any" />
-          </Picker>
-        </View>
-
-        <View>
-          <Picker
-            selectedValue={this.state.active}
-            onValueChange={(itemValue, itemIndex) =>
-              this.setState({active: itemValue})
-            }
-            mode="dropdown">
-            <Picker.Item label="Yes" value="true" />
-            <Picker.Item label="No" value="false" />
-          </Picker>
-        </View>
-        <View>
-          <TextInput
-            placeholder={'Emergency Contact'}
-            value={this.state.emergency_cont}
-            onChangeText={this.onHandleEmergencyCont}
-            keyboardType="phone-pad"
-          />
-        </View>
-        <View>
-          <Button title="Add" onPress={() => this.onAdd()} />
+        <View style={styles.buttonContainer}>
+          <Button title="Add Team Member" onPress={() => this.onAdd()} />
         </View>
       </ScrollView>
     );
   }
 }
-
-// <TextInput
-//             placeholder={'Gender'}
-//             value={this.state.gender}
-//             onChangeText={this.onHandleGender}
-//           />
-
-//           <TextInput
-//             placeholder={'Paddling side Preference'}
-//             value={this.state.side_preference}
-//             onChangeText={this.onHandleSidePreference}
-//           />
-
-//           <TextInput
-//           placeholder={'Active'}
-//           value={this.state.active}
-//           onChangeText={this.onHandleActive}
-//         />

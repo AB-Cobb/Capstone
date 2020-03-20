@@ -1,8 +1,18 @@
 import React from 'react';
-import {View, Button, StyleSheet, ScrollView, Text, TextInput} from 'react-native';
+import {
+  View,
+  Button,
+  StyleSheet,
+  ScrollView,
+  Picker,
+  PickerIOS,
+} from 'react-native';
+import {TextInput} from 'react-native-paper';
+import {Dropdown} from 'react-native-material-dropdown';
 import { Divider } from 'react-native-elements';
 import {db} from '../db/db';
 import {Team_member} from '../models/team_member';
+
 
 class EditTeammateModal extends React.Component {
     static navigationOptions = ({ navigation }) => {
@@ -16,119 +26,162 @@ class EditTeammateModal extends React.Component {
             )
         };
     };
+  
 
-    constructor(props){
-        super(props);
-        const teammate = this.props.navigation.getParam("teammate");
-        this.state = {
-            oldName: teammate.name,
-            newName: "",
-            oldGender: teammate.gender,
-            newGender: "",
-            oldSide: teammate.side_preference,
-            newSide: "",
-            oldHeight: teammate.height.toString(),
-            newHeight: "",
-            oldWeight: teammate.weight.toString(),
-            newWeight: "",
-            oldEmail: teammate.email,
-            newEmail: "",
-            oldPhone: teammate.phone,
-            newPhone: "",
-            oldEmergency: teammate.emergency_cont,
-            newEmergency: "",
-            oldActive: teammate.active.toString(),
-            newActive: true
-        }
-    }
 
-    static saveHandler = () =>{
-        let data = new Team_member(
-            this.state.newName,
-            this.state.newEmail,
-            this.state.newPhone,
-            this.state.newGender,
-            this.state.newWeight,
-            this.state.newHeight,
-            this.state.newSide,
-            this.state.newActive,
-            this.state.newEmergency,
-        );
-
-        db.updateTeammamber(data)
-            .then()
+  constructor(props) {
+    super(props);
+    const item = this.props.navigation.state.params.teammember;
+    this.state = {
+      name: item.name,
+      email: item.email,
+      phone: item.phone,
+      gender: item.gender,
+      weight: item.weight,
+      height: item.height,
+      side_preference: item.side_preference,
+      active: item.active,
+      emergency_cont: item.emergency_cont,
     };
+  }
 
-    render(){
+  onUpdateButton() {
+    let data = new Team_member(
+      this.state.name,
+      this.state.email,
+      this.state.phone,
+      this.state.gender,
+      this.state.weight,
+      this.state.height,
+      this.state.side_preference,
+      this.state.active,
+      this.state.emergency_cont,
+    );
 
-        return (
-            <ScrollView>
-                <Text>Name</Text>
-                <TextInput placeholder={this.state.oldName || "FIRST_NAME"}
-                           onChangeText={(text) => this.setState({newName: text})}
-                           value={this.state.newName}
-                />
-                <Divider style={{ backgroundColor: 'blue' }} />
+    db.updateTeammamber(data)
+      .then(result => {
+        console.log(result);
+        this.props.navigation.goBack();
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
 
-                <Text>Gender</Text>
-                <TextInput placeholder={this.state.oldGender || "GENDER"}
-                           onChangeText={(text) => this.setState({newGender: text})}
-                           value={this.state.newGender}
-                />
-                <Divider style={{ backgroundColor: 'blue' }} />
+  onDeleteButton() {
+    console.log('Button clicked');
+  }
 
-                <Text>Paddling Side Preference</Text>
-                <TextInput placeholder={this.state.oldSide || "PADDLING_SIDE"}
-                           onChangeText={(text) => this.setState({newSide: text})}
-                           value={this.state.newSide}
-                />
-                <Divider style={{ backgroundColor: 'blue' }} />
+  render() {
+    const styles = StyleSheet.create({
+      container: {
+        paddingTop: 10,
+      },
+      field: {
+        marginTop: 10,
+        marginLeft: 20,
+        marginRight: 20,
+      },
+      saveButton: {
+        backgroundColor: '#A14A76',
+        padding: 10,
+        margin: 15,
+        height: 40,
+      },
+      buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 70,
+        margin: 15,
+        paddingTop: 23,
+      },
+    });
 
-                <Text>Height</Text>
-                <TextInput placeholder={this.state.oldHeight || "HEIGHT"}
-                           onChangeText={(text) => this.setState({newHeight: text})}
-                           value={this.state.newHeight}
-                />
-                <Divider style={{ backgroundColor: 'blue' }} />
-
-                <Text>Weight</Text>
-                <TextInput placeholder={this.state.oldWeight || "WEIGHT"}
-                           onChangeText={(text) => this.setState({newWeight: text})}
-                           value={this.state.newWeight}
-                />
-                <Divider style={{ backgroundColor: 'blue' }} />
-
-                <Text>Email Address</Text>
-                <TextInput placeholder={this.state.oldEmail || "EMAIL"}
-                           onChangeText={(text) => this.setState({newEmail: text})}
-                           value={this.state.newEmail}
-                />
-                <Divider style={{ backgroundColor: 'blue' }} />
-
-                <Text>Phone</Text>
-                <TextInput placeholder={this.state.oldPhone || "PHONE"}
-                           onChangeText={(text) => this.setState({newPhone: text})}
-                           value={this.state.newPhone}
-                />
-                <Divider style={{ backgroundColor: 'blue' }} />
-
-                <Text>Emergency Contact</Text>
-                <TextInput placeholder={this.state.oldEmergency || "EMERGENCY_CONTACT"}
-                           onChangeText={(text) => this.setState({newEmergency: text})}
-                           value={this.state.newEmergency}
-                />
-                <Divider style={{ backgroundColor: 'blue' }} />
-
-                <Text>Active Teammate</Text>
-                <TextInput placeholder={this.state.oldActive || "true"}
-                           onChangeText={(text) => this.setState({newActive: text})}
-                           value={this.state.newActive}
-                />
-                <Divider style={{ backgroundColor: 'blue' }} />
-            </ScrollView>
-        );
-    }
-
+    return (
+      <ScrollView>
+        <View style={styles.container}>
+          <TextInput
+            style={styles.field}
+            label="Name"
+            mode="outlined"
+            value={this.state.name}
+            onChangeText={name => this.setState({name})}
+          />
+          <TextInput
+            style={styles.field}
+            label="Email"
+            mode="outlined"
+            value={this.state.email}
+            onChangeText={email => this.setState({email})}
+          />
+          <TextInput
+            style={styles.field}
+            label="Phone Number"
+            mode="outlined"
+            value={this.state.phone}
+            onChangeText={phone => this.setState({phone})}
+          />
+          <View style={styles.field}>
+            <Dropdown
+              label="Gender"
+              value={this.state.gender}
+              data={[{value: 'Male'}, {value: 'Female'}, {value: 'Others'}]}
+              onChangeText={gender => this.setState({gender})}
+            />
+          </View>
+          <TextInput
+            style={styles.field}
+            label="Weight"
+            mode="outlined"
+            value={this.state.weight}
+            onChangeText={weight => this.setState({weight})}
+          />
+          <TextInput
+            style={styles.field}
+            label="Height"
+            mode="outlined"
+            value={this.state.height}
+            onChangeText={height => this.setState({height})}
+          />
+          <View style={styles.field}>
+            <Dropdown
+              label="Padding Side Preference"
+              value={this.state.side_preference}
+              data={[{value: 'Left'}, {value: 'Right'}, {value: 'Any Sides'}]}
+              onChangeText={side_preference => this.setState({side_preference})}
+            />
+          </View>
+          <View style={styles.field}>
+            <Dropdown
+              label="Status"
+              value={this.state.active}
+              data={[{value: 'Active'}, {value: 'Inactive'}]}
+              onChangeText={active => this.setState({active})}
+            />
+          </View>
+          <TextInput
+            style={styles.field}
+            label="Emergency Contact"
+            mode="outlined"
+            value={this.state.emergency_cont}
+            onChangeText={emergency_cont => this.setState({emergency_cont})}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Save"
+            style={styles.saveButton}
+            onPress={() => this.onAdd()}
+          />
+          <Button
+            title="Delete"
+            style={styles.saveButton}
+            onPress={() => this.onAdd()}
+          />
+        </View>
+      </ScrollView>
+    );
+  }
 }
 
 export default EditTeammateModal;

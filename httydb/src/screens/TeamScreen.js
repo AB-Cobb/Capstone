@@ -9,6 +9,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Card from '../components/Card.js';
+import {
+  CardTitle,
+  CardContent,
+  CardAction,
+  CardButton,
+  CardImage,
+} from 'react-native-cards';
 import {db} from '../db/db';
 
 class TeamScreen extends React.Component {
@@ -29,18 +36,19 @@ class TeamScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      teamMembers: [],
-      isLoading: false,
+
+      teammates: null,
+
     };
   }
-
-  componentDidMount() {
-    // this.setState({
-    //   teammates: ["Arsalan", "Andrew", "Guiseppe", "Nga","Zapdos","Jolteon","Pikachu","Luxray","Dedenne","Charizard"],
-    // });
-
+  
+   componentDidMount() {
     this._subscribe = this.props.navigation.addListener('didFocus', () => {
       this.listTeammembers();
+    });
+    this.setState({
+      teamMembers: [],
+      isLoading: false,
     });
   }
 
@@ -75,12 +83,17 @@ class TeamScreen extends React.Component {
             data={teamMembers}
             renderItem={({item}) => (
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('ViewTeammate', {teammate: item})}>
+                onPress={() =>
+                  this.props.navigation.navigate('ViewTeammate', {
+                    item,
+                  })
+                }>
                 <Card>
-                  <Text>{item.name}</Text>
-                  <Text>{item.gender}</Text>
-                  <Text>{item.phone}</Text>
-                  <Text>{item.side_preference}</Text>
+                  <CardTitle title={item.name} />
+                  <CardContent text={item.gender} />
+                  <CardContent text={item.side_preference} />
+                  <CardContent text={item.active} />
+
                 </Card>
               </TouchableOpacity>
             )}
