@@ -16,6 +16,13 @@ export class db_init {
                 })
               })
             }
+            if (dbversion == 1){
+              db.executeSql('DROP TABLE map_point').then(()=>{
+                db.transaction(this.createTables).then(() => {
+                  db.executeSql("INSERT INTO version (version) VALUES (2)")
+                })
+              })
+            }
         });
     }
 
@@ -79,6 +86,8 @@ export class db_init {
                   '"race_id"	   INTEGER ' +
                   '"long"         FLOAT, ' +
                   '"lat"          FLOAT, '+
+                  '"acc"         FLOAT, ' +
+                  '"speed"          FLOAT, '+
                   '"timestamp"    datetime, '+
                   'FOREIGN KEY(race_id) REFERENCES race(race_id) ' +
               ');'
