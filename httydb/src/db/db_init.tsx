@@ -30,6 +30,13 @@ export class db_init {
                 })
               })
             }
+            if (dbversion == 3){
+              db.executeSql('DROP TABLE race').then(()=>{
+                db.transaction(this.createTables).then(() => {
+                  db.executeSql("INSERT INTO version (version) VALUES (4)")
+                })
+              })
+            }
         });
     }
 
@@ -79,7 +86,7 @@ export class db_init {
                 'CREATE TABLE IF NOT EXISTS race( '+ 
                   '"race_id" INTEGER PRIMARY KEY, ' +
                   'layout_id INTEGER, '+
-                  'name       TEXT' +
+                  'name       TEXT, ' +
                   'race_date  DATE, ' +
                   'duration   FLOAT, ' +
                   'distance   FLOAT, ' +
