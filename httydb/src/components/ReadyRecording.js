@@ -6,7 +6,7 @@ class ReadyRecording extends React.Component {
     constructor(props) {
       super(props)
       this.state = {
-        currentLayout: props.selectedLayout
+        currentLayout: props.currentLayout
       }
     }
 
@@ -20,23 +20,24 @@ class ReadyRecording extends React.Component {
 
     render() {
       return (
-        <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-          <View style={{alignItems: "flex-start"}}>
+        <View style={{flexDirection: "row", justifyContent: "space-between", flex: 1}}>
+          <View style={{alignItems: "flex-start", flex: 0.5}}>
             <Text style={styles.TextSpacing}>Current Layout: {this.state.currentLayout}</Text>
             <Text style={styles.TextSpacing}>Distance: {this.props.distance} km</Text>
-            <Text style={styles.TextSpacing}>Current Velocity: {this.props.currVelocity} m/s</Text>
-            <Text style={styles.TextSpacing}>Average Velocity: {"0.00 m/s"}</Text>
+            <Text style={styles.TextSpacing}>Current Velocity: {this.props.currentSpeed} m/s</Text>
+            <Text style={styles.TextSpacing}>Average Velocity: {this.props.averageSpeed} m/s</Text>
           </View>
   
-          <View style={{alignItems: "flex-end"}}>
+          <View style={{flexDirection: "column", justifyContent: "space-between", alignItems: "flex-end", flex: 0.5}}>
             <Timer ref="timerRef" isPaused={() => this.props.isPaused()} elapsedTime={0} sendTime={(time) => this.sendTime(time)}></Timer>
             <TouchableOpacity>
-              <Text style={styles.ButtonStyleTwo} onPress={() => this.props.setPause()}>
+              <Text style={styles.ButtonStyleOne} onPress={() => this.props.setPause()}>
                 Pause
               </Text>
             </TouchableOpacity>
             <TouchableOpacity>
-              <Text style={styles.ButtonStyleTwo} onPress={() => this.props.saveData()}>Stop and Save
+              <Text style={styles.ButtonStyleTwo} onPress={() => this.props.saveData()}>
+                Stop and Save
               </Text>
             </TouchableOpacity>
           </View>
@@ -48,17 +49,32 @@ class ReadyRecording extends React.Component {
 const styles = StyleSheet.create({
   ButtonStyleTwo: {
     backgroundColor: "lightgrey",
-    flexDirection: "row-reverse",
-    width: 150,
-    height: 75,
     margin: 15,
+    height: 75,
+    width: 125,
     textAlign: "center",
     textAlignVertical: "center", 
     fontSize: 24,
     color: "white",
     borderWidth: 1,
     borderColor: "grey",
-    borderRadius: 2
+    borderRadius: 2,
+    marginTop: 140
+  },
+
+  ButtonStyleOne: {
+    backgroundColor: "lightgrey",
+    margin: 15,
+    height: 75,
+    width: 125,
+    textAlign: "center",
+    textAlignVertical: "center", 
+    fontSize: 24,
+    color: "white",
+    borderWidth: 1,
+    borderColor: "grey",
+    borderRadius: 2,
+    marginTop: 50
   },
 
   TextSpacing: {

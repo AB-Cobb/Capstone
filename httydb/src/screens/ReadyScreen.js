@@ -5,6 +5,7 @@ import MapView from 'react-native-maps';
 import { PROVIDER_GOOGLE } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import { request, PERMISSIONS } from 'react-native-permissions';
+import { Boat_Layout } from '../models/boat_layout';
 
 class ReadyScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -16,7 +17,10 @@ class ReadyScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      layouts: ["-- Select A Layout --", "Layout One", "Layout Two", "Layout Three"],
+      layouts: [{name: "-- Select A Layout --", id: 0}, 
+      new Boat_Layout(12, "Dummy Layout One", Date.now(), true, 1), 
+      new Boat_Layout(16, "Dummy Layout Two", Date.now(), true, 2), 
+      new Boat_Layout(20, "Dummy Layout Three", Date.now(), true, 3)],
       selectedLayout: 0,
       locationData: {
           latitude: 0,
@@ -37,7 +41,7 @@ class ReadyScreen extends React.Component {
   }
 
   handleClick() {
-    if (this.state.selectedLayout != 0){
+    if (this.state.selectedLayout.id != 0){
       console.log("Clearing Watch ID")
       Geolocation.clearWatch(this.watchID)
       this.props.navigation.navigate('ReadyRecording', {

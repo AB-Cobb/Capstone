@@ -9,7 +9,12 @@ export class Map_Point{
         this.lat = lat;
         this.long = long;
         this.timestamp = timestamp;
+<<<<<<< HEAD
         this.speed = speed;
         this.acc = acc;
+=======
+        this.acc = acc;
+        this.speed = speed;
+>>>>>>> c269c61523e1fbe02a8de73fa3d756e74411ce15
     }
 }

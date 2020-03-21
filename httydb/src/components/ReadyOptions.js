@@ -22,7 +22,7 @@ class ReadyOptions extends React.Component {
               this.props.onChange(itemIndex)
             }}>
               {this.state.layouts.map((item, index) => {
-                return (<Picker.Item label={item} value={item} key={index}/>) 
+                return (<Picker.Item label={item.name} value={item.id} key={index}/>) 
               })}
           </Picker>
             <TouchableOpacity>
