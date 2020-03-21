@@ -20,8 +20,10 @@ class ReadyRecordingModal extends React.Component {
 
     constructor(props) {
         super(props)
+        const {params} = this.props.navigation.state
         this.state = {
-            selectedLayout: props.selectedLayout,
+            selectedLayout: params.selectedLayout,
+            layoutName: params.layoutName,
             isPaused: false,
             routeData: {
               routeName: "",
@@ -141,8 +143,24 @@ class ReadyRecordingModal extends React.Component {
      this.props.navigation.navigate('Ready');
     }
 
-    getCurrVelocity(){
-      return this.state.routeData.points[this.state.routeData.length -1].speed
+    calculateAverageSpeed() {
+      let speedSum = 0
+      let length = this.state.routeData.length
+      if (length > 0) {
+        for (let i = 0; i < length; i++){
+          speedSum += this.state.routeData.points[i].speed
+        }
+        let averageSpeed = (speedSum / length)
+        return averageSpeed
+      }
+      return 0
+    }
+
+    getCurrentSpeed() {
+      if (this.state.routeData.length > 0){
+        return this.state.routeData.points[this.state.routeData.length - 1].speed
+      }
+      return 0
     }
 
     calculateDistance(newLat, newLong) {
@@ -163,6 +181,9 @@ class ReadyRecordingModal extends React.Component {
         console.log("Rendered ReadyRecordingModal!")
         console.log(`Application Paused: ${this.getPaused()}`)
 
+        const {layoutName} = this.state
+        const distance = this.state.routeData.distance
+
         let initialPos = {
             latitude: 37.421,
             longitude: -122.084,
@@ -175,7 +196,7 @@ class ReadyRecordingModal extends React.Component {
                     <MapView.Marker coordinate={this.state.recentMarker} title="Current Location" />
                     <Polyline coordinates={this.state.markers} />
                 </MapView>
-                <ReadyRecording ref="readyRecording" currentLayout={this.state.selectedLayout} setPause={() => this.setPause()} isPaused={() => this.getPaused()} currVelocity={this.state.routeData.length == 0 ? 0 : () => this.getCurrVelocity()} distance={this.state.routeData.distance} sendTime={(time) => this.getTime(time)} saveData={() => this.saveData()}/>
+                <ReadyRecording ref="readyRecording" currentLayout={this.state.selectedLayout.name} distance={distance} currentSpeed={this.getCurrentSpeed()} averageSpeed={this.calculateAverageSpeed()} setPause={() => this.setPause()} isPaused={() => this.getPaused()} sendTime={(time) => this.getTime(time)} saveData={() => this.saveData()}/>
             </View>
         )
     }
