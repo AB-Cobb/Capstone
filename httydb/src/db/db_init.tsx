@@ -23,6 +23,13 @@ export class db_init {
                 })
               })
             }
+            if (dbversion == 2){
+              db.executeSql('DROP TABLE race').then(()=>{
+                db.transaction(this.createTables).then(() => {
+                  db.executeSql("INSERT INTO version (version) VALUES (3)")
+                })
+              })
+            }
         });
     }
 
