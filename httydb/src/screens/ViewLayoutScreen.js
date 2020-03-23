@@ -1,7 +1,8 @@
 import React from 'react';
-import {View, Button, StyleSheet, ScrollView} from 'react-native';
-import { Divider, Text } from 'react-native-elements';
-
+import {View, Button, StyleSheet, Text, Dimensions, TouchableOpacity} from 'react-native';
+import LayoutRow from "../components/LayoutRow";
+import RBSheet from "react-native-raw-bottom-sheet";
+import { SearchBar } from 'react-native-elements';
 
 class ViewLayoutScreen extends React.Component {
     static navigationOptions = ({ navigation }) => {
@@ -12,13 +13,51 @@ class ViewLayoutScreen extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            searchTerm: '',
+            searchResults: [],
+        }
     }
 
+    CreateRows = (numRows) => {
+        const rows = [];
+        for (let i = 0; i < numRows; i++){
+            rows.push(<LayoutRow key={i}/>)
+        }
+        return rows;
+    };
+
     render() {
-        console.log('Rendered Layout!');
+        const rows = this.CreateRows(10);
+
+
+
+        console.log('Rendered Layout Screen!');
         return (
             <View>
-                <Text>Layout!</Text>
+                <View style={styles.ViewStyle}>
+                    <View style={styles.BoatOutline}>
+                        {rows}
+                    </View>
+                    <TouchableOpacity onPress={() => this.RBSheet.open()}><Text>Click to view Teammates</Text></TouchableOpacity>
+                </View>
+                <RBSheet
+                    ref={ref => {
+                        this.RBSheet = ref;
+                    }}
+                    height={300}
+                    duration={250}
+                >
+                    <SearchBar
+                        placeholder={"Search for a teammate..."}
+                        onChangeText={term => this.setState({searchTerm: term})}
+                        searchIcon={false}
+                        clearIcon={false}
+                        value={this.state.searchTerm}
+                        lightTheme={true}
+                    />
+                </RBSheet>
+
             </View>
         );
     }
@@ -26,16 +65,19 @@ class ViewLayoutScreen extends React.Component {
 
 const styles = StyleSheet.create({
     ViewStyle: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        paddingBottom: 10,
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     RecentHeaderStyle: {
         alignSelf: 'center',
     },
-    BottomHalf: {
-        justifyContent: 'flex-end'
+    BoatOutline: {
+        borderColor: "black",
+        borderWidth: 1,
+        borderRadius: 4,
+        width: Dimensions.get('window').width * 0.8,
+        height: Dimensions.get('window').height * 0.8,
     }
 });
 
-export default HomeScreen;
+export default ViewLayoutScreen;

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Button, Alert, StyleSheet, ScrollView, FlatList} from 'react-native';
+import {View, Text, Button, Alert, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
 import Card from "../components/Card";
 
 class LayoutScreen extends React.Component {
@@ -37,7 +37,10 @@ class LayoutScreen extends React.Component {
             <View>
                 <FlatList
                     data={layouts}
-                    renderItem={({item}) => <Card><Text>{item}</Text></Card>}
+                    renderItem={({item}) =>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('ViewLayout', {layout: item})}>
+                        <Card><Text>{item}</Text></Card>
+                        </TouchableOpacity>}
                     keyExtractor={item => item.length}
                     numColumns={3}
                     columnWrapperStyle={styles.ListStyle}
