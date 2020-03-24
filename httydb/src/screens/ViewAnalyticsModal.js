@@ -1,4 +1,5 @@
 import React from 'react';
+import {View, Text} from 'react-native';
 
 class ViewAnalyticsModal extends React.Component {
     static navigationOptions = ({ navigation }) => {
@@ -16,7 +17,7 @@ class ViewAnalyticsModal extends React.Component {
 
         return (
             <View>
-                Analytics Modal!
+                <Text>Analytics Modal!</Text>
             </View>
         )
     }
