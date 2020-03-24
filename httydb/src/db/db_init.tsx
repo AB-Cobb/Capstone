@@ -16,6 +16,27 @@ export class db_init {
                 })
               })
             }
+            if (dbversion == 1){
+              db.executeSql('DROP TABLE map_point').then(()=>{
+                db.transaction(this.createTables).then(() => {
+                  db.executeSql("INSERT INTO version (version) VALUES (2)")
+                })
+              })
+            }
+            if (dbversion == 2){
+              db.executeSql('DROP TABLE race').then(()=>{
+                db.transaction(this.createTables).then(() => {
+                  db.executeSql("INSERT INTO version (version) VALUES (3)")
+                })
+              })
+            }
+            if (dbversion == 3){
+              db.executeSql('DROP TABLE race').then(()=>{
+                db.transaction(this.createTables).then(() => {
+                  db.executeSql("INSERT INTO version (version) VALUES (4)")
+                })
+              })
+            }
         });
     }
 
@@ -65,7 +86,7 @@ export class db_init {
                 'CREATE TABLE IF NOT EXISTS race( '+ 
                   '"race_id" INTEGER PRIMARY KEY, ' +
                   'layout_id INTEGER, '+
-                  'name       TEXT' +
+                  'name       TEXT, ' +
                   'race_date  DATE, ' +
                   'duration   FLOAT, ' +
                   'distance   FLOAT, ' +
@@ -79,6 +100,8 @@ export class db_init {
                   '"race_id"	   INTEGER ' +
                   '"long"         FLOAT, ' +
                   '"lat"          FLOAT, '+
+                  '"acc"         FLOAT, ' +
+                  '"speed"          FLOAT, '+
                   '"timestamp"    datetime, '+
                   'FOREIGN KEY(race_id) REFERENCES race(race_id) ' +
               ');'

@@ -395,12 +395,14 @@ class db_impl implements Database {
       return this.getDB()
         .then(db => 
           db.executeSql(
-            'INSERT INTO map_point (race_id, long, lat, timestamp) values (?,?,?);',
+            'INSERT INTO map_point (race_id, long, lat, timestamp, acc, speed) values (?,?,?,?,?);',
             [
               race.id,
               map_point.long,
               map_point.lat,
-              map_point.timestamp
+              map_point.timestamp,
+              map_point.acc,
+              map_point.speed
             ]
           )
         ).then(([results]) => {

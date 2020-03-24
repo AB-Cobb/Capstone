@@ -126,6 +126,7 @@ class ReadyRecordingModal extends React.Component {
     }
 
     saveData() {
+      console.log("saveing race")
       let newRace = new Race(Date.now, "New Race", this.state.routeData.distance, this.getElapsedTime(), -1, this.props.selectedLayout, this.state.routeData.points)
       /*
       let newRouteObject = {
