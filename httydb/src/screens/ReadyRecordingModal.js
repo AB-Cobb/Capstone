@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, Dimensions, StyleSheet} from 'react-native';
 import ReadyRecording from '../components/ReadyRecording';
 import MapView from 'react-native-maps';
 import { PROVIDER_GOOGLE, Polyline } from 'react-native-maps';
@@ -193,7 +193,7 @@ class ReadyRecordingModal extends React.Component {
           }
         return (
             <View>
-                <MapView ref={map => this._mapRecord = map} provider={PROVIDER_GOOGLE} style={{width: 410, height:300}} showsUserLocation={true} followsUserLocation={true} initialRegion={initialPos}>
+                <MapView ref={map => this._mapRecord = map} provider={PROVIDER_GOOGLE} style={styles.MapStyle} showsUserLocation={true} followsUserLocation={true} initialRegion={initialPos}>
                     <MapView.Marker coordinate={this.state.recentMarker} title="Current Location" />
                     <Polyline coordinates={this.state.markers} />
                 </MapView>
@@ -202,5 +202,12 @@ class ReadyRecordingModal extends React.Component {
         )
     }
 }
+
+const styles = StyleSheet.create({
+  MapStyle: {
+    width: Dimensions.get('window').width * 1,
+    height: Dimensions.get('window').height * 0.45
+  }
+})
 
 export default ReadyRecordingModal;

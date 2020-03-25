@@ -1,8 +1,5 @@
 import React from 'react';
 import {
-  ScrollView,
-  Text,
-  Button,
   StyleSheet,
   View,
   FlatList,
@@ -22,8 +19,8 @@ import { Race } from '../models/race.ts';
 import { Boat_Layout } from '../models/boat_layout.ts';
 import { Map_Point } from '../models/map_point.ts';
 import { LineChart } from 'react-native-chart-kit'
-import { getUnavailabilityReason } from 'expo/build/AR';
 
+const MAX_POINTS = 6
 class AnalyticsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -36,13 +33,45 @@ class AnalyticsScreen extends React.Component {
     this.state = {
       analytics: [
         new Race(
-          Date.now(), this.getDate(), 2, 5, 1, new Boat_Layout(12, "Dummy Layout One", Date.now(), true, 1), 
-          [new Map_Point(1584235300, 43.629, -79.459, 10, 1),
-            new Map_Point(1584235400, 43.630, -79.459, 10, 2),
-            new Map_Point(1584235500, 43.630, -79.460, 10, 1),
-            new Map_Point(1584235600, 43.630, -79.461, 10, 2),
-            new Map_Point(1584235700, 43.631, -79.461, 10, 1),
-            new Map_Point(1584235800, 43.631, -79.461, 10, 3)])
+          Date.now(), this.getDate(), 2, 6, 1, new Boat_Layout(12, "Dummy Layout One", Date.now(), true, 1), 
+          [new Map_Point(15842353000, -79.408, 43.671, 10, 1),
+            new Map_Point(15842354000, -79.408, 43.675, 10, 2),
+            new Map_Point(15842355000, -79.413, 43.675, 10, 1),
+            new Map_Point(15842356000, -79.418, 43.675, 10, 2),
+            new Map_Point(15842357000, -79.423, 43.675, 10, 1),
+            new Map_Point(15842358000, -79.423, 43.679, 10, 3)]),
+        new Race(
+          Date.now(), this.getDate(), 1.5, 8, 2, new Boat_Layout(16, "Dummy Layout Two", Date.now(), true, 2), 
+          [new Map_Point(15842353000, -79.408, 43.671, 10, 2),
+            new Map_Point(15842354000, -79.408, 43.675, 10, 4),
+            new Map_Point(15842355000, -79.413, 43.675, 10, 1),
+            new Map_Point(15842356000, -79.418, 43.675, 10, 2),
+            new Map_Point(15842357000, -79.423, 43.675, 10, 4),
+            new Map_Point(15842358000, -79.423, 43.679, 10, 3),
+            new Map_Point(15842359000, -79.423, 43.683, 10, 1),
+            new Map_Point(15842360000, -79.427, 43.683, 10, 1)]),
+        new Race(
+          Date.now(), this.getDate(), 2.1, 10, 3, new Boat_Layout(20, "Dummy Layout Three", Date.now(), true, 3), 
+          [new Map_Point(15842353000, -79.408, 43.671, 10, 0.5),
+            new Map_Point(15842354000, -79.408, 43.675, 10, 2),
+            new Map_Point(15842355000, -79.413, 43.675, 10, 4),
+            new Map_Point(15842356000, -79.418, 43.675, 10, 3),
+            new Map_Point(15842357000, -79.423, 43.675, 10, 1.5),
+            new Map_Point(15842358000, -79.423, 43.679, 10, 3),
+            new Map_Point(15842359000, -79.423, 43.683, 10, 4),
+            new Map_Point(15842360000, -79.427, 43.683, 10, 1),
+            new Map_Point(15842361000, -79.431, 43.683, 10, 2),
+            new Map_Point(15842362000, -79.431, 43.679, 10, 5)]),
+        new Race(
+          Date.now(), this.getDate(), 1.65, 8, 4, new Boat_Layout(14, "Dummy Layout Four", Date.now(), true, 4), 
+          [new Map_Point(15842353000, -79.408, 43.671, 10, 1),
+            new Map_Point(15842354000, -79.408, 43.675, 10, 4),
+            new Map_Point(15842355000, -79.413, 43.675, 10, 3),
+            new Map_Point(15842356000, -79.418, 43.675, 10, 3),
+            new Map_Point(15842357000, -79.423, 43.675, 10, 3.2),
+            new Map_Point(15842358000, -79.423, 43.679, 10, 2),
+            new Map_Point(15842359000, -79.423, 43.683, 10, 1.4),
+            new Map_Point(15842360000, -79.427, 43.683, 10, 1)])
       ]
     }
   }
@@ -84,15 +113,18 @@ class AnalyticsScreen extends React.Component {
   }
 
   getLabels(id) {
-    console.log(id)
     let labels = []
-    this.state.analytics[id - 1].map_points.map(point => {labels.push(point.timestamp)})
+    for (let i = 0; i < MAX_POINTS; i++) {
+      labels.push(this.state.analytics[id - 1].map_points[i].timestamp)
+    }
     return labels
   }
 
   getData(id) {
     let data = []
-    this.state.analytics[id - 1].map_points.map(point => {data.push(point.speed)})
+    for (let i = 0; i < MAX_POINTS; i++) {
+      data.push(this.state.analytics[id - 1].map_points[i].speed)
+    }
     return data
   }
 
@@ -105,7 +137,7 @@ class AnalyticsScreen extends React.Component {
         <FlatList data={analytics} renderItem={({item}) => (
           <TouchableOpacity onPress={() => {
             this.props.navigation.navigate('ViewAnalytics', {
-              item
+              race: item
             })
           }}>
             <Card>

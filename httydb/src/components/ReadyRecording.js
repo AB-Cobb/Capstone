@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
 import Timer from './Timer';
 
 class ReadyRecording extends React.Component {
@@ -21,14 +21,14 @@ class ReadyRecording extends React.Component {
     render() {
       return (
         <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-          <View style={{alignItems: "flex-start"}}>
+          <View style={{alignItems: "flex-start", width: Dimensions.get('window').width * 0.5}}>
             <Text style={styles.TextSpacing}>{this.state.currentLayout}</Text>
             <Text style={styles.TextSpacing}>Distance: {this.props.distance} km</Text>
             <Text style={styles.TextSpacing}>Current Velocity: {this.props.currentSpeed} m/s</Text>
             <Text style={styles.TextSpacing}>Average Velocity: {this.props.averageSpeed} m/s</Text>
           </View>
   
-          <View style={{alignItems: "flex-end"}}>
+          <View style={{alignItems: "flex-end", width: Dimensions.get('window').width * 0.5}}>
             <Timer ref="timerRef" isPaused={() => this.props.isPaused()} elapsedTime={0} sendTime={(time) => this.sendTime(time)}></Timer>
             <TouchableOpacity>
               <Text style={styles.ButtonStyleOne} onPress={() => this.props.setPause()}>
