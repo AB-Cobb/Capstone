@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, Dimensions, StyleSheet} from 'react-native';
 import ReadyOptions from '../components/ReadyOptions';
 import MapView from 'react-native-maps';
 import { PROVIDER_GOOGLE } from 'react-native-maps';
@@ -100,7 +100,7 @@ class ReadyScreen extends React.Component {
 
     return (
       <View>
-        <MapView ref={map => this._map = map} provider={PROVIDER_GOOGLE} style={{width: 410, height:300}} showsUserLocation={true} followsUserLocation={true} initialRegion={initialPos}>
+        <MapView ref={map => this._map = map} provider={PROVIDER_GOOGLE} style={styles.MapStyle} showsUserLocation={true} followsUserLocation={true} initialRegion={initialPos}>
           <MapView.Marker coordinate={this.state.marker} title="Current Location" />
         </MapView>
         <ReadyOptions layouts={this.state.layouts} selectedLayout={this.state.selectedLayout}  onClick={() => this.handleClick()} onChange={i => this.changeLayout(i)}/>
@@ -108,6 +108,13 @@ class ReadyScreen extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  MapStyle: {
+    width: Dimensions.get('window').width * 1,
+    height: Dimensions.get('window').height * 0.45
+  }
+})
 
 export default ReadyScreen;
 
