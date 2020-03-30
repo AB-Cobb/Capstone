@@ -1,11 +1,11 @@
 import React from 'react';
-import {Dimensions, StyleSheet, View, Slider} from "react-native";
+import {Dimensions, StyleSheet, View, Slider, Text} from "react-native";
 
 const LayoutRow = (props) =>{
-
     return(
         <View style={styles.Row}>
-            <View style={styles.Seat}/>
+            <View style={styles.Seat}>
+            <Text>{props.teammateName}</Text></View>
             <Slider style={styles.Slider}/>
             <View style={styles.Seat}/>
         </View>

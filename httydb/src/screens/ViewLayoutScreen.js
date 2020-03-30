@@ -2,7 +2,9 @@ import React from 'react';
 import {View, Button, StyleSheet, Text, Dimensions, TouchableOpacity} from 'react-native';
 import LayoutRow from "../components/LayoutRow";
 import RBSheet from "react-native-raw-bottom-sheet";
-import { SearchBar } from 'react-native-elements';
+import { SearchBar, ListItem } from 'react-native-elements';
+import { SearchableFlatList } from "react-native-searchable-list";
+import { db } from '../db/db'
 
 class ViewLayoutScreen extends React.Component {
     static navigationOptions = ({ navigation }) => {
@@ -16,6 +18,10 @@ class ViewLayoutScreen extends React.Component {
         this.state = {
             searchTerm: '',
             searchResults: [],
+            teamMembers: [],
+            searchAttribute: 'name',
+            addMate: '',
+            ignoreCase: true
         }
     }
 
@@ -27,24 +33,71 @@ class ViewLayoutScreen extends React.Component {
         return rows;
     };
 
+    componentDidMount() {
+        this.listTeammembers();
+        this.setState({
+            teamMembers: [],
+        })
+    }
+
+    addTeammamte(mate){
+        this.setState({
+            addMate:mate
+        })
+    }
+    listTeammembers() {
+        let teamMembers = [];
+        db.getAllTeammembers()
+          .then(data => {
+            teamMembers = data;
+            console.log('View LayoutScreen: teammembers: ', teamMembers);
+            this.setState({
+              teamMembers: teamMembers,
+              isLoading: false,
+            });
+        }
+          )
+          .catch(err => {
+            console.log(err);
+            this.setState({
+              isLoading: false,
+            });
+          });
+      }
+
+    //   getName(name){
+    //       this.props.teammateName = name
+    //       console.log("props: ", this.props.teammateName)
+    //       console.log("name: ", name)
+    //   }
     render() {
         const rows = this.CreateRows(10);
-
-
-
+        const {teamMembers} = this.state;
         console.log('Rendered Layout Screen!');
+        console.log("rows: ", rows)
         return (
             <View>
+            <View style={styles.Seat}>
+            <Text>{this.state.addMate}</Text>
+            </View>
                 <View style={styles.ViewStyle}>
                     <View style={styles.BoatOutline}>
-                        {rows}
+                    <TouchableOpacity onPress={() => {this.RBSheet.open(), this.props.teammateName}}>
+                    {rows}
+                    </TouchableOpacity>
                     </View>
                     <TouchableOpacity onPress={() => this.RBSheet.open()}><Text>Click to view Teammates</Text></TouchableOpacity>
+                    <View style={styles.Row}>
+            
                 </View>
+                
+        </View>
                 <RBSheet
                     ref={ref => {
-                        this.RBSheet = ref;
+                        this.RBSheet= ref;
                     }}
+                    closeOnDragDown={true}
+                    closeOnSwipeDown={true}
                     height={300}
                     duration={250}
                 >
@@ -56,6 +109,15 @@ class ViewLayoutScreen extends React.Component {
                         value={this.state.searchTerm}
                         lightTheme={true}
                     />
+        <SearchableFlatList data={teamMembers} searchTerm={this.state.searchTerm} 
+        searchAttribute={this.state.searchAttribute} ignoreCase={this.state.ignoreCase}
+        renderItem={({item, index}) => (
+          <TouchableOpacity
+                onPress={() => {this.addTeammamte(item.name), this.RBSheet.close()}}>
+                <ListItem key={index} leftIcon= {{name: 'face'}} title={item.name} subtitle={item.gender} bottomDivider/>
+              </TouchableOpacity>)}
+        keyExtractor={item => item.id} />
+
                 </RBSheet>
 
             </View>
@@ -77,6 +139,13 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         width: Dimensions.get('window').width * 0.8,
         height: Dimensions.get('window').height * 0.8,
+    },
+    Seat: {
+        borderColor: "black",
+        borderWidth: 1,
+        borderRadius: 200,
+        width: Dimensions.get('window').width * 0.1,
+        height: Dimensions.get('window').height * 0.05,
     }
 });
 

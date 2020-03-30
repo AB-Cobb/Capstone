@@ -29,18 +29,20 @@ class LayoutScreen extends React.Component {
               }}
               title="+"
           />,
-      headerTitleAlign: 'center',
-      headerRight: () => ( <
-        Button onPress = {
-          () => {
-            navigation.navigate('AddLayout');
-          }
-        }
-        title = "+" /
-        >
-      ),
     };
   };
+
+  // static navigationOptions = ({ navigation }) => {
+  //   return (
+  //     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+  //       <Text>Home Screen</Text>
+  //       <Button
+  //         title="View"
+  //         onPress={() => navigation.navigate('ViewLayoutScreen')}
+  //       />
+  //     </View>
+  //   );
+  // };
 
   constructor(props) {
     super(props);
@@ -99,20 +101,22 @@ class LayoutScreen extends React.Component {
       searchTerm: event
     })
   }
-
   render() {
-    const {
-      teamMembers
-    } = this.state;
-
+    const {layouts} = this.state;
     return ( 
       <View styles={styles.container}>
-       <SearchBar placeholder="Search here" onChangeText={this.onHandleSearch} value={this.state.searchTerm}/>
-        
-        <SearchableFlatList data={teamMembers} searchTerm={this.state.searchTerm} 
-        searchAttribute={this.state.searchAttribute} ignoreCase={this.state.ignoreCase}
-        renderItem={({item, index}) => ( <ListItem key={index} leftIcon= {{name: 'face' }} title={item.name} subtitle={item.gender} bottomDivider/>)}
-        keyExtractor={item => item.id} />
+       
+        <FlatList
+                    data={layouts}
+                    renderItem={({item}) =>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('ViewLayout', {layout: item})}>
+                        <Card><Text>{item}</Text></Card>
+                        </TouchableOpacity>}
+                    keyExtractor={item => item.length}
+                    numColumns={3}
+                    columnWrapperStyle={styles.ListStyle}
+                />
+
     </View>
     );
           }
@@ -141,3 +145,10 @@ const styles = StyleSheet.create({
 });
   
 export default LayoutScreen;
+
+// <Button
+//           onPress={() => {
+//             this.props.navigation.navigate('ViewLayout', teamMembers);
+//           }}
+//           title="View"
+//         />
