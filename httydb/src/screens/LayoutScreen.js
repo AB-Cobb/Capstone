@@ -107,15 +107,15 @@ class LayoutScreen extends React.Component {
       <View styles={styles.container}>
        
         <FlatList
-                    data={layouts}
-                    renderItem={({item}) =>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('ViewLayout', {layout: item})}>
-                        <Card><Text>{item}</Text></Card>
-                        </TouchableOpacity>}
-                    keyExtractor={item => item.length}
-                    numColumns={3}
-                    columnWrapperStyle={styles.ListStyle}
-                />
+          data={layouts}
+          renderItem={({item}) =>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('ViewLayout', {layout: item})}>
+              <Card><Text>{item}</Text></Card>
+              </TouchableOpacity>}
+          keyExtractor={item => item.length}
+          numColumns={3}
+          columnWrapperStyle={styles.ListStyle}
+      />
 
     </View>
     );
