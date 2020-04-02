@@ -33,10 +33,8 @@ class ViewTeammateModal extends React.Component {
       teammate,
     };
   }
-
   // navigationOptions = ({navigation}) => {
   //   const editItem = this.props.navigation.state.params.item;
-
   //   return {
   //     headerTitleAlign: 'center',
   //     headerRight: () => (

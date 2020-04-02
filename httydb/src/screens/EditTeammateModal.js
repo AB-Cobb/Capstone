@@ -63,7 +63,7 @@ class EditTeammateModal extends React.Component {
   }
 
   onDeleteButton() {
-    console.log('Button clicked');
+    db.removeTeammamber();
   }
 
   render() {

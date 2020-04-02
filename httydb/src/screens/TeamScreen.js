@@ -36,13 +36,11 @@ class TeamScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-
       teammates: null,
-
     };
   }
-  
-   componentDidMount() {
+
+  componentDidMount() {
     this._subscribe = this.props.navigation.addListener('didFocus', () => {
       this.listTeammembers();
     });
@@ -55,7 +53,7 @@ class TeamScreen extends React.Component {
   listTeammembers() {
     let teamMembers = [];
     db.getAllTeammembers()
-      .then(data => {
+      .then((data) => {
         teamMembers = data;
         console.log('Teamscreen: teammembers: ', teamMembers);
         this.setState({
@@ -63,7 +61,7 @@ class TeamScreen extends React.Component {
           isLoading: false,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         this.setState({
           isLoading: false,
@@ -93,11 +91,10 @@ class TeamScreen extends React.Component {
                   <CardContent text={item.gender} />
                   <CardContent text={item.side_preference} />
                   <CardContent text={item.active} />
-
                 </Card>
               </TouchableOpacity>
             )}
-            keyExtractor={item => item.id}
+            keyExtractor={(item) => item.id}
             numColumns={3}
             columnWrapperStyle={StyleSheet.ListStyle}
           />
