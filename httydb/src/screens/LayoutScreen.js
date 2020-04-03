@@ -8,76 +8,58 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import {
-  CardTitle,
-  CardContent,
-} from 'react-native-cards';
+import {CardTitle, CardContent} from 'react-native-cards';
 import Card from '../components/Card';
-import {
-  db
-} from '../db/db';
-import { SearchBar, ListItem } from 'react-native-elements';
-import { SearchableFlatList } from "react-native-searchable-list";
+import {db} from '../db/db';
+import {SearchBar, ListItem} from 'react-native-elements';
+import {SearchableFlatList} from 'react-native-searchable-list';
 
 class LayoutScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions = ({navigation}) => {
     return {
-      headerTitleAlign: "center",
-      headerRight: () => <Button
-              onPress={() => {
-                navigation.navigate('AddLayout');
-              }}
-              title="+"
-          />,
+      headerTitleAlign: 'center',
+      headerRight: () => (
+        <Button
+          onPress={() => {
+            navigation.navigate('AddLayout');
+          }}
+          title="+"
+        />
+      ),
     };
   };
-
-  // static navigationOptions = ({ navigation }) => {
-  //   return (
-  //     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-  //       <Text>Home Screen</Text>
-  //       <Button
-  //         title="View"
-  //         onPress={() => navigation.navigate('ViewLayoutScreen')}
-  //       />
-  //     </View>
-  //   );
-  // };
 
   constructor(props) {
     super(props);
     this.state = {
       layouts: [],
-      teamMembers: [],
       searchTerm: '',
-      searchAttribute: 'name',
+      searchAttribute: '',
       ignoreCase: true,
     };
   }
 
   componentDidMount() {
-    this.listTeammembers();
+    this._subscribe = this.props.navigation.addListener('didFocus', () => {
+      this.listLayouts();
+    });
     this.setState({
       layouts: [],
-      teamMembers: [],
       isLoading: false,
     });
   }
 
-  listTeammembers() {
-    let teamMembers = [];
-    db.getAllTeammembers()
-      .then(data => {
-        teamMembers = data;
-        console.log('LayoutScreen: teammembers: ', teamMembers);
+  listLayouts() {
+    let layouts = [];
+    db.getallBoatLayouts()
+      .then((data) => {
+        layouts = data;
+        console.log('LayoutScreen: ', layouts);
         this.setState({
-            layouts: ["Mens Team", "Womens Team", "A Team", "B Team","Mixed Team","C Team","Practice Team A","Practice Team B","Test Team","Team Team 2"],
-          teamMembers: teamMembers,
-          isLoading: false,
+          layouts: layouts,
         });
-    }
-      )
-      .catch(err => {
+      })
+      .catch((err) => {
         console.log(err);
         this.setState({
           isLoading: false,
@@ -85,43 +67,43 @@ class LayoutScreen extends React.Component {
       });
   }
 
-  // searchFilter(keyword) {
-  //   const searchKey = this.teamMembers.filter(item => {
-  //     const data = `${item.name} ${item.side_preference}`
-  //     return data.indexOf(keyword) > -1
-  //   })
-
-  //   this.setState({
-  //     search: searchKey
-  //   })
-  // }
-
-  onHandleSearch = event => {
+  onHandleSearch = (event) => {
     this.setState({
-      searchTerm: event
-    })
-  }
+      searchTerm: event,
+    });
+  };
   render() {
     const {layouts} = this.state;
-    return ( 
+    return (
       <View styles={styles.container}>
-       
-        <FlatList
+        <SearchBar
+          placeholder="Search Layout..."
+          onChangeText={this.onHandleSearch}
+          value={this.state.searchTerm}
+        />
+        <SearchableFlatList
           data={layouts}
-          renderItem={({item}) =>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('ViewLayout', {layout: item})}>
-              <Card><Text>{item}</Text></Card>
-              </TouchableOpacity>}
-          keyExtractor={item => item.length}
+          searchTerm={this.state.searchTerm}
+          searchAttribute={this.state.searchAttribute}
+          ignoreCase={this.state.ignoreCase}
+          renderItem={({item}) => (
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate('ViewLayout', {layout: item})
+              }>
+              <Card>
+                <Text>{item}</Text>
+              </Card>
+            </TouchableOpacity>
+          )}
+          keyExtractor={(item) => item.length}
           numColumns={3}
           columnWrapperStyle={styles.ListStyle}
-      />
-
-    </View>
+        />
+      </View>
     );
-          }
-        }
-
+  }
+}
 
 const styles = StyleSheet.create({
   ListStyle: {
@@ -130,25 +112,15 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    marginTop:60
+    marginTop: 60,
   },
   circle: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-  //   borderBottomLeftRadius: 20,
-    // borderTopEndRadius: 500,
-    // borderBottomEndRadius: 500,
   },
   card: {
-    borderRadius: 8 
-  }
+    borderRadius: 8,
+  },
 });
-  
-export default LayoutScreen;
 
-// <Button
-//           onPress={() => {
-//             this.props.navigation.navigate('ViewLayout', teamMembers);
-//           }}
-//           title="View"
-//         />
+export default LayoutScreen;

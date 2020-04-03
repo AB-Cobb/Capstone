@@ -17,6 +17,9 @@ class ViewLayoutScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
     return {
       headerTitleAlign: 'center',
+      headerRight: () => (
+        <Button onPress={() => this.onAddLayout} title="Save" />
+      ),
     };
   };
 
@@ -29,6 +32,7 @@ class ViewLayoutScreen extends React.Component {
       searchAttribute: 'name',
       addMate: '',
       ignoreCase: true,
+      layout: [],
     };
   }
 
@@ -48,9 +52,7 @@ class ViewLayoutScreen extends React.Component {
   }
 
   addTeammamte(mate) {
-    this.setState({
-      addMate: mate,
-    });
+    layout[0][0].append;
   }
   listTeammembers() {
     let teamMembers = [];
@@ -70,6 +72,23 @@ class ViewLayoutScreen extends React.Component {
         });
       });
   }
+  onAddLayout() {
+    let data = new Boat_Layout(
+      this.state.num_paddlers,
+      this.state.name,
+      this.state.date,
+      this.state.active,
+      this.state.id,
+    );
+    console.log('new boad add: ', data);
+    this.props.navigation.navigate('ViewLayout', {data});
+  }
+
+  // searchFilter(keyword) {
+  //   const searchKey = this.teamMembers.filter((item) => {
+  //     const data = `${item.name} ${item.side_preference}`;
+  //     return data.indexOf(keyword) > -1;
+  //   });
 
   //   getName(name){
   //       this.props.teammateName = name
@@ -77,7 +96,8 @@ class ViewLayoutScreen extends React.Component {
   //       console.log("name: ", name)
   //   }
   render() {
-    const rows = this.CreateRows(10);
+    const layout = this.props.navigation.state.params.data;
+    const rows = this.CreateRows(layout.num_paddlers);
     const {teamMembers} = this.state;
     console.log('Rendered Layout Screen!');
     console.log('rows: ', rows);
@@ -124,7 +144,7 @@ class ViewLayoutScreen extends React.Component {
             renderItem={({item, index}) => (
               <TouchableOpacity
                 onPress={() => {
-                  this.addTeammamte(item.name), this.RBSheet.close();
+                  this.addTeammamte(item), this.RBSheet.close();
                 }}>
                 <ListItem
                   key={index}
