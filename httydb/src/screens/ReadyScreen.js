@@ -32,6 +32,12 @@ class ReadyScreen extends React.Component {
       marker: {
         latitude: 0,
         longitude: 0
+      },
+      mapRegion: {
+        latitude: 37.421,
+        longitude: -122.084,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421
       }
     }
   }
@@ -64,7 +70,14 @@ class ReadyScreen extends React.Component {
   accessLocation() {
       this.watchID = Geolocation.watchPosition((position) => {
         console.log(position)
-      
+
+        let mapRegion = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421
+        }
+
         this.setState({
           locationData: {
               latitude: position.coords.latitude,
@@ -76,7 +89,8 @@ class ReadyScreen extends React.Component {
           marker: {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
-          }
+          },
+          mapRegion: mapRegion
         })
       }, (error) => {
         console.log("An error occured: " + error.message)
@@ -91,16 +105,9 @@ class ReadyScreen extends React.Component {
   render() {
     console.log('Rendered ReadyScreen!');
 
-    let initialPos = {
-      latitude: 37.421,
-      longitude: -122.084,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421
-    }
-
     return (
       <View>
-        <MapView ref={map => this._map = map} provider={PROVIDER_GOOGLE} style={styles.MapStyle} showsUserLocation={true} followsUserLocation={true} initialRegion={initialPos}>
+        <MapView ref={map => this._map = map} provider={PROVIDER_GOOGLE} style={styles.MapStyle} showsUserLocation={true} followsUserLocation={true} initialRegion={this.state.mapRegion} region={this.state.mapRegion}>
           <MapView.Marker coordinate={this.state.marker} title="Current Location" />
         </MapView>
         <ReadyOptions layouts={this.state.layouts} selectedLayout={this.state.selectedLayout}  onClick={() => this.handleClick()} onChange={i => this.changeLayout(i)}/>
