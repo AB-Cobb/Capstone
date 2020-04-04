@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import LayoutRow from '../components/LayoutRow';
+import {Boat_Layout} from '../models/boat_layout'
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {SearchBar, ListItem} from 'react-native-elements';
 import {SearchableFlatList} from 'react-native-searchable-list';
@@ -55,6 +56,7 @@ class ViewLayoutScreen extends React.Component {
     layout[0][0].append;
   }
   listTeammembers() {
+    console.log("getting teammembers")
     let teamMembers = [];
     db.getAllTeammembers()
       .then((data) => {
@@ -64,12 +66,15 @@ class ViewLayoutScreen extends React.Component {
           teamMembers: teamMembers,
           isLoading: false,
         });
+        console.log("got teammembers")
       })
       .catch((err) => {
         console.log(err);
         this.setState({
+          teamMembers: [],
           isLoading: false,
         });
+        console.log("no teammembers")
       });
   }
   onAddLayout() {
@@ -80,7 +85,16 @@ class ViewLayoutScreen extends React.Component {
       this.state.active,
       this.state.id,
     );
+    let dummydata = new Boat_Layout(
+      20, // num paddlers
+      "Dummy Layout", //name
+      new Date().getDate(), //date
+      true, // active
+      -1, // id
+    )
+    data = dummydata;
     console.log('new boad add: ', data);
+    db.insertBoatLayout(data).then((id)=>{console.log("added layout with id ")})
     this.props.navigation.navigate('ViewLayout', {data});
   }
 

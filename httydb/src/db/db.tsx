@@ -299,24 +299,32 @@ class db_impl implements Database {
     // ------- Boat Layout -------
     //insert 
     public insertBoatLayout(layout: Boat_Layout) : Promise<number>{
-        return this.getDB().then( db => 
-            db.executeSql(
-                'INSERT INTO boat_layout (num_paddlers, active, name, date) VALUES (?,?,?,?)',
-                [layout.num_paddlers, layout.active, layout.name, layout.date])
-            ).then(([results]) => {
-                console.log("insert boatlayout with ID: ", results.insertId)
-                return results.insertId;
-            }).then ((id) =>{
-              let paddlers = layout.paddlers;
-              for (let i = 0; i < 2; i++){
-                for (let j = 0; j < layout.num_paddlers; j++){
-                  let paddler = paddlers[i][j]
+      console.log("Hello from insertBoatLayout")
+      return this.getDB()
+        .then(db => 
+          db.executeSql(
+              'INSERT INTO boat_layout (num_paddlers, active, name, date) VALUES (?,?,?,?);',
+              [
+                layout.num_paddlers,
+                layout.active,
+                layout.name,
+                layout.date.toDateString
+              ]
+            ),
+          ).then(([results]) => {
+              console.log("insert boatlayout with ID: ", results.insertId)
+              return results.insertId;
+          }).then ((id) =>{
+            let paddlers = layout.paddlers;
+            for (let i = 0; i < 2; i++){
+              for (let j = 0; j < layout.num_paddlers; j++){
+                let paddler = paddlers[i][j]
+                if (paddler !== undefined)
                   this.insertPaddlerOnBoat(new PaddleronBoat(id, paddler.id, i,j))
-                }
-               console.log ("add paddler to boat")
               }
-              return id;
-            });
+            }
+            return id;
+          });//*/
     }
 
     //get
