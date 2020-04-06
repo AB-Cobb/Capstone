@@ -5,7 +5,7 @@ import Slider from '@react-native-community/slider';
 const LayoutRow = (props) => {
   return (
     <View style={styles.Row}>
-      <TouchableOpacity onPress={props.openSheet}>
+      <TouchableOpacity onPress={props.leftSeatPress}>
         <View style={styles.Seat}>
           <Text>{props.leftSide}</Text>
         </View>
@@ -17,7 +17,7 @@ const LayoutRow = (props) => {
         minimumTrackTintColor="#FFFFFF"
         maximumTrackTintColor="#000000"
       />
-      <TouchableOpacity onPress={props.openSheet}>
+      <TouchableOpacity onPress={props.rightSeatPress}>
         <View style={styles.Seat}>
           <Text>{props.rightSide}</Text>
         </View>

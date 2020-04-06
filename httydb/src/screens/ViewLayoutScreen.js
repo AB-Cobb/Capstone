@@ -32,7 +32,8 @@ class ViewLayoutScreen extends React.Component {
       teamMembers: [],
       searchAttribute: 'name',
       sheetOpen: false,
-      addMate: '',
+      selectedTeammate: '',
+      selectedRow: null,
       ignoreCase: true,
       layout: [],
     };
@@ -41,19 +42,34 @@ class ViewLayoutScreen extends React.Component {
   CreateRows = (numRows) => {
     const rows = [];
     for (let i = 0; i < numRows; i++) {
-      rows.push(<LayoutRow key={i} leftSide="Click" rightSide="Click" openSheet={this.openSheetBehaviour}/>);
+      rows.push(
+          <LayoutRow
+          key={i}
+          leftSide="Click"
+          rightSide="Click"
+          leftSeatPress={this.openSheetBehaviour}
+          rightSeatPress={this.openSheetBehaviour}
+          />);
     }
     return rows;
   };
 
-  openSheetBehaviour = () => {
+  openSheetBehaviour = (rowNumber) => {
     this.RBSheet.open();
-    this.setState({sheetOpen: true})
+    this.setState({
+      sheetOpen: true,
+      selectedRow: rowNumber
+    });
+    console.log(`Selected Row#: ${rowNumber}`);
   };
 
-  closeSheetBehaviour = () =>{
+  closeSheetBehaviour = (member) =>{
     this.RBSheet.close();
-    this.setState({sheetOpen: false})
+    this.setState({
+      sheetOpen: false,
+      selectedTeammate: member
+    });
+    console.log(member);
   };
 
   componentDidMount() {
@@ -64,7 +80,7 @@ class ViewLayoutScreen extends React.Component {
   }
 
   listTeammembers() {
-    console.log("getting teammembers")
+    console.log("getting teammembers");
     let teamMembers = [];
     db.getAllTeammembers()
       .then((data) => {
@@ -103,7 +119,7 @@ class ViewLayoutScreen extends React.Component {
     );
 
     data = dummydata;
-    console.log('new boad add: ', data);
+    console.log('new boat add: ', data);
     db.insertBoatLayout(data).then((id)=>{console.log(`added layout with id: ${id}`)});
     this.props.navigation.navigate('ViewLayout', {data});
   }
@@ -160,7 +176,7 @@ class ViewLayoutScreen extends React.Component {
             renderItem={({item, index}) => (
               <TouchableOpacity
                 onPress={() => {
-                  this.closeSheetBehaviour()
+                  this.closeSheetBehaviour(item)
                 }}>
                 <ListItem
                   key={index}
