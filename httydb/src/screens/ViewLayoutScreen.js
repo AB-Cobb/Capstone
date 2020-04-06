@@ -31,6 +31,7 @@ class ViewLayoutScreen extends React.Component {
       searchResults: [],
       teamMembers: [],
       searchAttribute: 'name',
+      sheetOpen: false,
       addMate: '',
       ignoreCase: true,
       layout: [],
@@ -40,9 +41,19 @@ class ViewLayoutScreen extends React.Component {
   CreateRows = (numRows) => {
     const rows = [];
     for (let i = 0; i < numRows; i++) {
-      rows.push(<LayoutRow key={i} />);
+      rows.push(<LayoutRow key={i} leftSide="Click" rightSide="Click" openSheet={this.openSheetBehaviour}/>);
     }
     return rows;
+  };
+
+  openSheetBehaviour = () => {
+    this.RBSheet.open();
+    this.setState({sheetOpen: true})
+  };
+
+  closeSheetBehaviour = () =>{
+    this.RBSheet.close();
+    this.setState({sheetOpen: false})
   };
 
   componentDidMount() {
@@ -52,9 +63,6 @@ class ViewLayoutScreen extends React.Component {
     });
   }
 
-  addTeammamte(mate) {
-    layout[0][0].append;
-  }
   listTeammembers() {
     console.log("getting teammembers")
     let teamMembers = [];
@@ -85,16 +93,18 @@ class ViewLayoutScreen extends React.Component {
       this.state.active,
       this.state.id,
     );
+
     let dummydata = new Boat_Layout(
       20, // num paddlers
       "Dummy Layout", //name
       new Date().getDate(), //date
       true, // active
       -1, // id
-    )
+    );
+
     data = dummydata;
     console.log('new boad add: ', data);
-    db.insertBoatLayout(data).then((id)=>{console.log("added layout with id ")})
+    db.insertBoatLayout(data).then((id)=>{console.log(`added layout with id: ${id}`)});
     this.props.navigation.navigate('ViewLayout', {data});
   }
 
@@ -114,26 +124,18 @@ class ViewLayoutScreen extends React.Component {
     const rows = this.CreateRows(layout.num_paddlers);
     const {teamMembers} = this.state;
     console.log('Rendered Layout Screen!');
-    console.log('rows: ', rows);
+    console.log(`Sheet is open?: ${this.state.sheetOpen}`);
     return (
       <View>
-        <View style={styles.Seat}>
-          <Text>{this.state.addMate}</Text>
-        </View>
         <View style={styles.ViewStyle}>
           <View style={styles.BoatOutline}>
-            <TouchableOpacity
-              onPress={() => {
-                this.RBSheet.open(), this.props.teammateName;
-              }}>
-              {rows}
-            </TouchableOpacity>
+            {rows}
           </View>
           <TouchableOpacity onPress={() => this.RBSheet.open()}>
             <Text>Click to view Teammates</Text>
           </TouchableOpacity>
-          <View style={styles.Row}></View>
         </View>
+
         <RBSheet
           ref={(ref) => {
             this.RBSheet = ref;
@@ -158,7 +160,7 @@ class ViewLayoutScreen extends React.Component {
             renderItem={({item, index}) => (
               <TouchableOpacity
                 onPress={() => {
-                  this.addTeammamte(item), this.RBSheet.close();
+                  this.closeSheetBehaviour()
                 }}>
                 <ListItem
                   key={index}

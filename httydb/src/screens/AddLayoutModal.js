@@ -41,8 +41,19 @@ class AddLayoutModal extends React.Component {
       this.state.active,
       this.state.id,
     );
-    console.log('new boad add: ', data);
+    console.log("Before Insert Layout");
+    /*
+    db.insertBoatLayout(data)
+        .then((res) =>{
+          console.log(`Added layout ${res}`);
+          this.props.navigation.navigate('ViewLayout', {data});
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    */
     this.props.navigation.navigate('ViewLayout', {data});
+
   }
 
   listLayouts() {

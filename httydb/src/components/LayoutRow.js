@@ -1,13 +1,15 @@
 import React from 'react';
-import {Dimensions, StyleSheet, View, Text} from 'react-native';
+import {Dimensions, StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import Slider from '@react-native-community/slider';
 
 const LayoutRow = (props) => {
   return (
     <View style={styles.Row}>
-      <View style={styles.Seat}>
-        <Text>{props.teammateName}</Text>
-      </View>
+      <TouchableOpacity onPress={props.openSheet}>
+        <View style={styles.Seat}>
+          <Text>{props.leftSide}</Text>
+        </View>
+      </TouchableOpacity>
       <Slider
         style={styles.Slider}
         minimumValue={0}
@@ -15,7 +17,11 @@ const LayoutRow = (props) => {
         minimumTrackTintColor="#FFFFFF"
         maximumTrackTintColor="#000000"
       />
-      <View style={styles.Seat} />
+      <TouchableOpacity onPress={props.openSheet}>
+        <View style={styles.Seat}>
+          <Text>{props.rightSide}</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
