@@ -213,7 +213,7 @@ class db_impl implements Database {
   }
     // ------- Paddler On Boat ---
     //get
-    public getPaddlersOnBoat(id): Promise<Team_member[][]> {
+    public getPaddlersOnBoat(id, num_paddlers): Promise<Team_member[][]> {
       return this.getDB()
         .then(db =>
           db.executeSql('SELECT * FROM team_member as tm '+
@@ -224,7 +224,12 @@ class db_impl implements Database {
         )
         .then(([results]) => {
           if (results !== undefined) {
-            let paddlers: Team_member[][];
+            let paddlers = [new Array(num_paddlers/2), new Array(num_paddlers/2)];
+            for (let i = 0; i < num_paddlers/2; i++){
+                for (let j = 0; j < 2; j++){
+                    paddlers[i][j] = new Team_member();
+                }
+            }
             for (let i = 0; i < results.rows.length; i++) {
               const data = results.rows.item(i);
               let {
@@ -319,7 +324,7 @@ class db_impl implements Database {
             for (let i = 0; i < 2; i++){
               for (let j = 0; j < layout.num_paddlers; j++){
                 let paddler = paddlers[i][j]
-                if (paddler !== undefined)
+                if (paddler.id !== null)
                   this.insertPaddlerOnBoat(new PaddleronBoat(id, paddler.id, i,j))
               }
             }
@@ -343,7 +348,7 @@ class db_impl implements Database {
                 else 
                     return Promise.reject()
             }).then ((layout) =>{
-              return this.getPaddlersOnBoat(layout.id).then((paddlersonboat) => {
+              return this.getPaddlersOnBoat(layout.id, layout.num_paddlers).then((paddlersonboat) => {
                 layout.paddlers = paddlersonboat;
                 return layout
               })
@@ -392,7 +397,7 @@ class db_impl implements Database {
           data.date,
           data.active,
           data.id)
-          return this.getPaddlersOnBoat(data.id).then(paddlers => {
+          return this.getPaddlersOnBoat(data.id, layout.num_paddlers).then(paddlers => {
             layout.paddlers = paddlers;
             return layout;
           });
