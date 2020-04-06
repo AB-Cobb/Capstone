@@ -34,26 +34,25 @@ class AddLayoutModal extends React.Component {
     };
   }
   onAddLayout() {
-    let data = new Boat_Layout(
-      this.state.num_paddlers,
-      this.state.name,
-      this.state.date,
-      this.state.active,
-      this.state.id,
-    );
-    console.log("Before Insert Layout");
-    /*
-    db.insertBoatLayout(data)
-        .then((res) =>{
-          console.log(`Added layout ${res}`);
-          this.props.navigation.navigate('ViewLayout', {data});
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    */
-    this.props.navigation.navigate('ViewLayout', {data});
+    if (!this.isEvenNumber(this.state.num_paddlers)) {
+      alert('Please enter an odd number for number of Rows');
+    } else {
+      numRows = this.state.num_paddlers * 2;
+      let data = new Boat_Layout(
+        numRows,
+        this.state.name,
+        this.state.date,
+        this.state.active,
+        this.state.id,
+      );
+      console.log('Before Insert Layout');
+      this.props.navigation.navigate('ViewLayout', {data});
+    }
+  }
 
+  isEvenNumber(num) {
+    if (num % 2 === 0) return true;
+    return false;
   }
 
   listLayouts() {

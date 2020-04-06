@@ -8,11 +8,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import LayoutRow from '../components/LayoutRow';
-import {Boat_Layout} from '../models/boat_layout'
+import {Boat_Layout} from '../models/boat_layout';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {SearchBar, ListItem} from 'react-native-elements';
 import {SearchableFlatList} from 'react-native-searchable-list';
 import {db} from '../db/db';
+import {FlatList} from 'react-native-gesture-handler';
 
 class ViewLayoutScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -35,7 +36,7 @@ class ViewLayoutScreen extends React.Component {
       selectedTeammate: '',
       selectedRow: null,
       ignoreCase: true,
-      layout: [],
+      layout: this.props.navigation.state.params.data,
     };
   }
 
@@ -43,31 +44,52 @@ class ViewLayoutScreen extends React.Component {
     const rows = [];
     for (let i = 0; i < numRows; i++) {
       rows.push(
-          <LayoutRow
+        <LayoutRow
           key={i}
           leftSide="Click"
           rightSide="Click"
           leftSeatPress={this.openSheetBehaviour}
           rightSeatPress={this.openSheetBehaviour}
-          />);
+        />,
+      );
     }
     return rows;
   };
 
-  openSheetBehaviour = (rowNumber) => {
+  openSheetBehaviourLeft = (rowNumber) => {
     this.RBSheet.open();
     this.setState({
       sheetOpen: true,
-      selectedRow: rowNumber
+      selectedRow: rowNumber,
     });
+    this.state.layout.paddlers[0][rowNumber] = this.state.selectedTeammate;
     console.log(`Selected Row#: ${rowNumber}`);
   };
 
-  closeSheetBehaviour = (member) =>{
+  openSheetBehaviourRight = (rowNumber) => {
+    this.RBSheet.open();
+    this.setState({
+      sheetOpen: true,
+      selectedRow: rowNumber,
+    });
+    this.state.layout.paddlers[1][rowNumber] = this.state.selectedTeammate;
+    console.log(`Selected Row#: ${rowNumber}`);
+  };
+
+  // openSheetBehaviour = (rowNumber) => {
+  //   this.RBSheet.open();
+  //   this.setState({
+  //     sheetOpen: true,
+  //     selectedRow: rowNumber,
+  //   });
+  //   console.log(`Selected Row#: ${rowNumber}`);
+  // };
+
+  closeSheetBehaviour = (member) => {
     this.RBSheet.close();
     this.setState({
       sheetOpen: false,
-      selectedTeammate: member
+      selectedTeammate: member,
     });
     console.log(member);
   };
@@ -80,7 +102,7 @@ class ViewLayoutScreen extends React.Component {
   }
 
   listTeammembers() {
-    console.log("getting teammembers");
+    console.log('getting teammembers');
     let teamMembers = [];
     db.getAllTeammembers()
       .then((data) => {
@@ -90,7 +112,7 @@ class ViewLayoutScreen extends React.Component {
           teamMembers: teamMembers,
           isLoading: false,
         });
-        console.log("got teammembers")
+        console.log('got teammembers');
       })
       .catch((err) => {
         console.log(err);
@@ -98,9 +120,17 @@ class ViewLayoutScreen extends React.Component {
           teamMembers: [],
           isLoading: false,
         });
-        console.log("no teammembers")
+        console.log('no teammembers');
       });
   }
+
+  addTeammate = (teammate) => {
+    this.setState({
+      selectedTeammate: teammate,
+    });
+    console.log('selected teammate: ', this.state.selectedTeammate);
+    console.log('layout: ', this.state.layout);
+  };
   onAddLayout() {
     let data = new Boat_Layout(
       this.state.num_paddlers,
@@ -112,7 +142,7 @@ class ViewLayoutScreen extends React.Component {
 
     let dummydata = new Boat_Layout(
       20, // num paddlers
-      "Dummy Layout", //name
+      'Dummy Layout', //name
       new Date().getDate(), //date
       true, // active
       -1, // id
@@ -120,7 +150,9 @@ class ViewLayoutScreen extends React.Component {
 
     data = dummydata;
     console.log('new boat add: ', data);
-    db.insertBoatLayout(data).then((id)=>{console.log(`added layout with id: ${id}`)});
+    db.insertBoatLayout(data).then((id) => {
+      console.log(`added layout with id: ${id}`);
+    });
     this.props.navigation.navigate('ViewLayout', {data});
   }
 
@@ -136,8 +168,7 @@ class ViewLayoutScreen extends React.Component {
   //       console.log("name: ", name)
   //   }
   render() {
-    const layout = this.props.navigation.state.params.data;
-    const rows = this.CreateRows(layout.num_paddlers);
+    // const layout = this.state.layout;
     const {teamMembers} = this.state;
     console.log('Rendered Layout Screen!');
     console.log(`Sheet is open?: ${this.state.sheetOpen}`);
@@ -145,7 +176,20 @@ class ViewLayoutScreen extends React.Component {
       <View>
         <View style={styles.ViewStyle}>
           <View style={styles.BoatOutline}>
-            {rows}
+            <FlatList
+              extraData={this.state}
+              data={this.state.layout.paddlers[0]}
+              renderItem={({item}) => (
+                <LayoutRow
+                  key={item}
+                  leftSide="Click"
+                  rightSide="Click"
+                  leftSeatPress={this.openSheetBehaviourLeft}
+                  rightSeatPress={this.openSheetBehaviourRight}
+                />
+              )}
+              keyExtractor={(item) => item.id}
+            />
           </View>
           <TouchableOpacity onPress={() => this.RBSheet.open()}>
             <Text>Click to view Teammates</Text>
@@ -176,7 +220,7 @@ class ViewLayoutScreen extends React.Component {
             renderItem={({item, index}) => (
               <TouchableOpacity
                 onPress={() => {
-                  this.closeSheetBehaviour(item)
+                  this.addTeammate(item), this.closeSheetBehaviour(item);
                 }}>
                 <ListItem
                   key={index}
