@@ -63,6 +63,7 @@ class ViewLayoutScreen extends React.Component {
       selectedRow: rowNumber,
     });
     this.state.layout.paddlers[0][rowNumber] = this.state.selectedTeammate;
+    LayoutRow.leftSide = this.state.selectedTeammate;
     console.log(`Selected Row#: ${rowNumber}`);
   };
 
@@ -75,15 +76,6 @@ class ViewLayoutScreen extends React.Component {
     this.state.layout.paddlers[1][rowNumber] = this.state.selectedTeammate;
     console.log(`Selected Row#: ${rowNumber}`);
   };
-
-  // openSheetBehaviour = (rowNumber) => {
-  //   this.RBSheet.open();
-  //   this.setState({
-  //     sheetOpen: true,
-  //     selectedRow: rowNumber,
-  //   });
-  //   console.log(`Selected Row#: ${rowNumber}`);
-  // };
 
   closeSheetBehaviour = (member) => {
     this.RBSheet.close();
@@ -168,7 +160,6 @@ class ViewLayoutScreen extends React.Component {
   //       console.log("name: ", name)
   //   }
   render() {
-    // const layout = this.state.layout;
     const {teamMembers} = this.state;
     console.log('Rendered Layout Screen!');
     console.log(`Sheet is open?: ${this.state.sheetOpen}`);
@@ -180,13 +171,16 @@ class ViewLayoutScreen extends React.Component {
               extraData={this.state}
               data={this.state.layout.paddlers[0]}
               renderItem={({item}) => (
-                <LayoutRow
-                  key={item}
-                  leftSide="Click"
-                  rightSide="Click"
-                  leftSeatPress={this.openSheetBehaviourLeft}
-                  rightSeatPress={this.openSheetBehaviourRight}
-                />
+                console.log('item co gi ', item),
+                (
+                  <LayoutRow
+                    key={item}
+                    leftSide={item.name}
+                    rightSide={item.name}
+                    leftSeatPress={this.openSheetBehaviourLeft}
+                    rightSeatPress={this.openSheetBehaviourRight}
+                  />
+                )
               )}
               keyExtractor={(item) => item.id}
             />
