@@ -141,9 +141,14 @@ class ReadyRecordingModal extends React.Component {
       return this.refs.readyRecording.getElapsedTime()
     }
 
+    getDate(){
+      let today = new Date()
+      return `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`
+    }
+
     saveData() {
       console.log("saveing race")
-      let newRace = new Race(Date.now, "New Race", this.state.routeData.distance, this.getElapsedTime(), -1, this.props.selectedLayout, this.state.routeData.points)
+      let newRace = new Race(Date.now, this.getDate(), this.state.routeData.distance, this.getElapsedTime(), -1, this.props.selectedLayout, this.state.routeData.points)
       /*
       let newRouteObject = {
         routeName: Date.now(),
