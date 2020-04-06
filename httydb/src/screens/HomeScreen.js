@@ -26,48 +26,7 @@ class HomeScreen extends React.Component {
     super(props);
     this.state = {
         layouts: ['A Team', 'B Team', 'Mixed Team'],
-        analytics: [
-          new Race(
-            Date.now(), this.getDate(), 2, 6, 1, new Boat_Layout(12, "Dummy Layout One", Date.now(), true, 1), 
-            [new Map_Point(15842353000, -79.408, 43.671, 10, 1),
-              new Map_Point(15842354000, -79.408, 43.675, 10, 2),
-              new Map_Point(15842355000, -79.413, 43.675, 10, 1),
-              new Map_Point(15842356000, -79.418, 43.675, 10, 2),
-              new Map_Point(15842357000, -79.423, 43.675, 10, 1),
-              new Map_Point(15842358000, -79.423, 43.679, 10, 3)]),
-          new Race(
-            Date.now(), this.getDate(), 1.5, 8, 2, new Boat_Layout(16, "Dummy Layout Two", Date.now(), true, 2), 
-            [new Map_Point(15842353000, -79.408, 43.671, 10, 2),
-              new Map_Point(15842354000, -79.408, 43.675, 10, 4),
-              new Map_Point(15842355000, -79.413, 43.675, 10, 1),
-              new Map_Point(15842356000, -79.418, 43.675, 10, 2),
-              new Map_Point(15842357000, -79.423, 43.675, 10, 4),
-              new Map_Point(15842358000, -79.423, 43.679, 10, 3),
-              new Map_Point(15842359000, -79.423, 43.683, 10, 1),
-              new Map_Point(15842360000, -79.427, 43.683, 10, 1)]),
-          new Race(
-            Date.now(), this.getDate(), 2.1, 10, 3, new Boat_Layout(20, "Dummy Layout Three", Date.now(), true, 3), 
-            [new Map_Point(15842353000, -79.408, 43.671, 10, 0.5),
-              new Map_Point(15842354000, -79.408, 43.675, 10, 2),
-              new Map_Point(15842355000, -79.413, 43.675, 10, 4),
-              new Map_Point(15842356000, -79.418, 43.675, 10, 3),
-              new Map_Point(15842357000, -79.423, 43.675, 10, 1.5),
-              new Map_Point(15842358000, -79.423, 43.679, 10, 3),
-              new Map_Point(15842359000, -79.423, 43.683, 10, 4),
-              new Map_Point(15842360000, -79.427, 43.683, 10, 1),
-              new Map_Point(15842361000, -79.431, 43.683, 10, 2),
-              new Map_Point(15842362000, -79.431, 43.679, 10, 5)]),
-          new Race(
-            Date.now(), this.getDate(), 1.65, 8, 4, new Boat_Layout(14, "Dummy Layout Four", Date.now(), true, 4), 
-            [new Map_Point(15842353000, -79.408, 43.671, 10, 1),
-              new Map_Point(15842354000, -79.408, 43.675, 10, 4),
-              new Map_Point(15842355000, -79.413, 43.675, 10, 3),
-              new Map_Point(15842356000, -79.418, 43.675, 10, 3),
-              new Map_Point(15842357000, -79.423, 43.675, 10, 3.2),
-              new Map_Point(15842358000, -79.423, 43.679, 10, 2),
-              new Map_Point(15842359000, -79.423, 43.683, 10, 1.4),
-              new Map_Point(15842360000, -79.427, 43.683, 10, 1)])
-        ]
+        analytics: []
     };
   }
 
@@ -90,6 +49,63 @@ class HomeScreen extends React.Component {
       data.push(item.map_points[i].speed)
     }
     return data
+  }
+
+  getAnalytics() {
+    /*
+      Database code goes here
+    */
+    
+    this.setState({
+      analytics: [
+        new Race(
+          Date.now(), this.getDate(), 2, 6, 1, new Boat_Layout(12, "Dummy Layout One", Date.now(), true, 1), 
+          [new Map_Point(15842353000, -79.408, 43.671, 10, 1),
+            new Map_Point(15842354000, -79.408, 43.675, 10, 2),
+            new Map_Point(15842355000, -79.413, 43.675, 10, 1),
+            new Map_Point(15842356000, -79.418, 43.675, 10, 2),
+            new Map_Point(15842357000, -79.423, 43.675, 10, 1),
+            new Map_Point(15842358000, -79.423, 43.679, 10, 3)]),
+        new Race(
+          Date.now(), this.getDate(), 1.5, 8, 2, new Boat_Layout(16, "Dummy Layout Two", Date.now(), true, 2), 
+          [new Map_Point(15842353000, -79.408, 43.671, 10, 2),
+            new Map_Point(15842354000, -79.408, 43.675, 10, 4),
+            new Map_Point(15842355000, -79.413, 43.675, 10, 1),
+            new Map_Point(15842356000, -79.418, 43.675, 10, 2),
+            new Map_Point(15842357000, -79.423, 43.675, 10, 4),
+            new Map_Point(15842358000, -79.423, 43.679, 10, 3),
+            new Map_Point(15842359000, -79.423, 43.683, 10, 1),
+            new Map_Point(15842360000, -79.427, 43.683, 10, 1)]),
+        new Race(
+          Date.now(), this.getDate(), 2.1, 10, 3, new Boat_Layout(20, "Dummy Layout Three", Date.now(), true, 3), 
+          [new Map_Point(15842353000, -79.408, 43.671, 10, 0.5),
+            new Map_Point(15842354000, -79.408, 43.675, 10, 2),
+            new Map_Point(15842355000, -79.413, 43.675, 10, 4),
+            new Map_Point(15842356000, -79.418, 43.675, 10, 3),
+            new Map_Point(15842357000, -79.423, 43.675, 10, 1.5),
+            new Map_Point(15842358000, -79.423, 43.679, 10, 3),
+            new Map_Point(15842359000, -79.423, 43.683, 10, 4),
+            new Map_Point(15842360000, -79.427, 43.683, 10, 1),
+            new Map_Point(15842361000, -79.431, 43.683, 10, 2),
+            new Map_Point(15842362000, -79.431, 43.679, 10, 5)]),
+        new Race(
+          Date.now(), this.getDate(), 1.65, 8, 4, new Boat_Layout(14, "Dummy Layout Four", Date.now(), true, 4), 
+          [new Map_Point(15842353000, -79.408, 43.671, 10, 1),
+            new Map_Point(15842354000, -79.408, 43.675, 10, 4),
+            new Map_Point(15842355000, -79.413, 43.675, 10, 3),
+            new Map_Point(15842356000, -79.418, 43.675, 10, 3),
+            new Map_Point(15842357000, -79.423, 43.675, 10, 3.2),
+            new Map_Point(15842358000, -79.423, 43.679, 10, 2),
+            new Map_Point(15842359000, -79.423, 43.683, 10, 1.4),
+            new Map_Point(15842360000, -79.427, 43.683, 10, 1)])
+      ]
+    })
+  }
+
+  componentDidMount(){
+    this._subscribe = this.props.navigation.addListener('didFocus', () => {
+      this.getAnalytics()
+    })
   }
 
   render() {

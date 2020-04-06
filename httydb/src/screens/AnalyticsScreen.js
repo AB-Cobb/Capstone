@@ -31,6 +31,40 @@ class AnalyticsScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      analytics: []
+    }
+  }
+
+  getDate(){
+    let today = new Date()
+    return `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`
+  }
+
+  componentDidMount() {
+    this._subscribe = this.props.navigation.addListener('didFocus', () => {
+      this.getAnalytics()
+    })
+  }
+
+  getAnalytics() {
+    /*
+    let analytics = []
+    db.getAllRaces().then(data => {
+      analytics = data;
+      console.log('Analytics Data: ', analytics)
+      this.setState({
+        analytics: analytics,
+        isLoading: false
+      })
+    }).catch(error => {
+      console.log(error);
+        this.setState({
+          isLoading: false,
+        });
+    })
+    */
+
+    this.setState({
       analytics: [
         new Race(
           Date.now(), this.getDate(), 2, 6, 1, new Boat_Layout(12, "Dummy Layout One", Date.now(), true, 1), 
@@ -73,43 +107,7 @@ class AnalyticsScreen extends React.Component {
             new Map_Point(15842359000, -79.423, 43.683, 10, 1.4),
             new Map_Point(15842360000, -79.427, 43.683, 10, 1)])
       ]
-    }
-  }
-
-  getDate(){
-    let today = new Date()
-    return `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`
-  }
-
-  componentDidMount() {
-    /*
-    this._subscribe = this.props.navigation.addListener('didFocus', () => {
-      this.getAnalytics()
     })
-    this.setState({
-      analytics: [],
-      isLoading: false
-    })
-    */
-  }
-
-  getAnalytics() {
-    /*
-    let analytics = []
-    db.getAllRaces().then(data => {
-      analytics = data;
-      console.log('Analytics Data: ', analytics)
-      this.setState({
-        analytics: analytics,
-        isLoading: false
-      })
-    }).catch(error => {
-      console.log(error);
-        this.setState({
-          isLoading: false,
-        });
-    })
-    */
   }
 
   getLabels(id) {

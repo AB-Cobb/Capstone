@@ -36,6 +36,12 @@ class ReadyRecordingModal extends React.Component {
             recentMarker: {
               latitude: 0,
               longitude: 0
+            },
+            mapRegion: {
+              latitude: 37.421,
+              longitude: -122.084,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421
             }
         }
     }
@@ -81,6 +87,14 @@ class ReadyRecordingModal extends React.Component {
             longitude: position.coords.longitude
           }
 
+          let {mapRegion} = this.state
+          mapRegion = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421
+          }
+
           let newDistance = this.calculateDistance(position.coords.latitude, position.coords.longitude)
 
           let newLength = this.state.routeData.length + 1
@@ -101,7 +115,9 @@ class ReadyRecordingModal extends React.Component {
                 routeName: ""
               },
               markers: polyArray,
-              recentMarker: newMarker
+              recentMarker: newMarker,
+              isRegionSet: true,
+              mapRegion: mapRegion
             })
           }
         }, (error) => {
@@ -185,15 +201,9 @@ class ReadyRecordingModal extends React.Component {
         const {layoutName} = this.state
         const distance = this.state.routeData.distance
 
-        let initialPos = {
-            latitude: 37.421,
-            longitude: -122.084,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421
-          }
         return (
             <View>
-                <MapView ref={map => this._mapRecord = map} provider={PROVIDER_GOOGLE} style={styles.MapStyle} showsUserLocation={true} followsUserLocation={true} initialRegion={initialPos}>
+                <MapView ref={map => this._mapRecord = map} provider={PROVIDER_GOOGLE} style={styles.MapStyle} showsUserLocation={true} followsUserLocation={true} initialRegion={this.state.mapRegion} region={this.state.mapRegion}>
                     <MapView.Marker coordinate={this.state.recentMarker} title="Current Location" />
                     <Polyline coordinates={this.state.markers} />
                 </MapView>

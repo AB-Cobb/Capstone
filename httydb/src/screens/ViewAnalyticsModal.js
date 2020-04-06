@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, ScrollView, Dimensions, StyleSheet} from 'react-native';
+import {View, Text, ScrollView, Dimensions, StyleSheet, Button} from 'react-native';
 import { Race } from '../models/race.ts'
 import { Boat_Layout } from '../models/boat_layout.ts'
 import { Map_Point } from '../models/map_point.ts';
@@ -7,11 +7,21 @@ import { LineChart } from 'react-native-chart-kit'
 import MapView from 'react-native-maps';
 import {PROVIDER_GOOGLE, Polyline} from 'react-native-maps';
 import Timer from '../components/Timer.js'
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 class ViewAnalyticsModal extends React.Component {
     static navigationOptions = ({ navigation }) => {
         return {
             headerTitleAlign: "center",
+            headerRight: () => (
+                <Button onPress={() => {
+                    console.log("Analytics to delete: " + navigation.getParam("race").id);
+                    /*
+                        Database call to delete race goes here
+                    */
+                   navigation.navigate('Analytics')
+                }} title="Delete"/>
+            )
         };
     };
 
@@ -135,7 +145,8 @@ const styles = StyleSheet.create({
         height: Dimensions.get('window').height * 0.3
     },
     Text: {
-        fontSize: 14
+        fontSize: 14,
+        textAlign: "center"
     }
 })
 
