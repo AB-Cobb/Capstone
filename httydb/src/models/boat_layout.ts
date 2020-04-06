@@ -17,7 +17,7 @@ export class Boat_Layout {
         this.paddlers = [new Array(num_paddlers/2), new Array(num_paddlers/2)];
         for (let i = 0; i < num_paddlers/2; i++){
             for (let j = 0; j < 2; j++){
-                this.paddlers[i][j] = new Team_member();
+                this.paddlers[j][i] = new Team_member();
             }
         }
     }
