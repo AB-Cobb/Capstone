@@ -33,28 +33,12 @@ class ViewLayoutScreen extends React.Component {
       teamMembers: [],
       searchAttribute: 'name',
       sheetOpen: false,
-      selectedTeammate: '',
+      selectedTeammate: null,
       selectedRow: null,
       ignoreCase: true,
       layout: this.props.navigation.state.params.data,
     };
   }
-
-  CreateRows = (numRows) => {
-    const rows = [];
-    for (let i = 0; i < numRows; i++) {
-      rows.push(
-        <LayoutRow
-          key={i}
-          leftSide="Click"
-          rightSide="Click"
-          leftSeatPress={this.openSheetBehaviour}
-          rightSeatPress={this.openSheetBehaviour}
-        />,
-      );
-    }
-    return rows;
-  };
 
   openSheetBehaviourLeft = (rowNumber) => {
     this.RBSheet.open();
@@ -63,6 +47,9 @@ class ViewLayoutScreen extends React.Component {
       selectedRow: rowNumber,
     });
     this.state.layout.paddlers[0][rowNumber] = this.state.selectedTeammate;
+    this.setState({
+      selectedTeammate: null,
+    });
     console.log(`Selected Row#: ${rowNumber}`);
   };
 
@@ -73,6 +60,9 @@ class ViewLayoutScreen extends React.Component {
       selectedRow: rowNumber,
     });
     this.state.layout.paddlers[1][rowNumber] = this.state.selectedTeammate;
+    this.setState({
+      selectedTeammate: null,
+    });
     console.log(`Selected Row#: ${rowNumber}`);
   };
 
@@ -107,7 +97,6 @@ class ViewLayoutScreen extends React.Component {
     db.getAllTeammembers()
       .then((data) => {
         teamMembers = data;
-        console.log('View LayoutScreen: teammembers: ', teamMembers);
         this.setState({
           teamMembers: teamMembers,
           isLoading: false,
@@ -129,7 +118,7 @@ class ViewLayoutScreen extends React.Component {
       selectedTeammate: teammate,
     });
     console.log('selected teammate: ', this.state.selectedTeammate);
-    console.log('layout: ', this.state.layout);
+    console.log('layout: ', this.state.layout.paddlers);
   };
   onAddLayout() {
     let data = new Boat_Layout(
@@ -169,7 +158,7 @@ class ViewLayoutScreen extends React.Component {
   //   }
   render() {
     // const layout = this.state.layout;
-    const {teamMembers} = this.state;
+    const {teamMembers, selectedRow} = this.state;
     console.log('Rendered Layout Screen!');
     console.log(`Sheet is open?: ${this.state.sheetOpen}`);
     return (
@@ -179,11 +168,12 @@ class ViewLayoutScreen extends React.Component {
             <FlatList
               extraData={this.state}
               data={this.state.layout.paddlers[0]}
-              renderItem={({item}) => (
+              renderItem={({item, index}) => (
                 <LayoutRow
                   key={item}
-                  leftSide="Click"
-                  rightSide="Click"
+                  leftSide={this.state.selectedTeammate || null}
+                  rightSide={this.state.selectedTeammate || null}
+                  rowNum={index}
                   leftSeatPress={this.openSheetBehaviourLeft}
                   rightSeatPress={this.openSheetBehaviourRight}
                 />

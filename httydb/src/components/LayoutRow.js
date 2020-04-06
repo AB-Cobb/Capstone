@@ -3,11 +3,28 @@ import {Dimensions, StyleSheet, View, Text, TouchableOpacity} from 'react-native
 import Slider from '@react-native-community/slider';
 
 const LayoutRow = (props) => {
+
+  let left = "Click";
+  let right = "Click";
+  let leftWeight = 0;
+  let rightWeight = 0;
+  const rowNum = props.rowNum;
+  if (props.leftSide){
+    left = props.leftSide;
+  }
+
+  if (props.rightSide){
+    right = props.rightSide;
+  }
+
+  console.log(`Left Seat: ${left.name || "Click"}`);
+  console.log(`right Seat: ${right.name || "Click"}`);
+
   return (
     <View style={styles.Row}>
       <TouchableOpacity onPress={props.leftSeatPress}>
         <View style={styles.Seat}>
-          <Text>{props.leftSide}</Text>
+          <Text>{left.name || "Click"}</Text>
         </View>
       </TouchableOpacity>
       <Slider
@@ -19,7 +36,7 @@ const LayoutRow = (props) => {
       />
       <TouchableOpacity onPress={props.rightSeatPress}>
         <View style={styles.Seat}>
-          <Text>{props.rightSide}</Text>
+          <Text>{right.name || "Click"}</Text>
         </View>
       </TouchableOpacity>
     </View>
