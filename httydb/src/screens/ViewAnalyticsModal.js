@@ -145,7 +145,8 @@ const styles = StyleSheet.create({
         height: Dimensions.get('window').height * 0.3
     },
     Text: {
-        fontSize: 14
+        fontSize: 14,
+        textAlign: "center"
     }
 })
 
