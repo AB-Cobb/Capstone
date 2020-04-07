@@ -87,6 +87,7 @@ class ViewLayoutScreen extends React.Component {
       selectedColumn: null,
       layout: newLayout,
     });
+    console.log('layout: ', this.state.layout.paddlers);
     this.RBSheet.close();
   };
 
@@ -124,7 +125,6 @@ class ViewLayoutScreen extends React.Component {
       selectedTeammate: teammate,
     });
     console.log('selected teammate: ', this.state.selectedTeammate);
-    console.log('layout: ', this.state.layout.paddlers);
   };
   onAddLayout() {
     let data = new Boat_Layout(
@@ -154,14 +154,13 @@ class ViewLayoutScreen extends React.Component {
     const {teamMembers, selectedRow} = this.state;
     console.log('Rendered Layout Screen!');
     console.log(`Sheet is open?: ${this.state.sheetOpen}`);
-    console.log('layout: ', this.state.layout.paddlers);
     return (
       <View>
         <View style={styles.ViewStyle}>
           <View style={styles.BoatOutline}>
             <FlatList
               extraData={this.state}
-              data={this.state.layout.paddlers[0]}
+              data={this.state.layout.paddlers}
               renderItem={({item, index}) => (
                 <LayoutRow
                   key={item}
