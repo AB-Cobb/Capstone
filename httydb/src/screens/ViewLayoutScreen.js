@@ -58,9 +58,6 @@ class ViewLayoutScreen extends React.Component {
       selectedTeammate: null,
     });
   };
-
-
-
   // openSheetBehaviour = (rowNumber) => {
   //   this.RBSheet.open();
   //   this.setState({
@@ -100,7 +97,7 @@ class ViewLayoutScreen extends React.Component {
     console.log('getting teammembers');
     let teamMembers = [];
     db.getAllTeammembers()
-      .then((data) => {
+      .then(data => {
         teamMembers = data;
         this.setState({
           teamMembers: teamMembers,
@@ -108,7 +105,7 @@ class ViewLayoutScreen extends React.Component {
         });
         console.log('got teammembers');
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
         this.setState({
           teamMembers: [],
@@ -118,7 +115,7 @@ class ViewLayoutScreen extends React.Component {
       });
   }
 
-  addTeammate = (teammate) => {
+  addTeammate = teammate => {
     this.setState({
       selectedTeammate: teammate,
     });
@@ -144,7 +141,7 @@ class ViewLayoutScreen extends React.Component {
 
     data = dummydata;
     console.log('new boat add: ', data);
-    db.insertBoatLayout(data).then((id) => {
+    db.insertBoatLayout(data).then(id => {
       console.log(`added layout with id: ${id}`);
     });
     this.props.navigation.navigate('ViewLayout', {data});
@@ -190,7 +187,7 @@ class ViewLayoutScreen extends React.Component {
                         }}
                     />
               )}
-              keyExtractor={(item) => item.id}
+              keyExtractor={item => item.id}
             />
           </View>
           <TouchableOpacity onPress={() => this.RBSheet.open()}>
@@ -199,7 +196,7 @@ class ViewLayoutScreen extends React.Component {
         </View>
 
         <RBSheet
-          ref={(ref) => {
+          ref={ref => {
             this.RBSheet = ref;
           }}
           closeOnDragDown={true}
@@ -208,7 +205,7 @@ class ViewLayoutScreen extends React.Component {
           duration={250}>
           <SearchBar
             placeholder={'Search for a teammate...'}
-            onChangeText={(term) => this.setState({searchTerm: term})}
+            onChangeText={term => this.setState({searchTerm: term})}
             searchIcon={false}
             clearIcon={false}
             value={this.state.searchTerm}
@@ -233,7 +230,7 @@ class ViewLayoutScreen extends React.Component {
                 />
               </TouchableOpacity>
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={item => item.id}
           />
         </RBSheet>
       </View>
