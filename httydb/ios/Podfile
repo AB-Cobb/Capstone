@@ -41,6 +41,9 @@ target 'httydb' do
 
   pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
+  pod 'GoogleMaps'
+  pod 'Google-Maps-iOS-Utils'
+
   target 'httydbTests' do
     inherit! :search_paths
     # Pods for testing
