@@ -57,7 +57,7 @@ class ReadyRecordingModal extends React.Component {
 
     async requestLocationPermission() {
         if (Platform.OS == 'android'){
-          let response = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+          let response = await request(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION)
     
           if (response === 'granted'){
             console.log("Permission Granted")
