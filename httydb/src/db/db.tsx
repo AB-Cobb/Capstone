@@ -373,69 +373,61 @@ class db_impl implements Database {
           Promise.all(layouts).then(() => {
             return layouts;
           });
-        } else return Promise.reject();
-      }); // */
-  }
-  //get most recent layouts
-  public getRecentBoatLayouts(num = 3): Promise<Boat_Layout[]> {
-    return this.getDB()
-      .then(db =>
-        db.executeSql('SELECT * FROM Boat_Layout ORDER BY date LIMIT ?;', [
-          num,
-        ]),
-      )
-      .then(([results]) => {
-        if (results !== undefined) {
-          let layouts: [Promise<Boat_Layout>];
-          for (let i = 0; i < results.rows.length; i++) {
-            layouts.push(this.getBoatLayouts_helper(results.rows.item(i)));
-          }
-          Promise.all(layouts).then(() => {
-            return layouts;
-          });
-        } else return Promise.reject();
-      }); // */
-  }
-  private getBoatLayouts_helper(data: {
-    num_paddlers;
-    name;
-    date;
-    active;
-    id;
-  }): Promise<Boat_Layout> {
-    let layout: Boat_Layout = new Boat_Layout(
-      data.num_paddlers,
-      data.name,
-      data.date,
-      data.active,
-      data.id,
-    );
-    return this.getPaddlersOnBoat(data.id, layout.num_paddlers).then(
-      paddlers => {
-        layout.paddlers = paddlers;
-        return layout;
-      },
-    );
-  }
-  //map point
-  //instert
-  public insertMapPoint(map_point: Map_Point, race: Race): Promise<number> {
-    return this.getDB()
-      .then(db =>
-        db.executeSql(
-          'INSERT INTO map_point (race_id, long, lat, timestamp) values (?,?,?);',
-          [race.id, map_point.long, map_point.lat, map_point.timestamp],
-        ),
-      )
-      .then(([results]) => {
-        console.log('iserted map point');
-        return results.insertId;
-      });
-  }
-  //get by race
-  public getMapPointsByRace(race_id: number): Promise<Map_Point[]> {
-    return this.getDB()
-      .then(db =>
+    }
+    //map point
+    //instert
+    public insertMapPoint (map_point: Map_Point, race : Race) : Promise <number>{
+      return this.getDB()
+        .then(db => 
+          db.executeSql(
+            'INSERT INTO map_point (race_id, long, lat, timestamp, acc, speed) values (?,?,?,?,?);',
+            [
+              race.id,
+              map_point.long,
+              map_point.lat,
+              map_point.timestamp,
+              map_point.acc,
+              map_point.speed
+            ]
+          )
+        ).then(([results]) => {
+          console.log('iserted map point');
+          return results.insertId;
+        })
+    }
+    //get by race 
+    public getMapPointsByRace (race_id : number) : Promise <Map_Point[]>{
+      return this.getDB()
+        .then(db =>
+            db.executeSql ('SELECT * FROM map_point WHERE race_id = ? ORDER BY timestamp',[
+              race_id
+            ])
+          )
+        .then(([results]) => {
+          if (results !== undefined){
+            let map_points : Map_Point[]= []
+            for (let i = 0; i < results.rows.length; i++){
+              const data = results.rows.item(i)
+              let {timestamp,
+                 lat,
+                long
+              } = data;
+              map_points.push(
+                new Map_Point(
+                  timestamp,
+                  lat,
+                  long
+                )
+              ) 
+            }
+            return map_points
+          } else return Promise.reject();
+        })
+    }
+    // race 
+    //insert
+    public insertRace (race : Race) : Promise<number> {
+      return this.getDB().then( db =>
         db.executeSql(
           'SELECT * FROM map_point WHERE race_id = ? ORDER BY timestamp',
           [race_id],

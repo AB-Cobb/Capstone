@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, Dimensions, StyleSheet} from 'react-native';
 import ReadyRecording from '../components/ReadyRecording';
 import MapView from 'react-native-maps';
 import { PROVIDER_GOOGLE, Polyline } from 'react-native-maps';
@@ -20,8 +20,10 @@ class ReadyRecordingModal extends React.Component {
 
     constructor(props) {
         super(props)
+        const {params} = this.props.navigation.state
         this.state = {
-            selectedLayout: props.selectedLayout,
+            selectedLayout: params.selectedLayout,
+            layoutName: params.layoutName,
             isPaused: false,
             routeData: {
               routeName: "",
@@ -34,6 +36,12 @@ class ReadyRecordingModal extends React.Component {
             recentMarker: {
               latitude: 0,
               longitude: 0
+            },
+            mapRegion: {
+              latitude: 37.421,
+              longitude: -122.084,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421
             }
         }
     }
@@ -49,7 +57,7 @@ class ReadyRecordingModal extends React.Component {
 
     async requestLocationPermission() {
         if (Platform.OS == 'android'){
-          let response = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+          let response = await request(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION)
     
           if (response === 'granted'){
             console.log("Permission Granted")
@@ -79,6 +87,14 @@ class ReadyRecordingModal extends React.Component {
             longitude: position.coords.longitude
           }
 
+          let {mapRegion} = this.state
+          mapRegion = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421
+          }
+
           let newDistance = this.calculateDistance(position.coords.latitude, position.coords.longitude)
 
           let newLength = this.state.routeData.length + 1
@@ -99,13 +115,15 @@ class ReadyRecordingModal extends React.Component {
                 routeName: ""
               },
               markers: polyArray,
-              recentMarker: newMarker
+              recentMarker: newMarker,
+              isRegionSet: true,
+              mapRegion: mapRegion
             })
           }
         }, (error) => {
           console.log("An error occured: " + error.message)
         },
-        {enableHighAccuracy: false, timeout:20000, maximumAge:1000})
+        {enableHighAccuracy: true, timeout:20000, maximumAge:1000})
     }
 
     setPause() {
@@ -123,8 +141,14 @@ class ReadyRecordingModal extends React.Component {
       return this.refs.readyRecording.getElapsedTime()
     }
 
+    getDate(){
+      let today = new Date()
+      return `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`
+    }
+
     saveData() {
-      let newRace = new Race(Date.now, "New Race", this.state.routeData.distance, this.getElapsedTime(), -1, this.props.selectedLayout, this.state.routeData.points)
+      console.log("saveing race")
+      let newRace = new Race(Date.now, this.getDate(), this.state.routeData.distance, this.getElapsedTime(), -1, this.props.selectedLayout, this.state.routeData.points)
       /*
       let newRouteObject = {
         routeName: Date.now(),
@@ -141,8 +165,24 @@ class ReadyRecordingModal extends React.Component {
      this.props.navigation.navigate('Ready');
     }
 
-    getCurrVelocity(){
-      return this.state.routeData.points[this.state.routeData.length -1].speed
+    calculateAverageSpeed() {
+      let speedSum = 0
+      let length = this.state.routeData.length
+      if (length > 0) {
+        for (let i = 0; i < length; i++){
+          speedSum += this.state.routeData.points[i].speed
+        }
+        let averageSpeed = (speedSum / length)
+        return averageSpeed
+      }
+      return 0
+    }
+
+    getCurrentSpeed() {
+      if (this.state.routeData.length > 0){
+        return this.state.routeData.points[this.state.routeData.length - 1].speed
+      }
+      return 0
     }
 
     calculateDistance(newLat, newLong) {
@@ -163,22 +203,26 @@ class ReadyRecordingModal extends React.Component {
         console.log("Rendered ReadyRecordingModal!")
         console.log(`Application Paused: ${this.getPaused()}`)
 
-        let initialPos = {
-            latitude: 37.421,
-            longitude: -122.084,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421
-          }
+        const {layoutName} = this.state
+        const distance = this.state.routeData.distance
+
         return (
             <View>
-                <MapView ref={map => this._mapRecord = map} provider={PROVIDER_GOOGLE} style={{width: 410, height:300}} showsUserLocation={true} followsUserLocation={true} initialRegion={initialPos}>
+                <MapView ref={map => this._mapRecord = map} provider={PROVIDER_GOOGLE} style={styles.MapStyle} showsUserLocation={true} followsUserLocation={true} initialRegion={this.state.mapRegion} region={this.state.mapRegion}>
                     <MapView.Marker coordinate={this.state.recentMarker} title="Current Location" />
                     <Polyline coordinates={this.state.markers} />
                 </MapView>
-                <ReadyRecording ref="readyRecording" currentLayout={this.state.selectedLayout} setPause={() => this.setPause()} isPaused={() => this.getPaused()} currVelocity={this.state.routeData.length == 0 ? 0 : () => this.getCurrVelocity()} distance={this.state.routeData.distance} sendTime={(time) => this.getTime(time)} saveData={() => this.saveData()}/>
+                <ReadyRecording ref="readyRecording" currentLayout={this.state.selectedLayout.name} distance={distance} currentSpeed={this.getCurrentSpeed()} averageSpeed={this.calculateAverageSpeed()} setPause={() => this.setPause()} isPaused={() => this.getPaused()} sendTime={(time) => this.getTime(time)} saveData={() => this.saveData()}/>
             </View>
         )
     }
 }
+
+const styles = StyleSheet.create({
+  MapStyle: {
+    width: Dimensions.get('window').width * 1,
+    height: Dimensions.get('window').height * 0.45
+  }
+})
 
 export default ReadyRecordingModal;
