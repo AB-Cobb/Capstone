@@ -39,6 +39,8 @@ target 'httydb' do
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
 
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
   target 'httydbTests' do
     inherit! :search_paths
     # Pods for testing
