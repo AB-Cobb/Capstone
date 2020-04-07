@@ -9,5 +9,7 @@ export class Map_Point{
         this.lat = lat;
         this.long = long;
         this.timestamp = timestamp;
+        this.speed = speed;
+        this.acc = acc;
     }
 }
