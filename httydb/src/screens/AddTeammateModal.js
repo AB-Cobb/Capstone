@@ -5,7 +5,7 @@ import {db} from '../db/db';
 import {Team_member} from '../models/team_member';
 import {Dropdown} from 'react-native-material-dropdown';
 // import Icon from 'react-native-vector-icons/FontAwesome';
-// import {Input} from 'react-native-elements';
+import {Icon} from 'react-native-elements';
 import {OutlinedTextField} from 'react-native-material-textfield';
 
 export default class AddTeammateModal extends React.Component {
@@ -97,6 +97,9 @@ export default class AddTeammateModal extends React.Component {
             label="Name"
             keyboardType="default"
             onChangeText={name => this.setState({name})}
+            InputProps={{ endAdornment: (
+              <Icon name="mail"/>
+            )}}
           />
           <OutlinedTextField
             label="Email"
