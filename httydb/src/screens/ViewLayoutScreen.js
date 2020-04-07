@@ -33,51 +33,40 @@ class ViewLayoutScreen extends React.Component {
       teamMembers: [],
       searchAttribute: 'name',
       sheetOpen: false,
-      selectedTeammate: '',
+      selectedTeammate: null,
       selectedRow: null,
       ignoreCase: true,
       layout: this.props.navigation.state.params.data,
     };
   }
 
-  CreateRows = (numRows) => {
-    const rows = [];
-    for (let i = 0; i < numRows; i++) {
-      rows.push(
-        <LayoutRow
-          key={i}
-          leftSide="Click"
-          rightSide="Click"
-          leftSeatPress={this.openSheetBehaviour}
-          rightSeatPress={this.openSheetBehaviour}
-        />,
-      );
-    }
-    return rows;
-  };
-
-  openSheetBehaviourLeft = (rowNumber) => {
+  openSheetBehaviourLeft = rowNumber => {
     this.RBSheet.open();
     this.setState({
       sheetOpen: true,
       selectedRow: rowNumber,
     });
     this.state.layout.paddlers[0][rowNumber] = this.state.selectedTeammate;
-    LayoutRow.leftSide = this.state.selectedTeammate;
+    this.setState({
+      selectedTeammate: null,
+    });
     console.log(`Selected Row#: ${rowNumber}`);
   };
 
-  openSheetBehaviourRight = (rowNumber) => {
+  openSheetBehaviourRight = rowNumber => {
     this.RBSheet.open();
     this.setState({
       sheetOpen: true,
       selectedRow: rowNumber,
     });
     this.state.layout.paddlers[1][rowNumber] = this.state.selectedTeammate;
+    this.setState({
+      selectedTeammate: null,
+    });
     console.log(`Selected Row#: ${rowNumber}`);
   };
 
-  closeSheetBehaviour = (member) => {
+  closeSheetBehaviour = member => {
     this.RBSheet.close();
     this.setState({
       sheetOpen: false,
@@ -97,16 +86,15 @@ class ViewLayoutScreen extends React.Component {
     console.log('getting teammembers');
     let teamMembers = [];
     db.getAllTeammembers()
-      .then((data) => {
+      .then(data => {
         teamMembers = data;
-        console.log('View LayoutScreen: teammembers: ', teamMembers);
         this.setState({
           teamMembers: teamMembers,
           isLoading: false,
         });
         console.log('got teammembers');
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
         this.setState({
           teamMembers: [],
@@ -116,12 +104,12 @@ class ViewLayoutScreen extends React.Component {
       });
   }
 
-  addTeammate = (teammate) => {
+  addTeammate = teammate => {
     this.setState({
       selectedTeammate: teammate,
     });
     console.log('selected teammate: ', this.state.selectedTeammate);
-    console.log('layout: ', this.state.layout);
+    console.log('layout: ', this.state.layout.paddlers);
   };
   onAddLayout() {
     let data = new Boat_Layout(
@@ -142,7 +130,7 @@ class ViewLayoutScreen extends React.Component {
 
     data = dummydata;
     console.log('new boat add: ', data);
-    db.insertBoatLayout(data).then((id) => {
+    db.insertBoatLayout(data).then(id => {
       console.log(`added layout with id: ${id}`);
     });
     this.props.navigation.navigate('ViewLayout', {data});
@@ -160,7 +148,8 @@ class ViewLayoutScreen extends React.Component {
   //       console.log("name: ", name)
   //   }
   render() {
-    const {teamMembers} = this.state;
+    // const layout = this.state.layout;
+    const {teamMembers, selectedRow} = this.state;
     console.log('Rendered Layout Screen!');
     console.log(`Sheet is open?: ${this.state.sheetOpen}`);
     return (
@@ -170,19 +159,17 @@ class ViewLayoutScreen extends React.Component {
             <FlatList
               extraData={this.state}
               data={this.state.layout.paddlers[0]}
-              renderItem={({item}) => (
-                console.log('item co gi ', item),
-                (
-                  <LayoutRow
-                    key={item}
-                    leftSide={item.name}
-                    rightSide={item.name}
-                    leftSeatPress={this.openSheetBehaviourLeft}
-                    rightSeatPress={this.openSheetBehaviourRight}
-                  />
-                )
+              renderItem={({item, index}) => (
+                <LayoutRow
+                  key={item}
+                  leftSide={this.state.selectedTeammate || null}
+                  rightSide={this.state.selectedTeammate || null}
+                  rowNum={index}
+                  leftSeatPress={this.openSheetBehaviourLeft}
+                  rightSeatPress={this.openSheetBehaviourRight}
+                />
               )}
-              keyExtractor={(item) => item.id}
+              keyExtractor={item => item.id}
             />
           </View>
           <TouchableOpacity onPress={() => this.RBSheet.open()}>
@@ -191,7 +178,7 @@ class ViewLayoutScreen extends React.Component {
         </View>
 
         <RBSheet
-          ref={(ref) => {
+          ref={ref => {
             this.RBSheet = ref;
           }}
           closeOnDragDown={true}
@@ -200,7 +187,7 @@ class ViewLayoutScreen extends React.Component {
           duration={250}>
           <SearchBar
             placeholder={'Search for a teammate...'}
-            onChangeText={(term) => this.setState({searchTerm: term})}
+            onChangeText={term => this.setState({searchTerm: term})}
             searchIcon={false}
             clearIcon={false}
             value={this.state.searchTerm}
@@ -225,7 +212,7 @@ class ViewLayoutScreen extends React.Component {
                 />
               </TouchableOpacity>
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={item => item.id}
           />
         </RBSheet>
       </View>
