@@ -17,6 +17,8 @@ import {
   CardImage,
 } from 'react-native-cards';
 import {db} from '../db/db';
+import {SearchBar} from 'react-native-elements';
+import {SearchableFlatList} from 'react-native-searchable-list';
 
 class TeamScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -36,7 +38,10 @@ class TeamScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      teammates: null,
+      teamMembers: [],
+      searchTerm: '',
+      searchAttribute: 'name',
+      ignoreCase: true,
     };
   }
 
@@ -53,7 +58,7 @@ class TeamScreen extends React.Component {
   listTeammembers() {
     let teamMembers = [];
     db.getAllTeammembers()
-      .then((data) => {
+      .then(data => {
         teamMembers = data;
         console.log('Teamscreen: teammembers: ', teamMembers);
         this.setState({
@@ -61,7 +66,7 @@ class TeamScreen extends React.Component {
           isLoading: false,
         });
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
         this.setState({
           isLoading: false,
@@ -76,29 +81,33 @@ class TeamScreen extends React.Component {
 
     return (
       <View>
-        <View>
-          <FlatList
-            data={teamMembers}
-            renderItem={({item}) => (
-              <TouchableOpacity
-                onPress={() =>
-                  this.props.navigation.navigate('ViewTeammate', {
-                    item,
-                  })
-                }>
-                <Card>
-                  <CardTitle title={item.name} />
-                  <CardContent text={item.gender} />
-                  <CardContent text={item.side_preference} />
-                  <CardContent text={item.active} />
-                </Card>
-              </TouchableOpacity>
-            )}
-            keyExtractor={(item) => item.id}
-            numColumns={3}
-            columnWrapperStyle={StyleSheet.ListStyle}
-          />
-        </View>
+        <SearchBar
+          placeholder={'Search Team Member...'}
+          onChangeText={term => this.setState({searchTerm: term})}
+          value={this.state.searchTerm}
+        />
+        <SearchableFlatList
+          data={teamMembers.sort((a, b) => a.name.localeCompare(b.name))}
+          searchTerm={this.state.searchTerm}
+          searchAttribute={this.state.searchAttribute}
+          ignoreCase={this.state.ignoreCase}
+          renderItem={({item}) => (
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate('ViewTeammate', {item})
+              }>
+              <Card>
+                <CardTitle title={item.name} />
+                <CardContent text={item.gender} />
+                <CardContent text={item.side_preference} />
+                <CardContent text={item.active} />
+              </Card>
+            </TouchableOpacity>
+          )}
+          keyExtractor={item => item.id}
+          numColumns={3}
+          columnWrapperStyle={StyleSheet.ListStyle}
+        />
       </View>
     );
   }

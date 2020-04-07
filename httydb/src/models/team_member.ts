@@ -8,7 +8,7 @@ export class Team_member {
   public phone: string;
   public emergency_cont: string;
   public id: number;
-  public active: boolean;
+  public active: string;
 
   constructor(
     name: string = null,
@@ -18,7 +18,7 @@ export class Team_member {
     wieght: number = null,
     hieght: number = null,
     side_preference: string = null,
-    active: boolean = null,
+    active: string = null,
     emergency_cont: string = null,
     id: number = null,
   ) {

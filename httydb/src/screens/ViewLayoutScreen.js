@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Button,
@@ -37,6 +37,8 @@ class ViewLayoutScreen extends React.Component {
       selectedRow: null,
       selectedColumn: null,
       ignoreCase: true,
+      filteredList: [],
+      filterKeyword: '',
       layout: this.props.navigation.state.params.data,
     };
   }
@@ -50,12 +52,12 @@ class ViewLayoutScreen extends React.Component {
     });
   };
 
-  openSheetBehaviourRight = () => {
+  openSheetBehaviourRight = item => {
     this.RBSheet.open();
     this.setState({
       sheetOpen: true,
       selectedColumn: 1,
-      selectedTeammate: null,
+      selectedTeammate: item,
     });
   };
   // openSheetBehaviour = (rowNumber) => {
@@ -67,7 +69,7 @@ class ViewLayoutScreen extends React.Component {
   //   console.log(`Selected Row#: ${rowNumber}`);
   // };
 
-  closeSheetBehaviour = (member) => {
+  closeSheetBehaviour = member => {
     this.setState({
       sheetOpen: false,
       selectedTeammate: member,
@@ -76,7 +78,9 @@ class ViewLayoutScreen extends React.Component {
     console.log(`Selected Row: ${this.state.selectedRow}`);
 
     let newLayout = this.state.layout;
-    newLayout.paddlers[this.state.selectedColumn][this.state.selectedRow] = member;
+    newLayout.paddlers[this.state.selectedColumn][
+      this.state.selectedRow
+    ] = member;
 
     this.setState({
       selectedRow: null,
@@ -146,21 +150,7 @@ class ViewLayoutScreen extends React.Component {
     });
     this.props.navigation.navigate('ViewLayout', {data});
   }
-
-  // searchFilter(keyword) {
-  //   const searchKey = this.teamMembers.filter((item) => {
-  //     const data = `${item.name} ${item.side_preference}`;
-  //     return data.indexOf(keyword) > -1;
-  //   });
-
-  //   getName(name){
-  //       this.props.teammateName = name
-  //       console.log("props: ", this.props.teammateName)
-  //       console.log("name: ", name)
-  //   }
-
   render() {
-    // const layout = this.state.layout;
     const {teamMembers, selectedRow} = this.state;
     console.log('Rendered Layout Screen!');
     console.log(`Sheet is open?: ${this.state.sheetOpen}`);
@@ -173,20 +163,20 @@ class ViewLayoutScreen extends React.Component {
               extraData={this.state}
               data={this.state.layout.paddlers[0]}
               renderItem={({item, index}) => (
-                    <LayoutRow
-                        key={item}
-                        leftSide={this.state.selectedTeammate || null}
-                        rightSide={this.state.selectedTeammate || null}
-                        rowNum={index}
-                        leftSeatPress={() => {
-                          this.setState({selectedRow: index});
-                          this.openSheetBehaviourLeft();
-                        }}
-                        rightSeatPress={() => {
-                          this.setState({selectedRow: index});
-                          this.openSheetBehaviourRight();
-                        }}
-                    />
+                <LayoutRow
+                  key={item}
+                  leftSide={this.state.selectedTeammate || null}
+                  rightSide={this.state.selectedTeammate || null}
+                  rowNum={index}
+                  leftSeatPress={() => {
+                    this.setState({selectedRow: index});
+                    this.openSheetBehaviourLeft({item});
+                  }}
+                  rightSeatPress={() => {
+                    this.setState({selectedRow: index});
+                    this.openSheetBehaviourRight({item});
+                  }}
+                />
               )}
               keyExtractor={item => item.id}
             />
@@ -212,8 +202,9 @@ class ViewLayoutScreen extends React.Component {
             value={this.state.searchTerm}
             lightTheme={true}
           />
+
           <SearchableFlatList
-            data={teamMembers}
+            data={teamMembers.sort((a, b) => a.name.localeCompare(b.name))}
             searchTerm={this.state.searchTerm}
             searchAttribute={this.state.searchAttribute}
             ignoreCase={this.state.ignoreCase}

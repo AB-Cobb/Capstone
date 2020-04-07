@@ -14,14 +14,14 @@ import {db} from '../db/db';
 import {Team_member} from '../models/team_member';
 
 class EditTeammateModal extends React.Component {
-  static navigationOptions = ({navigation}) => {
-    return {
-      headerTitleAlign: 'center',
-      headerRight: () => (
-        <Button onPress={() => this.saveHandler()} title="Save" />
-      ),
-    };
-  };
+  // static navigationOptions = ({navigation}) => {
+  //   return {
+  //     headerTitleAlign: 'center',
+  //     headerRight: () => (
+  //       <Button onPress={() => this.saveHandler()} title="Save" />
+  //     ),
+  //   };
+  // };
 
   constructor(props) {
     super(props);
@@ -31,8 +31,8 @@ class EditTeammateModal extends React.Component {
       email: item.email,
       phone: item.phone,
       gender: item.gender,
-      weight: item.weight,
-      height: item.height,
+      weight: item.weight.toString(),
+      height: item.height.toString(),
       side_preference: item.side_preference,
       active: item.active,
       emergency_cont: item.emergency_cont,
@@ -53,11 +53,11 @@ class EditTeammateModal extends React.Component {
     );
 
     db.updateTeammamber(data)
-      .then((result) => {
+      .then(result => {
         console.log(result);
         this.props.navigation.goBack();
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
   }
@@ -76,11 +76,11 @@ class EditTeammateModal extends React.Component {
     );
 
     db.removeTeammamber(data)
-      .then((result) => {
+      .then(result => {
         console.log(result);
         this.props.navigation.goBack();
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
   }
@@ -118,28 +118,28 @@ class EditTeammateModal extends React.Component {
             label="Name"
             mode="outlined"
             value={this.state.name}
-            onChangeText={(name) => this.setState({name})}
+            onChangeText={name => this.setState({name})}
           />
           <TextInput
             style={styles.field}
             label="Email"
             mode="outlined"
             value={this.state.email}
-            onChangeText={(email) => this.setState({email})}
+            onChangeText={email => this.setState({email})}
           />
           <TextInput
             style={styles.field}
             label="Phone Number"
             mode="outlined"
             value={this.state.phone}
-            onChangeText={(phone) => this.setState({phone})}
+            onChangeText={phone => this.setState({phone})}
           />
           <View style={styles.field}>
             <Dropdown
               label="Gender"
               value={this.state.gender}
               data={[{value: 'Male'}, {value: 'Female'}, {value: 'Others'}]}
-              onChangeText={(gender) => this.setState({gender})}
+              onChangeText={gender => this.setState({gender})}
             />
           </View>
           <TextInput
@@ -147,23 +147,21 @@ class EditTeammateModal extends React.Component {
             label="Weight"
             mode="outlined"
             value={this.state.weight}
-            onChangeText={(weight) => this.setState({weight})}
+            onChangeText={weight => this.setState({weight})}
           />
           <TextInput
             style={styles.field}
             label="Height"
             mode="outlined"
             value={this.state.height}
-            onChangeText={(height) => this.setState({height})}
+            onChangeText={height => this.setState({height})}
           />
           <View style={styles.field}>
             <Dropdown
               label="Padding Side Preference"
               value={this.state.side_preference}
               data={[{value: 'Left'}, {value: 'Right'}, {value: 'Any Sides'}]}
-              onChangeText={(side_preference) =>
-                this.setState({side_preference})
-              }
+              onChangeText={side_preference => this.setState({side_preference})}
             />
           </View>
           <View style={styles.field}>
@@ -171,7 +169,7 @@ class EditTeammateModal extends React.Component {
               label="Status"
               value={this.state.active}
               data={[{value: 'Active'}, {value: 'Inactive'}]}
-              onChangeText={(active) => this.setState({active})}
+              onChangeText={active => this.setState({active})}
             />
           </View>
           <TextInput
@@ -179,7 +177,7 @@ class EditTeammateModal extends React.Component {
             label="Emergency Contact"
             mode="outlined"
             value={this.state.emergency_cont}
-            onChangeText={(emergency_cont) => this.setState({emergency_cont})}
+            onChangeText={emergency_cont => this.setState({emergency_cont})}
           />
         </View>
         <View style={styles.buttonContainer}>
