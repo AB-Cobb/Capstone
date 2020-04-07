@@ -9,25 +9,19 @@ import {
 } from 'react-native';
 import {TextInput} from 'react-native-paper';
 import {Dropdown} from 'react-native-material-dropdown';
-import { Divider } from 'react-native-elements';
+import {Divider} from 'react-native-elements';
 import {db} from '../db/db';
 import {Team_member} from '../models/team_member';
 
-
 class EditTeammateModal extends React.Component {
-    static navigationOptions = ({ navigation }) => {
-        return {
-            headerTitleAlign: "center",
-            headerRight: () => (
-                <Button
-                    onPress={() => this.saveHandler()}
-                    title="Save"
-                />
-            )
-        };
-    };
-  
-
+  // static navigationOptions = ({navigation}) => {
+  //   return {
+  //     headerTitleAlign: 'center',
+  //     headerRight: () => (
+  //       <Button onPress={() => this.saveHandler()} title="Save" />
+  //     ),
+  //   };
+  // };
 
   constructor(props) {
     super(props);
@@ -37,8 +31,8 @@ class EditTeammateModal extends React.Component {
       email: item.email,
       phone: item.phone,
       gender: item.gender,
-      weight: item.weight,
-      height: item.height,
+      weight: item.weight.toString(),
+      height: item.height.toString(),
       side_preference: item.side_preference,
       active: item.active,
       emergency_cont: item.emergency_cont,
@@ -69,7 +63,26 @@ class EditTeammateModal extends React.Component {
   }
 
   onDeleteButton() {
-    console.log('Button clicked');
+    let data = new Team_member(
+      this.state.name,
+      this.state.email,
+      this.state.phone,
+      this.state.gender,
+      this.state.weight,
+      this.state.height,
+      this.state.side_preference,
+      this.state.active,
+      this.state.emergency_cont,
+    );
+
+    db.removeTeammamber(data)
+      .then(result => {
+        console.log(result);
+        this.props.navigation.goBack();
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   render() {
@@ -171,12 +184,12 @@ class EditTeammateModal extends React.Component {
           <Button
             title="Save"
             style={styles.saveButton}
-            onPress={() => this.onAdd()}
+            onPress={() => this.onUpdateButton()}
           />
           <Button
             title="Delete"
             style={styles.saveButton}
-            onPress={() => this.onAdd()}
+            onPress={() => this.onDeleteButton()}
           />
         </View>
       </ScrollView>

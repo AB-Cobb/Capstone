@@ -8,17 +8,17 @@ export class Team_member {
   public phone: string;
   public emergency_cont: string;
   public id: number;
-  public active: boolean;
+  public active: string;
 
   constructor(
-    name: string,
-    email: string,
-    phone: string,
-    gender: string,
-    wieght: number,
-    hieght: number,
-    side_preference: string,
-    active: boolean,
+    name: string = null,
+    email: string = null,
+    phone: string = null,
+    gender: string = null,
+    wieght: number = null,
+    hieght: number = null,
+    side_preference: string = null,
+    active: string = null,
     emergency_cont: string = null,
     id: number = null,
   ) {
