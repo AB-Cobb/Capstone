@@ -6,8 +6,8 @@ const LayoutRow = (props) => {
 
   let left = "Click";
   let right = "Click";
-  let leftWeight = 0;
-  let rightWeight = 0;
+  let weight = 0;
+
   const rowNum = props.rowNum;
   if (props.leftSide){
     left = props.leftSide;
@@ -15,6 +15,10 @@ const LayoutRow = (props) => {
 
   if (props.rightSide){
     right = props.rightSide;
+  }
+
+  if (props.leftSide && props.rightSide){
+    weight = left.weight - right.weight;
   }
 
   console.log(`Left Seat: ${left.name || "Click"}`);
@@ -29,8 +33,9 @@ const LayoutRow = (props) => {
       </TouchableOpacity>
       <Slider
         style={styles.Slider}
-        minimumValue={0}
+        minimumValue={-1}
         maximumValue={1}
+        value={weight}
         minimumTrackTintColor="#FFFFFF"
         maximumTrackTintColor="#000000"
       />

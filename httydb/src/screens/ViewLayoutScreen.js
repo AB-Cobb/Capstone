@@ -164,6 +164,7 @@ class ViewLayoutScreen extends React.Component {
     const {teamMembers, selectedRow} = this.state;
     console.log('Rendered Layout Screen!');
     console.log(`Sheet is open?: ${this.state.sheetOpen}`);
+    console.log('layout: ', this.state.layout.paddlers);
     return (
       <View>
         <View style={styles.ViewStyle}>
