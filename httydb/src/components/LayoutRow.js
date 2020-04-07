@@ -18,7 +18,7 @@ const LayoutRow = (props) => {
   }
 
   if (props.leftSide && props.rightSide){
-    weight = left.weight - right.weight;
+    weight = (left.weight - right.weight)/100;
   }
 
   console.log(`Left Seat: ${left.name || "Click"}`);
@@ -35,7 +35,6 @@ const LayoutRow = (props) => {
         style={styles.Slider}
         minimumValue={-1}
         maximumValue={1}
-        value={weight}
         minimumTrackTintColor="#FFFFFF"
         maximumTrackTintColor="#000000"
       />
