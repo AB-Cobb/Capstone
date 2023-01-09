@@ -15,7 +15,7 @@
     "@react-native-community/slider": "^2.0.9",
     "@react-navigation/native": "^5.0.0-alpha.24",
     "expo": "^36.0.0",
-    "firebase-admin": "^8.9.2",
+    "firebase-admin": "^11.4.1",
     "geolib": "^3.2.1",
     "react": "^16.9.0",
     "react-dom": "^16.13.0",
